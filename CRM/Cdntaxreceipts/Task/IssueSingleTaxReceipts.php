@@ -98,7 +98,9 @@ class CRM_Cdntaxreceipts_Task_IssueSingleTaxReceipts extends CRM_Contribute_Form
   }
 
   function setDefaultValues() {
-    return array('receipt_option' => 'original_only');
+    return array('receipt_option' => 'original_only',
+      'is_preview' => true,
+    );
   }
 
   /**

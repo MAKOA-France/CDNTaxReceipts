@@ -146,7 +146,7 @@ class CRM_Cdntaxreceipts_Task_IssueAggregateTaxReceipts extends CRM_Contribute_F
     $this->addRule('receipt_year', E::ts('Selection required', array('domain' => 'org.civicrm.cdntaxreceipts')), 'required');
 
     if ($delivery_method != CDNTAX_DELIVERY_DATA_ONLY) {
-      $this->add('checkbox', 'is_preview', E::ts('Run in preview mode?', array('domain' => 'org.civicrm.cdntaxreceipts')));
+      $this->add('checkbox', 'is_preview', E::ts('Run in preview mode?', array('domain' => 'org.civicrm.cdntaxreceipts')) );
     }
 
     $buttons = array(
@@ -167,7 +167,9 @@ class CRM_Cdntaxreceipts_Task_IssueAggregateTaxReceipts extends CRM_Contribute_F
 
   function setDefaultValues() {
     // TODO: Handle case where year -1 was not an option
-    return array('receipt_year' => 'issue_' . (date("Y") - 1),);
+    return array('receipt_year' => 'issue_' . (date("Y") - 1),
+                  'is_preview' => true,
+                );
   }
 
   /**

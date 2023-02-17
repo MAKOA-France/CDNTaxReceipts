@@ -110,7 +110,9 @@ class CRM_Cdntaxreceipts_Task_IssueAnnualTaxReceipts extends CRM_Contact_Form_Ta
   }
 
   function setDefaultValues() {
-    return array('receipt_year' => 'issue_' . (date("Y") - 1),);
+    return array('receipt_year' => 'issue_' . (date("Y") - 1),
+      'is_preview' => true,
+    );
   }
 
   /**
