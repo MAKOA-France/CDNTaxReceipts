@@ -507,7 +507,7 @@ function _writeReceipt(&$pdf, $pdf_variables, $receipt) {
   //Civi::log()->info('cdntaxreceipts_cdntaxreceipts_writeReceipt _writeReceipt > pdf_variables : '.print_r($pdf_variables,1));
   
   //Format date 2023-12-01 en 01/12/2023
-  $issued_on = substr($issued_on,8,2).'/'.substr($issued_on,5,2).'/'.substr($issued_on,0,4);
+  $issued_on = CRM_Cdntaxreceipts_Utils_MK::date_format_fr($issued_on); // substr($issued_on,8,2).'/'.substr($issued_on,5,2).'/'.substr($issued_on,0,4);
 
   // Civi::log()->info('cdntaxreceipts_cdntaxreceipts_writeReceipt _writeReceipt > pdf_variables : '.print_r($pdf_variables,1));
 
@@ -909,7 +909,7 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
   //Civi::log()->info('cdntaxreceipts_cdntaxreceipts_writeReceipt _writeReceipt > pdf_variables : '.print_r($pdf_variables,1));
   
   //Format date 2023-12-01 en 01/12/2023
-  $issued_on = substr($issued_on,8,2).'/'.substr($issued_on,5,2).'/'.substr($issued_on,0,4);
+  $issued_on = CRM_Cdntaxreceipts_Utils_MK::date_format_fr($issued_on); //substr($issued_on,8,2).'/'.substr($issued_on,5,2).'/'.substr($issued_on,0,4);
 
   // Civi::log()->info('cdntaxreceipts_cdntaxreceipts_writeReceipt _writeReceipt > pdf_variables : '.print_r($pdf_variables,1));
 
@@ -1167,7 +1167,7 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
 
     $contribution_id = $rc['contribution_id'];
     $date_don = $rc['receive_date'];
-    $date_don = substr($date_don,8,2).'/'.substr($date_don,5,2).'/'.substr($date_don,0,4);
+    $date_don = CRM_Cdntaxreceipts_Utils_MK::date_format_fr($date_don); //substr($date_don,8,2).'/'.substr($date_don,5,2).'/'.substr($date_don,0,4);
     $valeur_don = $amount;
 
     $contributions = \Civi\Api4\Contribution::get(FALSE)
