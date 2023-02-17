@@ -5,6 +5,8 @@ require_once('CRM/Contribute/PseudoConstant.php');
 require_once('CRM/Utils/Type.php');
 require_once('CRM/Utils/Array.php');
 
+use CRM_Cdntaxreceipts_ExtensionUtil as E;
+
 class CRM_Cdntaxreceipts_Form_Report_ReceiptsNotIssued extends CRM_Report_Form {
 
   protected $_useEligibilityHooks = FALSE;
@@ -22,7 +24,7 @@ class CRM_Cdntaxreceipts_Form_Report_ReceiptsNotIssued extends CRM_Report_Form {
         'fields' =>
         array(
           'sort_name' =>
-          array('title' => ts('Contact Name', array('domain' => 'org.civicrm.cdntaxreceipts')),
+          array('title' => E::ts('Contact Name', array('domain' => 'org.civicrm.cdntaxreceipts')),
             'required' => TRUE,
           ),
           'id' =>
@@ -36,7 +38,7 @@ class CRM_Cdntaxreceipts_Form_Report_ReceiptsNotIssued extends CRM_Report_Form {
         array(
           'sort_name' =>
           array(
-            'title' => ts('Last Name, First Name', array('domain' => 'org.civicrm.cdntaxreceipts')),
+            'title' => E::ts('Last Name, First Name', array('domain' => 'org.civicrm.cdntaxreceipts')),
           ),
         ),
       ),
@@ -66,12 +68,12 @@ class CRM_Cdntaxreceipts_Form_Report_ReceiptsNotIssued extends CRM_Report_Form {
             'operatorType' => CRM_Report_Form::OP_DATE),
 	  'contribution_source' =>
 	  array(
-	    'title' => ts('Contribution Source'),
+	    'title' => E::ts('Contribution Source'),
 	    'operator' => 'like',
 	    'type' => CRM_Utils_Type::T_STRING,
 	  ),
           'financial_type_id' =>
-          array('title' => ts('Financial Type', array('domain' => 'org.civicrm.cdntaxreceipts')),
+          array('title' => E::ts('Financial Type', array('domain' => 'org.civicrm.cdntaxreceipts')),
             'operatorType' => CRM_Report_Form::OP_MULTISELECT,
             'options' => CRM_Contribute_PseudoConstant::financialType(),
             'type' => CRM_Utils_Type::T_INT,
@@ -90,14 +92,14 @@ class CRM_Cdntaxreceipts_Form_Report_ReceiptsNotIssued extends CRM_Report_Form {
     );
 
     if (Civi::settings()->get('enable_advanced_eligibility_report') == 1) {
-      $enable_options = array( 1 => ts('Yes'), 0 => ts('No'));
+      $enable_options = array( 1 => E::ts('Yes'), 0 => E::ts('No'));
     }
     elseif (Civi::settings()->get('enable_advanced_eligibility_report') == 0) {
-      $enable_options = array( 0 => ts('No'), 1 => ts('Yes'));
+      $enable_options = array( 0 => E::ts('No'), 1 => E::ts('Yes'));
     }
     $this->_options =
       array(
-        'use_advanced_eligibility' => array('title' => ts('Use Advanced Eligibility (Hooks - Memory Intensive)', array('domain' => 'org.civicrm.cdntaxreceipts')),
+        'use_advanced_eligibility' => array('title' => E::ts('Use Advanced Eligibility (Hooks - Memory Intensive)', array('domain' => 'org.civicrm.cdntaxreceipts')),
           'type' => 'select',
           'options' => $enable_options,
         ),
@@ -111,7 +113,7 @@ class CRM_Cdntaxreceipts_Form_Report_ReceiptsNotIssued extends CRM_Report_Form {
     //check for permission to edit contributions
     if ( ! CRM_Core_Permission::check('access CiviContribute') ) {
       require_once('CRM/Core/Error.php');
-      CRM_Core_Error::fatal(ts('You do not have permission to access this page', array('domain' => 'org.civicrm.cdntaxreceipts')));
+      CRM_Core_Error::fatal(E::ts('You do not have permission to access this page', array('domain' => 'org.civicrm.cdntaxreceipts')));
     }
   }
 
@@ -227,7 +229,7 @@ CREATE TEMPORARY TABLE cdntaxreceipts_temp_civireport_eligible (
     if (strpos($this->_where, 'receive_date') === FALSE) {
       $month = date("Ym", time()) . '01';
       $this->_where .= " AND {$this->_aliases['civicrm_contribution']}.receive_date >= {$month} ";
-      CRM_Core_Session::setStatus(ts('For performance reasons, date range is limited to the current month. If you want to a different date range, please use the date filter.'), '', 'info');
+      CRM_Core_Session::setStatus(E::ts('For performance reasons, date range is limited to the current month. If you want to a different date range, please use the date filter.'), '', 'info');
     }
 
     $sql = "SELECT {$this->_aliases['civicrm_contribution']}.id $this->_from $this->_where";
@@ -257,7 +259,7 @@ CREATE TEMPORARY TABLE cdntaxreceipts_temp_civireport_eligible (
                   $this->_absoluteUrl
                );
         $rows[$rowNum]['civicrm_contact_sort_name_link'] = $url;
-        $rows[$rowNum]['civicrm_contact_sort_name_hover'] = ts("View Contact Summary for this Contact");
+        $rows[$rowNum]['civicrm_contact_sort_name_hover'] = E::ts("View Contact Summary for this Contact");
         $entryFound = TRUE;
       }
 
@@ -267,7 +269,7 @@ CREATE TEMPORARY TABLE cdntaxreceipts_temp_civireport_eligible (
                   $this->_absoluteUrl
                );
         $rows[$rowNum]['civicrm_contribution_id_link'] = $url;
-        $rows[$rowNum]['civicrm_contribution_id_hover'] = ts("View Details of this Contribution");
+        $rows[$rowNum]['civicrm_contribution_id_hover'] = E::ts("View Details of this Contribution");
         $entryFound = TRUE;
       }
 

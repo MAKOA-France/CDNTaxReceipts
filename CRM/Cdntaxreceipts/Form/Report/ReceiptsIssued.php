@@ -31,7 +31,7 @@ class CRM_Cdntaxreceipts_Form_Report_ReceiptsIssued extends CRM_Report_Form {
         array(
           'sort_name' =>
           array(
-            'title' => ts('Last Name, First Name', array('domain' => 'org.civicrm.cdntaxreceipts')),
+            'title' => E::ts('Last Name, First Name', array('domain' => 'org.civicrm.cdntaxreceipts')),
           ),
         ),
       ),
@@ -65,27 +65,27 @@ class CRM_Cdntaxreceipts_Form_Report_ReceiptsIssued extends CRM_Report_Form {
           ),
           'issue_type' =>
             array(
-              'title' => ts('Issue Type'),
+              'title' => E::ts('Issue Type'),
               'operatorType' => CRM_Report_Form::OP_MULTISELECT,
-              'options' => array('single' => ts('Single'), 'annual' => ts('Annual'), 'aggregate' => ts('Aggregate')),
+              'options' => array('single' => E::ts('Single'), 'annual' => E::ts('Annual'), 'aggregate' => E::ts('Aggregate')),
               'type' => CRM_Utils_Type::T_STRING,
             ),
           'issue_method' =>
             array(
-            'title' => ts('Issue Method', array('domain' => 'org.civicrm.cdntaxreceipts')),
+            'title' => E::ts('Issue Method', array('domain' => 'org.civicrm.cdntaxreceipts')),
             'operatorType' => CRM_Report_Form::OP_MULTISELECT,
             'options' => array('email' => 'Email', 'print' => 'Print'),
             'type' => CRM_Utils_Type::T_STRING,
           ),
           'receipt_status' =>
             array(
-              'title' => ts('Receipt Status', array('domain' => 'org.civicrm.cdntaxreceipts')),
+              'title' => E::ts('Receipt Status', array('domain' => 'org.civicrm.cdntaxreceipts')),
               'operatorType' => CRM_Report_Form::OP_MULTISELECT,
               'options' => array('issued' => 'Issued', 'cancelled' => 'Cancelled'),
               'type' => CRM_Utils_Type::T_STRING,
             ),
           'email_opened' =>
-          array('title' => ts('Email Open Date', array('domain' => 'org.civicrm.cdntaxreceipts')),
+          array('title' => E::ts('Email Open Date', array('domain' => 'org.civicrm.cdntaxreceipts')),
             'type' => CRM_Utils_Type::T_DATE,
             'operatorType' => CRM_Report_Form::OP_DATE,
           ),
@@ -98,15 +98,15 @@ class CRM_Cdntaxreceipts_Form_Report_ReceiptsIssued extends CRM_Report_Form {
             ),
           'receipt_no' =>
             array(
-              'title' => ts('Receipt No.', array('domain' => 'org.civicrm.cdntaxreceipts')),
+              'title' => E::ts('Receipt No.', array('domain' => 'org.civicrm.cdntaxreceipts')),
             ),
           'receipt_amount' =>
             array(
-              'title' => ts('Receipt Amount', array('domain' => 'org.civicrm.cdntaxreceipts')),
+              'title' => E::ts('Receipt Amount', array('domain' => 'org.civicrm.cdntaxreceipts')),
             ),
           'receipt_status' =>
             array(
-              'title' => ts('Receipt Status', array('domain' => 'org.civicrm.cdntaxreceipts')),
+              'title' => E::ts('Receipt Status', array('domain' => 'org.civicrm.cdntaxreceipts')),
             ),
         ),
       ),
@@ -173,7 +173,7 @@ class CRM_Cdntaxreceipts_Form_Report_ReceiptsIssued extends CRM_Report_Form {
 
     //check for permission to edit contributions
     if ( ! CRM_Core_Permission::check('access CiviContribute') ) {
-      CRM_Core_Error::fatal(ts('You do not have permission to access this page', array('domain' => 'org.civicrm.cdntaxreceipts')));
+      CRM_Core_Error::fatal(E::ts('You do not have permission to access this page', array('domain' => 'org.civicrm.cdntaxreceipts')));
     }
   }
 
@@ -359,39 +359,39 @@ class CRM_Cdntaxreceipts_Form_Report_ReceiptsIssued extends CRM_Report_Form {
                   $this->_absoluteUrl
                );
         $rows[$rowNum]['civicrm_contact_sort_name_link'] = $url;
-        $rows[$rowNum]['civicrm_contact_sort_name_hover'] = ts("View Contact Summary for this Contact");
+        $rows[$rowNum]['civicrm_contact_sort_name_hover'] = E::ts("View Contact Summary for this Contact");
         $entryFound = TRUE;
       }
 
       if (array_key_exists('civicrm_cdntaxreceipts_log_issue_type', $row)) {
         if ($rows[$rowNum]['civicrm_cdntaxreceipts_log_issue_type'] == 'single' ) {
-          $rows[$rowNum]['civicrm_cdntaxreceipts_log_issue_type'] = ts('Single', array('domain' => 'org.civicrm.cdntaxreceipts'));
+          $rows[$rowNum]['civicrm_cdntaxreceipts_log_issue_type'] = E::ts('Single', array('domain' => 'org.civicrm.cdntaxreceipts'));
         }
         elseif ($rows[$rowNum]['civicrm_cdntaxreceipts_log_issue_type'] == 'annual' ) {
-          $rows[$rowNum]['civicrm_cdntaxreceipts_log_issue_type'] = ts('Annual', array('domain' => 'org.civicrm.cdntaxreceipts'));
+          $rows[$rowNum]['civicrm_cdntaxreceipts_log_issue_type'] = E::ts('Annual', array('domain' => 'org.civicrm.cdntaxreceipts'));
         }
         elseif ($rows[$rowNum]['civicrm_cdntaxreceipts_log_issue_type'] == 'aggregate' ) {
-          $rows[$rowNum]['civicrm_cdntaxreceipts_log_issue_type'] = ts('Aggregate', array('domain' => 'org.civicrm.cdntaxreceipts'));
+          $rows[$rowNum]['civicrm_cdntaxreceipts_log_issue_type'] = E::ts('Aggregate', array('domain' => 'org.civicrm.cdntaxreceipts'));
         }
         $entryFound = TRUE;
       }
 
       if (array_key_exists('civicrm_cdntaxreceipts_log_issue_method', $row)) {
         if ($rows[$rowNum]['civicrm_cdntaxreceipts_log_issue_method'] == 'print' ) {
-          $rows[$rowNum]['civicrm_cdntaxreceipts_log_issue_method'] = ts('Print', array('domain' => 'org.civicrm.cdntaxreceipts'));
+          $rows[$rowNum]['civicrm_cdntaxreceipts_log_issue_method'] = E::ts('Print', array('domain' => 'org.civicrm.cdntaxreceipts'));
         }
         elseif ($rows[$rowNum]['civicrm_cdntaxreceipts_log_issue_method'] == 'email' ) {
-          $rows[$rowNum]['civicrm_cdntaxreceipts_log_issue_method'] = ts('Email', array('domain' => 'org.civicrm.cdntaxreceipts'));
+          $rows[$rowNum]['civicrm_cdntaxreceipts_log_issue_method'] = E::ts('Email', array('domain' => 'org.civicrm.cdntaxreceipts'));
         }
         $entryFound = TRUE;
       }
 
       if (array_key_exists('civicrm_cdntaxreceipts_log_receipt_status', $row)) {
         if ($rows[$rowNum]['civicrm_cdntaxreceipts_log_receipt_status'] == 'issued' ) {
-          $rows[$rowNum]['civicrm_cdntaxreceipts_log_receipt_status'] = ts('Issued', array('domain' => 'org.civicrm.cdntaxreceipts'));
+          $rows[$rowNum]['civicrm_cdntaxreceipts_log_receipt_status'] = E::ts('Issued', array('domain' => 'org.civicrm.cdntaxreceipts'));
         }
         elseif ($rows[$rowNum]['civicrm_cdntaxreceipts_log_receipt_status'] == 'cancelled' ) {
-          $rows[$rowNum]['civicrm_cdntaxreceipts_log_receipt_status'] = ts('Cancelled', array('domain' => 'org.civicrm.cdntaxreceipts'));
+          $rows[$rowNum]['civicrm_cdntaxreceipts_log_receipt_status'] = E::ts('Cancelled', array('domain' => 'org.civicrm.cdntaxreceipts'));
         }
         $entryFound = TRUE;
       }
@@ -460,16 +460,16 @@ class CRM_Cdntaxreceipts_Form_Report_ReceiptsIssued extends CRM_Report_Form {
       $count += $dao->count;
     }
     $statistics['counts']['amount'] = array(
-      'title' => ts('Total Amount Issued', array('domain' => 'org.civicrm.cdntaxreceipts')),
+      'title' => E::ts('Total Amount Issued', array('domain' => 'org.civicrm.cdntaxreceipts')),
       'value' => implode(',  ', $totalAmount),
       'type' => CRM_Utils_Type::T_STRING,
     );
     $statistics['counts']['count'] = array(
-      'title' => ts('Number Issued', array('domain' => 'org.civicrm.cdntaxreceipts')),
+      'title' => E::ts('Number Issued', array('domain' => 'org.civicrm.cdntaxreceipts')),
       'value' => $count,
     );
     $statistics['counts']['avg'] = array(
-      'title' => ts('Average Amount Issued', array('domain' => 'org.civicrm.cdntaxreceipts')),
+      'title' => E::ts('Average Amount Issued', array('domain' => 'org.civicrm.cdntaxreceipts')),
       'value' => implode(',  ', $average),
       'type' => CRM_Utils_Type::T_STRING,
     );

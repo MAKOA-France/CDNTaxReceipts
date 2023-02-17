@@ -41,7 +41,7 @@ function cdntaxreceipts_civicrm_buildForm( $formName, &$form ) {
       $buttons[] = array(
         'type'      => 'submit',
         'subName'   => $subName,
-        'name'      => ts('Tax Receipt', array('domain' => 'org.civicrm.cdntaxreceipts')),
+        'name'      => E::ts('Tax Receipt', array('domain' => 'org.civicrm.cdntaxreceipts')),
         'isDefault' => FALSE,
         'icon'      => 'fa-check-square',
       );
@@ -106,13 +106,13 @@ function cdntaxreceipts_civicrm_searchTasks($objectType, &$tasks ) {
     }
     if (!$single_in_list) {
       $tasks[] = array (
-        'title' => ts('Issue Tax Receipts (Separate Receipt for Each Contribution)', array('domain' => 'org.civicrm.cdntaxreceipts')),
+        'title' => E::ts('Issue Tax Receipts (Separate Receipt for Each Contribution)', array('domain' => 'org.civicrm.cdntaxreceipts')),
         'class' => 'CRM_Cdntaxreceipts_Task_IssueSingleTaxReceipts',
         'result' => TRUE);
     }
     if (!$aggregate_in_list) {
       $tasks[] = array (
-        'title' => ts('Issue Tax Receipts (Combined Receipt with Total Contributed)'),
+        'title' => E::ts('Issue Tax Receipts (Combined Receipt with Total Contributed)'),
         'class' => 'CRM_Cdntaxreceipts_Task_IssueAggregateTaxReceipts',
         'result' => TRUE);
     }
@@ -126,7 +126,7 @@ function cdntaxreceipts_civicrm_searchTasks($objectType, &$tasks ) {
     }
     if (!$annual_in_list) {
       $tasks[] = array (
-        'title' => ts('Issue Annual Tax Receipts'),
+        'title' => E::ts('Issue Annual Tax Receipts'),
         'class' => 'CRM_Cdntaxreceipts_Task_IssueAnnualTaxReceipts',
         'result' => TRUE);
     }
@@ -137,9 +137,9 @@ function cdntaxreceipts_civicrm_searchTasks($objectType, &$tasks ) {
  * Implementation of hook_civicrm_permission().
  */
 function cdntaxreceipts_civicrm_permission( &$permissions ) {
-  $prefix = ts('CiviCRM CDN Tax Receipts') . ': ';
+  $prefix = E::ts('CiviCRM CDN Tax Receipts') . ': ';
   $permissions += array(
-    'issue cdn tax receipts' => $prefix . ts('Issue Tax Receipts', array('domain' => 'org.civicrm.cdntaxreceipts')),
+    'issue cdn tax receipts' => $prefix . E::ts('Issue Tax Receipts', array('domain' => 'org.civicrm.cdntaxreceipts')),
   );
 }
 
@@ -187,7 +187,7 @@ function cdntaxreceipts_civicrm_uninstall() {
  * Implementation of hook_civicrm_enable
  */
 function cdntaxreceipts_civicrm_enable() {
-  CRM_Core_Session::setStatus(ts('Configure the Tax Receipts extension at Administer >> CiviContribute >> CDN Tax Receipts.', array('domain' => 'org.civicrm.cdntaxreceipts')));
+  CRM_Core_Session::setStatus(E::ts('Configure the Tax Receipts extension at Administer >> CiviContribute >> CDN Tax Receipts.', array('domain' => 'org.civicrm.cdntaxreceipts')));
   return _cdntaxreceipts_civix_civicrm_enable();
 }
 
@@ -306,7 +306,7 @@ function cdntaxreceipts_civicrm_navigationMenu(&$params) {
         if ('CiviContribute' == $child_value['attributes']['name']) {
           $params[$parent_key]['child'][$child_key]['child'][$navId] = array (
             'attributes' => array (
-              'label' => ts('CDN Tax Receipts',array('domain' => 'org.civicrm.cdntaxreceipts')),
+              'label' => E::ts('CDN Tax Receipts',array('domain' => 'org.civicrm.cdntaxreceipts')),
               'name' => 'CDN Tax Receipts',
               'url' => 'civicrm/cdntaxreceipts/settings?reset=1',
               'permission' => 'access CiviContribute,administer CiviCRM',
@@ -331,7 +331,7 @@ function cdntaxreceipts_civicrm_validate( $formName, &$fields, &$files, &$form )
       if (CRM_Utils_Array::value('name', $value)) {
         $ext = pathinfo($value['name'], PATHINFO_EXTENSION);
         if (!in_array($ext, $allowed)) {
-          $errors[$key] = ts('Please upload a valid file. Allowed extensions are (.gif, .png, .jpg, .pdf)');
+          $errors[$key] = E::ts('Please upload a valid file. Allowed extensions are (.gif, .png, .jpg, .pdf)');
         }
       }
     }
@@ -531,11 +531,11 @@ function _writeReceipt(&$pdf, $pdf_variables, $receipt) {
   $y_detailscolumnstart = 6;
   $pdf->SetFont($fontFNE, '', 10.5); 
   $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 0);
-  $pdf->Cell(24 ,6, ts("%1", array(1 => $receipt_number, 'domain' => 'org.civicrm.cdntaxreceipts')),0,0,'L',FALSE,''); //http://www.fpdf.org/en/doc/cell.htm
-  //$pdf->Write(10, ts("%1", array(1 => $receipt_number, 'domain' => 'org.civicrm.cdntaxreceipts')));
+  $pdf->Cell(24 ,6, E::ts("%1", array(1 => $receipt_number, 'domain' => 'org.civicrm.cdntaxreceipts')),0,0,'L',FALSE,''); //http://www.fpdf.org/en/doc/cell.htm
+  //$pdf->Write(10, E::ts("%1", array(1 => $receipt_number, 'domain' => 'org.civicrm.cdntaxreceipts')));
   //$pdf->SetFont($fontFNE, '', 10.5);
   $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 4.6);
-  $pdf->Cell(24 ,6, ts("%1", array(1 => $contact_id)),0,0,'L',FALSE,'');
+  $pdf->Cell(24 ,6, E::ts("%1", array(1 => $contact_id)),0,0,'L',FALSE,'');
 
   // *******************************
   //      ENCART ADRESSE
@@ -933,11 +933,11 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
   $y_detailscolumnstart = 6;
   $pdf->SetFont($fontFNE, '', 10.5); 
   $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 0);
-  $pdf->Cell(24 ,6, ts("%1", array(1 => $receipt_number, 'domain' => 'org.civicrm.cdntaxreceipts')),0,0,'L',FALSE,''); //http://www.fpdf.org/en/doc/cell.htm
-  //$pdf->Write(10, ts("%1", array(1 => $receipt_number, 'domain' => 'org.civicrm.cdntaxreceipts')));
+  $pdf->Cell(24 ,6, E::ts("%1", array(1 => $receipt_number, 'domain' => 'org.civicrm.cdntaxreceipts')),0,0,'L',FALSE,''); //http://www.fpdf.org/en/doc/cell.htm
+  //$pdf->Write(10, E::ts("%1", array(1 => $receipt_number, 'domain' => 'org.civicrm.cdntaxreceipts')));
   //$pdf->SetFont($fontFNE, '', 10.5);
   $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 4.6);
-  $pdf->Cell(24 ,6, ts("%1", array(1 => $contact_id)),0,0,'L',FALSE,'');
+  $pdf->Cell(24 ,6, E::ts("%1", array(1 => $contact_id)),0,0,'L',FALSE,'');
 
   // *******************************
   //      ENCART ADRESSE
