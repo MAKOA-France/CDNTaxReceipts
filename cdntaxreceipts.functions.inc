@@ -1,6 +1,7 @@
 <?php
 
 require_once('FPDI/src/autoload.php');
+use CRM_Cdntaxreceipts_ExtensionUtil as E;
 
   class PDF extends \setasign\Fpdi\Tcpdf\Fpdi {
     /**
