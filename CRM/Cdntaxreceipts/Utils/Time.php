@@ -36,4 +36,33 @@ class CRM_Cdntaxreceipts_Utils_Time {
     \Civi::settings()->set('cdntaxreceipts_mocktime', NULL);
   }
 
+  public static function couperChaine($string, $nbrecarectere){
+    //$mot_wrap = wordwarp($string, $nbrecarectere, '#**#**#');
+    $mots = explode(" ", $string);
+
+    $retour[] = [];
+    $iretour = 0;
+    $ilen = 0;
+    foreach($mots as $value){
+        $ilen += strlen($values);
+        if ($ilen < $nbrecarectere){
+        $retour[$iretour] += $value;
+        }else{
+        $ilen = strlen($values);
+        $iretour += $iRetour + 1;
+        $retour[$iretour] = $value;
+        }
+    }
+
+    return $retour;
+  }
+
+    
+  /**
+   * Transformer une date yyyy-MM-dd
+   */
+  public static function date_format_fr($date){
+    $date = substr($date,8,2).'/'.substr($date,5,2).'/'.substr($dodaten_date,0,4);
+  }
+
 }

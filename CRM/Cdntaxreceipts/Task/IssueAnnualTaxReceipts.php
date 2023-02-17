@@ -6,7 +6,7 @@
  */
 class CRM_Cdntaxreceipts_Task_IssueAnnualTaxReceipts extends CRM_Contact_Form_Task {
 
-  const MAX_RECEIPT_COUNT = 1000;
+  const MAX_RECEIPT_COUNT = 2000; // FIXME : PUT IN setting
 
   private $_receipts;
   private $_years;

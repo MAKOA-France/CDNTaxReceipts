@@ -8,7 +8,7 @@ require_once('CRM/Contribute/Form/Task.php');
  */
 class CRM_Cdntaxreceipts_Task_IssueSingleTaxReceipts extends CRM_Contribute_Form_Task {
 
-  const MAX_RECEIPT_COUNT = 1000;
+  const MAX_RECEIPT_COUNT = 2000; // FIXME : PUT IN setting
 
   private $_receipts;
 

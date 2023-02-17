@@ -1,4 +1,5 @@
 <?php
+use CRM_Cdntaxreceipts_ExtensionUtil as E;
 
 /**
  * This class provides the common functionality for issuing Aggregate Tax Receipts for
@@ -6,7 +7,7 @@
  */
 class CRM_Cdntaxreceipts_Task_IssueAggregateTaxReceipts extends CRM_Contribute_Form_Task {
 
-  const MAX_RECEIPT_COUNT = 1000;
+  const MAX_RECEIPT_COUNT = 2000; // FIXME : PUT IN setting
 
   private $_contributions_status;
   private $_issue_type;
@@ -23,7 +24,7 @@ class CRM_Cdntaxreceipts_Task_IssueAggregateTaxReceipts extends CRM_Contribute_F
 
     //check for permission to edit contributions
     if ( ! CRM_Core_Permission::check('issue cdn tax receipts') ) {
-      CRM_Core_Error::fatal(ts('You do not have permission to access this page', array('domain' => 'org.civicrm.cdntaxreceipts')));
+      CRM_Core_Error::fatal(E::ts('You do not have permission to access this page', array('domain' => 'org.civicrm.cdntaxreceipts')));
     }
 
     _cdntaxreceipts_check_requirements();
@@ -202,6 +203,7 @@ class CRM_Cdntaxreceipts_Task_IssueAggregateTaxReceipts extends CRM_Contribute_F
     $printCount = 0;
     $dataCount = 0;
     $failCount = 0;
+
 
     foreach ($this->_receipts['original'][$year]['contact_ids'] as $contact_id => $contribution_status) {
       if ( $emailCount + $printCount + $failCount >= self::MAX_RECEIPT_COUNT ) {

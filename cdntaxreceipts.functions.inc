@@ -7,12 +7,27 @@ require_once('FPDI/src/autoload.php');
      * "Remembers" the template id of the imported page
      */
     var $_tplIdx;
+    var $_type_contact;
+
+    function Set_type_contact($contact_id) {
+      $contacts = \Civi\Api4\Contact::get(FALSE)
+        ->addWhere('id', '=', $contact_id)
+        ->execute();
+      foreach ($contacts as $contact) {
+        $contact_type = $contact['contact_type'];
+        break;
+      }
+      Civi::log()->info('Set_type_contact contact_type : '.print_r($contact_type,1)); 
+      $_type_contact = $contact_type;
+      return $_type_contact;
+    }
 
     /**
      * include a background template for every page
      */
     function Header() {
       $pdf_template_file = _cdntaxreceipts_get_image_filepath('receipt_pdftemplate');
+ 
       if (!empty($pdf_template_file)) {
 
         if (is_null($this->_tplIdx)) {
@@ -20,11 +35,44 @@ require_once('FPDI/src/autoload.php');
           $this->_tplIdx = $this->importPage(1);
         }
         $this->useTemplate($this->_tplIdx);
+        // Civi::log()->info('$this->_tplIdx : '.print_r($this->_tplIdx,1)); //cp1
       }
       else {
         $this->parsers = array();
       }
     }
+    function Header2($contact_id) {
+      Civi::log()->info('Header2 contact_id : '.print_r($contact_id,1)); 
+      $_type_contact = $this->Set_type_contact($contact_id);
+      $pdf_template_file = _cdntaxreceipts_get_image_filepath('receipt_pdftemplate');
+
+      // Civi::log()->info('_type_contact 00 : '.print_r($_type_contact,1)); 
+      // if (!empty($_type_contact)){
+      //   switch ($_type_contact){
+      //     case 'Individual' :
+      //       $pdf_template_file = CRM_Core_Config::singleton()->customFileUploadDir . 'Mod_le_donateur_V2023_Vierge_1_9cb237ed16bfbe5cb59436e0c9a002c4.pdf';
+      //       break;
+      //     case 'Organization' :
+      //       $pdf_template_file = CRM_Core_Config::singleton()->customFileUploadDir . 'Mod_le_Entreprise_V2023_Vierge_8f9ae87ec5eb2daac2c2918aa468a5c4.pdf';
+      //       break;
+      //   }
+      // }
+      Civi::log()->info('pdf_template_file 00 : '.print_r($pdf_template_file,1)); 
+     
+      if (!empty($pdf_template_file)) {
+
+        if (is_null($this->_tplIdx)) {
+          $this->setSourceFile($pdf_template_file);
+          $this->_tplIdx = $this->importPage(1);
+        }
+        $this->useTemplate($this->_tplIdx);
+        // Civi::log()->info('$this->_tplIdx : '.print_r($this->_tplIdx,1)); //cp1
+      }
+      else {
+        $this->parsers = array();
+      }
+    }
+    
 
     function Footer() {}
   }
@@ -67,7 +115,7 @@ function cdntaxreceipts_processTaxReceipt($receipt, &$collectedPdf = NULL, $mode
       return array(FALSE,'',NULL);
     }
     $next_id = cdntaxreceipts_log_next_id();
-    $receipt['receipt_no'] = Civi::settings()->get('receipt_prefix') . str_pad($next_id, 8, 0, STR_PAD_LEFT);
+    $receipt['receipt_no'] = Civi::settings()->get('receipt_prefix') . str_pad($next_id, 6, 0, STR_PAD_LEFT);
   }
   // allow modules to alter any details
   // invoke hook_cdntaxreceipts_alter_receipt(&$receipt)
@@ -182,7 +230,17 @@ function cdntaxreceipts_generateFormattedReceipt($receipt, &$collectedPdf = NULL
 
   $pdf_img_files_path = dirname(__FILE__) . '/img/';
 
+  $contact_id = $receipt['contact_id'];
   $address = cdntaxreceipts_getAddress($receipt['contact_id']);
+
+  $street_address = $address['street_address'];
+  $supplemental_address_1 = $address['supplemental_address_1'];
+  $supplemental_address_2 = $address['supplemental_address_2'];
+  $supplemental_address_3 = $address['supplemental_address_3'];
+  $postal_code = $address['postal_code'];
+  $city = $address['city'];
+  $country = isset($address['country']) ? $address['country'] : '';
+  if (mb_strtoupper($country) == 'FRANCE') {$country = '';}
 
   $address_line_1 = isset($address['street_address']) ? $address['street_address'] : '';
   $parts = array();
@@ -197,19 +255,42 @@ function cdntaxreceipts_generateFormattedReceipt($receipt, &$collectedPdf = NULL
 
   list($displayname, $email) = CRM_Contact_BAO_Contact::getContactDetails($receipt['contact_id']);
 
-  $result_get_name = civicrm_api3('Contact', 'get', array(
-    'sequential' => 1,
-    'return' => array("first_name", "last_name", "middle_name","contact_type"),
-    'id' => $receipt['contact_id'],
-  ));
+  // $result_get_name = civicrm_api3('Contact', 'get', array(
+  //   'sequential' => 1,
+  //   'return' => array("first_name", "last_name", "middle_name","contact_type"),
+  //   'id' => $receipt['contact_id'],
+  // ));
 
-  if ($result_get_name['values'][0]['contact_type'] == 'Individual') {
-    if (strlen(trim($result_get_name['values'][0]['middle_name'])) > 0) {
-      $displayname = $result_get_name['values'][0]['first_name'] . ' ' . $result_get_name['values'][0]['middle_name'][0] . ' ' . $result_get_name['values'][0]['last_name'];
-    }
-    else {
-      $displayname = $result_get_name['values'][0]['first_name'] . ' ' . $result_get_name['values'][0]['last_name'];
-    }
+  // if ($result_get_name['values'][0]['contact_type'] == 'Individual') {
+  //   if (strlen(trim($result_get_name['values'][0]['middle_name'])) > 0) {
+  //     $displayname = $result_get_name['values'][0]['first_name'] . ' ' . $result_get_name['values'][0]['middle_name'][0] . ' ' . $result_get_name['values'][0]['last_name'];
+  //   }
+  //   else {
+  //     $displayname = $result_get_name['values'][0]['first_name'] . ' ' . $result_get_name['values'][0]['last_name'];
+  //   }
+  // }
+
+  
+  $contacts = \Civi\Api4\Contact::get(FALSE)
+    ->addSelect('*', 'prefix_id:label')
+    ->addWhere('id', '=', $receipt['contact_id'])
+    ->execute();
+  foreach ($contacts as $contact) {
+    $result_get_name = $contact;
+    break;
+  }
+  if ($result_get_name['contact_type'] == 'Individual') {
+    $displayname = $result_get_name['prefix_id:label'] . ' ' . $result_get_name['last_name'];
+    if (!empty($result_get_name['first_name'])) $displayname = $result_get_name['first_name']. ' ' . $result_get_name['last_name'];
+  }else{
+    //TODO organisation
+    $displayname = '';
+    if (!empty($result_get_name['display_name'])) $displayname .= ' '. $result_get_name['display_name'];
+    if (!empty($result_get_name['prefix_id:label'])) $displayname .= ' '. $result_get_name['prefix_id:label'];
+    if (!empty($result_get_name['first_name'])) $displayname .= ' '. $result_get_name['first_name'];
+    if (!empty($result_get_name['last_name'])) $displayname .= ' '. $result_get_name['last_name'];
+
+    if (!empty($displayname)) $displayname = substr($displayname,1);
   }
 
   if ( $receipt['issue_type'] == 'single' ) {
@@ -235,10 +316,14 @@ function cdntaxreceipts_generateFormattedReceipt($receipt, &$collectedPdf = NULL
   $user_friendly = 'Receipt-' . $receipt['receipt_no'] . '.pdf';
 
   if (!defined('PDF_PAGE_FORMAT')) {
-    define('PDF_PAGE_FORMAT', 'USLETTER'); // orig: 'A4'
+    // define('PDF_PAGE_FORMAT', 'USLETTER'); // orig: 'A4'
+    define('PDF_PAGE_FORMAT', 'A4'); // orig: 'A4'
   }
-  $pdf = new PDF(PDF_PAGE_ORIENTATION, PDF_UNIT, 'LETTER', TRUE, 'UTF-8', FALSE);
+  // $pdf = new PDF(PDF_PAGE_ORIENTATION, PDF_UNIT, 'LETTER', TRUE, 'UTF-8', FALSE);
+  $pdf = new PDF(PDF_PAGE_ORIENTATION, PDF_UNIT, 'A4', TRUE, 'UTF-8', FALSE);
   $pdf->Open();
+  $pdf->Set_type_contact($contact_id);
+ // $pdf->Header2($contact_id);
 
   $pdf->SetAuthor(Civi::settings()->get('org_name'));
 
@@ -274,6 +359,13 @@ function cdntaxreceipts_generateFormattedReceipt($receipt, &$collectedPdf = NULL
     "inkind_values" => isset($receipt['inkind_values']) ? $receipt['inkind_values'] : array(),
     "receipt_contributions" => $receipt['contributions'],
     "receipt_status" => $receipt['receipt_status'],
+    "street_address" => $street_address,
+    "supplemental_address_1" => $supplemental_address_1,
+    "supplemental_address_2" => $supplemental_address_2,
+    "supplemental_address_3" => $supplemental_address_3,
+    "postal_code" => $postal_code,
+    "city" => $city,
+    "country" => $country,
   );
 
   $output_files = array($pdf);
@@ -319,6 +411,10 @@ function _cdntaxreceipts_writePage(&$f, $pdf_variables, $receipt) {
         return;
       }
     }
+  }
+  elseif (!empty($receipt['skip_writereceipt']) || !empty($pdf_variables['is_custom_rewrite'])) {
+    // skip_writereceipt was the Symbiotic patch, and is_custom_rewrite is the JMA/CH way
+    return;
   }
 
   // if no custom function, go with default formatting...
@@ -684,7 +780,8 @@ function cdntaxreceipts_issueTaxReceipt($contribution, &$collectedPdf = NULL, $m
     $receipt_no = $receipt['receipt_no'];
   }
   else { // generate a receipt number
-    $receipt_no = Civi::settings()->get('receipt_prefix') . str_pad($contribution->id, 8, 0, STR_PAD_LEFT);
+    $setting_countnumber = 6; // 8;
+    $receipt_no = Civi::settings()->get('receipt_prefix') . str_pad($contribution->id, $setting_countnumber, 0, STR_PAD_LEFT);
   }
 
   // determine the send method
@@ -958,7 +1055,7 @@ function cdntaxreceipts_issueAnnualTaxReceipt( $contactId, $year, &$collectedPdf
     }
 
     // generate a receipt number
-    $receiptNo = Civi::settings()->get('receipt_prefix') . str_pad($receiptContributions[0]['contribution_id'], 8, 0, STR_PAD_LEFT);
+    $receiptNo = Civi::settings()->get('receipt_prefix') . str_pad($receiptContributions[0]['contribution_id'], 6, 0, STR_PAD_LEFT);
 
     $receipt = array(
       'receipt_no' => $receiptNo,
@@ -1060,7 +1157,7 @@ function cdntaxreceipts_issueAggregateTaxReceipt($contactId, $year, $contributio
     }
 
     // generate a receipt number
-    $receiptNo = Civi::settings()->get('receipt_prefix') . str_pad($receiptContributions[0]['contribution_id'], 8, 0, STR_PAD_LEFT);
+    $receiptNo = Civi::settings()->get('receipt_prefix') . str_pad($receiptContributions[0]['contribution_id'], 6, 0, STR_PAD_LEFT);
 
     $receipt = array(
       'receipt_no' => $receiptNo,
@@ -1126,6 +1223,7 @@ function cdntaxreceipts_sendMethodForContact( $contactId ) {
 
 }
 
+
 function cdntaxreceipts_sendMethodForContribution( $contributionId ) {
 
   $contribution =  new CRM_Contribute_DAO_Contribution();
@@ -1145,7 +1243,7 @@ function cdntaxreceipts_openCollectedPDF() {
   if ( ! isset($pdf) ) {
     //define ('K_PATH_IMAGES', '');
 
-    $pdf = new PDF(PDF_PAGE_ORIENTATION, PDF_UNIT, 'LETTER', TRUE, 'UTF-8', FALSE);
+    $pdf = new PDF(PDF_PAGE_ORIENTATION, PDF_UNIT, 'A4', TRUE, 'UTF-8', FALSE); //Orgi LETTER
     $pdf->Open();
 
     $pdf->SetAuthor(Civi::settings()->get('org_name'));
@@ -1225,9 +1323,11 @@ function cdntaxreceipts_getAddress($contact_id) {
 
   $address_results = civicrm_api('Address', 'get', $params);
 
+
   if ( $address_results['is_error'] == 0) {
     $address = array_shift($address_results['values']);
   }
+  
 
   if (!isset($address)) {
     $params = array(
@@ -1243,6 +1343,7 @@ function cdntaxreceipts_getAddress($contact_id) {
 
   }
   $address = isset($address) ? $address : array();
+
 
   // get actual names for province and country
 
@@ -1261,6 +1362,7 @@ function cdntaxreceipts_getAddress($contact_id) {
     );
   }
 
+  // Civi::log()->info('cdntaxreceipts_getAddress > address : '.print_r($address,1));
   return $address;
 }
 
@@ -1355,6 +1457,7 @@ function _cdntaxreceipts_get_image_filepath($imageSettingName) {
   $fileName = Civi::settings()->get($imageSettingName);
   if ($fileName) {
     $fileNameWithPath = CRM_Core_Config::singleton()->customFileUploadDir . $fileName;
+    //    Civi::log()->info('_cdntaxreceipts_get_image_filepath > $fileNameWithPath : '.print_r($fileNameWithPath,1));
     if (file_exists($fileNameWithPath)) {
       return $fileNameWithPath;
     }
