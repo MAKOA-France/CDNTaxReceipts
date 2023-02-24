@@ -416,7 +416,7 @@ function cdntaxreceipts_civicrm_alterMailParams(&$params, $context) {
  * /var/aegir/platforms/civicrm-d9/vendor/civicrm/org.civicrm.cdntaxreceipts/cdntaxreceipts.functions.inc
  */
 function cdntaxreceipts_cdntaxreceipts_writeReceipt(&$f, $pdf_variables, $receipt) {
-
+  Civi::log()->info('cdntaxreceipts_cdntaxreceipts_writeReceipt');
   //$fontPathRegular = '/var/aegir/platforms/civicrm-d9/sites/fne-dev.test.makoa.net/files/civicrm/custom/Type Dynamic - Predige Rounded.otf';
   //$fontPathRegular = '/var/aegir/platforms/civicrm-d9/sites/fne-dev.test.makoa.net/files/civicrm/custom/Outlands Truetype.ttf';
   //         $regularFont = $receipt->addTTFfont($fontPathRegular, '', '', 32);
@@ -448,7 +448,7 @@ function cdntaxreceipts_cdntaxreceipts_writeReceipt(&$f, $pdf_variables, $receip
     break;
   }
 
-  Civi::log()->info('cdntaxreceipts_cdntaxreceipts_writeReceipt > contact_type : '.print_r($contact_type,1));
+  // Civi::log()->info('cdntaxreceipts_cdntaxreceipts_writeReceipt > contact_type : '.print_r($contact_type,1));
   switch ($contact_type){
     case 'Individual' :
       _writeReceipt($f, $pdf_variables, $receipt);
@@ -468,7 +468,7 @@ function _updateLetter(&$f, $pdf_variables) {
 }
 
 function _writeReceipt(&$pdf, $pdf_variables, $receipt) {
-
+  Civi::log()->info('cdntaxreceipts_cdntaxreceipts_writeReceipt _writeReceipt()');
   // Extract variables
   $contact_id = $receipt['contact_id'];
   
@@ -870,7 +870,7 @@ function _writeReceipt(&$pdf, $pdf_variables, $receipt) {
 
 
 function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
-  Civi::log()->info('cdntaxreceipts_cdntaxreceipts_writeReceipt > _writeReceipt_Org : '.print_r($pdf_variables,1));
+  Civi::log()->info('cdntaxreceipts_cdntaxreceipts_writeReceipt > _writeReceipt_Org()'); // : '.print_r($pdf_variables,1));
   // Extract variables
   $contact_id = $receipt['contact_id'];
   

@@ -74,4 +74,34 @@ class CRM_Cdntaxreceipts_Utils_MK {
         return $date;
     }
 
+    /**
+     * get contact type
+     * 
+     * @param contact_id [INT] contact identifier
+     * @return string
+     */
+    public static function get_contact_type($contact_id) {
+        $contact_type = '';
+        $contacts = \Civi\Api4\Contact::get(FALSE)
+          ->addWhere('id', '=', $contact_id)
+          ->execute();
+        foreach ($contacts as $contact) {
+          $contact_type = $contact['contact_type'];
+          break;
+        }
+        // Civi::log()->info('get_contact_type contact_id : '.print_r($contact_id,1)); 
+        // Civi::log()->info('get_contact_type contact_type : '.print_r($contact_type,1)); 
+
+        return $contact_type;
+    }
+
+    Public static function mk_log($sFunctionName, $sVariable = '', $variable = null){
+        return;
+        // if (empty($variable)){
+        //     Civi::log()->info(sFunctionName.' '.$sVariable.' : '.$variable);
+        // }else{
+            Civi::log()->info($sFunctionName.' '.$sVariable.' : '.print_r($variable,1));
+        // }
+        
+      }
 }

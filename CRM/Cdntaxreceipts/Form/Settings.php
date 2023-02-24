@@ -40,7 +40,7 @@ class CRM_Cdntaxreceipts_Form_Settings extends CRM_Core_Form {
       ),
     ));
     // Set image defaults
-    $images = array('receipt_logo', 'receipt_signature', 'receipt_watermark', 'receipt_pdftemplate');
+    $images = array('receipt_logo', 'receipt_signature', 'receipt_watermark', 'receipt_pdftemplate', 'receipt_pdftemplate_organization', 'receipt_pdftemplate_individual');
     foreach ($images as $image) {
       if (!empty($defaults[$image])) {
         $this->assign($image, $defaults[$image]);
@@ -75,6 +75,7 @@ class CRM_Cdntaxreceipts_Form_Settings extends CRM_Core_Form {
       $this->addRule('org_web', 'Enter Website', 'required');
       $this->addRule('org_charitable_no', 'Enter Charitable Number', 'required');
       $this->addRule('receipt_location_issued', 'Location Issued', 'required');
+
     }
     else if ( $mode == 'defaults' ) {
       $defaults = array(
@@ -88,9 +89,14 @@ class CRM_Cdntaxreceipts_Form_Settings extends CRM_Core_Form {
         'receipt_logo' => Civi::settings()->get('receipt_logo'),
         'receipt_signature' => Civi::settings()->get('receipt_signature'),
         'receipt_watermark' => Civi::settings()->get('receipt_watermark'),
-        'receipt_pdftemplate' => Civi::settings()->get('receipt_pdftemplate'),
+        'receipt_pdftemplate' => Civi::settings()->get('receipt_pdftemplate'), 
+        // AB : addrule PDF specifique Organization AND Individual
+        'receipt_pdftemplate_organization' => Civi::settings()->get('receipt_pdftemplate_organization'), 
+        'receipt_pdftemplate_individual' => Civi::settings()->get('receipt_pdftemplate_individual'), 
+
         'org_charitable_no' => Civi::settings()->get('org_charitable_no'),
         'receipt_location_issued' => Civi::settings()->get('receipt_location_issued'),
+       
       );
       return $defaults;
     }
@@ -112,6 +118,7 @@ class CRM_Cdntaxreceipts_Form_Settings extends CRM_Core_Form {
   function processReceiptOptions($mode) {
     if ( $mode == 'build' ) {
       $this->add('text', 'receipt_prefix', E::ts('Receipt Prefix', array('domain' => 'org.civicrm.cdntaxreceipts')));
+      $this->add('text', 'receipt_postfix', E::ts('Receipt Postfix', array('domain' => 'org.civicrm.cdntaxreceipts')));
       $this->add('text', 'receipt_authorized_signature_text', E::ts('Authorized Signature Text', array('domain' => 'org.civicrm.cdntaxreceipts')));
 
       $uploadSize = cdntaxreceipts_getCiviSetting('maxFileSize');
@@ -138,10 +145,20 @@ class CRM_Cdntaxreceipts_Form_Settings extends CRM_Core_Form {
       $this->addElement('file', 'receipt_pdftemplate', E::ts('PDF Template', array('domain' => 'org.civicrm.cdntaxreceipts')), 'size=30 maxlength=60');
       $this->addUploadElement('receipt_pdftemplate');
       $this->addRule( 'receipt_pdftemplate', E::ts('File size should be less than %1 MBytes (%2 bytes)', array(1 => $uploadSize, 2 => $uploadFileSize)), 'maxfilesize', $uploadFileSize, array('domain' => 'org.civicrm.cdntaxreceipts') );
+
+      // AB : addrule PDF specifique Organization
+      $this->addElement('file', 'receipt_pdftemplate_organization', E::ts('PDF Template Organization', array('domain' => 'org.civicrm.cdntaxreceipts')), 'size=30 maxlength=60');
+      $this->addUploadElement('receipt_pdftemplate_organization');
+      $this->addRule( 'receipt_pdftemplate_organization', E::ts('File size should be less than %1 MBytes (%2 bytes)', array(1 => $uploadSize, 2 => $uploadFileSize)), 'maxfilesize', $uploadFileSize, array('domain' => 'org.civicrm.cdntaxreceipts') );
+       // AB : addrule PDF specifique Individual
+      $this->addElement('file', 'receipt_pdftemplate_individual', E::ts('PDF Template Individual', array('domain' => 'org.civicrm.cdntaxreceipts')), 'size=30 maxlength=60');
+      $this->addUploadElement('receipt_pdftemplate_individual');
+      $this->addRule( 'receipt_pdftemplate_individual', E::ts('File size should be less than %1 MBytes (%2 bytes)', array(1 => $uploadSize, 2 => $uploadFileSize)), 'maxfilesize', $uploadFileSize, array('domain' => 'org.civicrm.cdntaxreceipts') );
     }
     else if ( $mode == 'defaults' ) {
       $defaults = array(
         'receipt_prefix' => Civi::settings()->get('receipt_prefix'),
+        'receipt_postfix' => Civi::settings()->get('receipt_postfix'),
         'receipt_authorized_signature_text' => Civi::settings()->get('receipt_authorized_signature_text'),
       );
       return $defaults;
@@ -149,9 +166,12 @@ class CRM_Cdntaxreceipts_Form_Settings extends CRM_Core_Form {
     else if ( $mode == 'post' ) {
       $values = $this->exportValues();
       Civi::settings()->set('receipt_prefix', $values['receipt_prefix']);
+      Civi::settings()->set('receipt_postfix', $values['receipt_postfix']);
       Civi::settings()->set('receipt_authorized_signature_text', $values['receipt_authorized_signature_text']);
 
-      foreach ( array('receipt_logo', 'receipt_signature', 'receipt_watermark', 'receipt_pdftemplate') as $key ) {
+      //foreach ( array('receipt_logo', 'receipt_signature', 'receipt_watermark', 'receipt_pdftemplate') as $key ) {
+      // AB : addrule PDF specifique Organization AND Individual
+      foreach ( array('receipt_logo', 'receipt_signature', 'receipt_watermark', 'receipt_pdftemplate', 'receipt_pdftemplate_organization', 'receipt_pdftemplate_individual') as $key ) {
         $upload_file = $this->getSubmitValue($key);
         if (is_array($upload_file)) {
           if ( $upload_file['error'] == 0 ) {

@@ -62,6 +62,11 @@
           <p class="description">{ts domain='org.civicrm.cdntaxreceipts'}Receipt numbers are formed by appending the CiviCRM Contribution ID to this prefix. Receipt numbers must be unique within your organization. If you also issue tax receipts using another system, you can use the prefix to ensure uniqueness (e.g. enter 'WEB-' here so all receipts issued through CiviCRM are WEB-00000001, WEB-00000002, etc.){/ts}</p></td>
       </tr>
       <tr>
+        <td class="label">{$form.receipt_postfix.label}</td>
+        <td class="content">{$form.receipt_postfix.html}
+          <p class="description">{ts domain='org.civicrm.cdntaxreceipts'}number of digits after the prefix{/ts}</p></td>
+      </tr>
+      <tr>
         <td class="label">{$form.receipt_authorized_signature_text.label}</td>
         <td class="content">{$form.receipt_authorized_signature_text.html}
           <p class="description">{ts domain='org.civicrm.cdntaxreceipts'}Name and position of the authorizing official to be displayed under the signature line. Defaults to "Authorized Signature" if no name is specified.{/ts}</p></td>
@@ -100,6 +105,24 @@
 	  {if $receipt_pdftemplate}
 	      {if $receipt_pdftemplate_class}<span class="crm-error">The file {$receipt_pdftemplate} was not found</span>
 	      {else}<p class="label">Current {$form.receipt_pdftemplate.label}: {$receipt_pdftemplate}<span class="cdntaxreceipts-imagedelete"><a href="{crmURL p='civicrm/cdntaxreceipts/imagedelete' q='type=receipt_pdftemplate'}">{ts}Delete{/ts}</a></span></p>{/if}
+	  {/if}</td>
+      </tr>
+      <tr>
+        <td class="label">{$form.receipt_pdftemplate_organization.label}</td>
+        <td class="content">{$form.receipt_pdftemplate_organization.html}
+          <p class="description">{ts domain='org.civicrm.cdntaxreceipts'}Upload your own PDF template: .pdf{/ts}</p>
+	  {if $receipt_pdftemplate_organization}
+	      {if $receipt_pdftemplate_organization_class}<span class="crm-error">The file {$receipt_pdftemplate_organization} was not found</span>
+	      {else}<p class="label">Current {$form.receipt_pdftemplate_organization.label}: {$receipt_pdftemplate_organization}<span class="cdntaxreceipts-imagedelete"><a href="{crmURL p='civicrm/cdntaxreceipts/imagedelete' q='type=receipt_pdftemplate_organization'}">{ts}Delete{/ts}</a></span></p>{/if}
+	  {/if}</td>
+      </tr>
+      <tr>
+        <td class="label">{$form.receipt_pdftemplate_individual.label}</td>
+        <td class="content">{$form.receipt_pdftemplate_individual.html}
+          <p class="description">{ts domain='org.civicrm.cdntaxreceipts'}Upload your own PDF template: .pdf{/ts}</p>
+	  {if $receipt_pdftemplate_individual}
+	      {if $receipt_pdftemplate_individual_class}<span class="crm-error">The file {$receipt_pdftemplate_individual} was not found</span>
+	      {else}<p class="label">Current {$form.receipt_pdftemplate_individual.label}: {$receipt_pdftemplate_individual}<span class="cdntaxreceipts-imagedelete"><a href="{crmURL p='civicrm/cdntaxreceipts/imagedelete' q='type=receipt_pdftemplate_individual'}">{ts}Delete{/ts}</a></span></p>{/if}
 	  {/if}</td>
       </tr>
     </tbody>
