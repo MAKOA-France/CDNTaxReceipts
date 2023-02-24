@@ -112,7 +112,78 @@ class CRM_Cdntaxreceipts_Task_IssueSingleTaxReceipts extends CRM_Contribute_Form
    */
 
   function postProcess() {
+    Civi::log()->info('IssueSingleTaxReceipts.php > postProcess _contributionIds : '.print_r($this->_contributionIds,1));
+    
+    $i_Org = -1;
+    $i_Ind = -1;
+    $i_Original = -1;
+    $contributionIds_Organization = array();
+    $contributionIds_Individual = array();
+    $contributionIds_Original = array();
 
+    $org_id = 0;
+    $ind_id = 0;
+
+    foreach ($this->_contributionIds as $item => $contributionId) {
+      $contributions = \Civi\Api4\Contribution::get(FALSE)
+        ->addSelect('contact_id.contact_type', 'contact_id')
+        ->addWhere('id', '=', $contributionId)
+        ->execute();
+      foreach ($contributions as $contribution) {
+        $contact_type = $contribution['contact_id.contact_type'];
+        $contact_id = $contribution['contact_id'];
+      }
+      
+      switch ($contact_type){
+        case 'Organization' :
+          if ($org_id ==0 ) {$org_id = $contact_id;}
+          $i_Org ++;
+          array_push($contributionIds_Organization, $contributionId);
+          break;
+        case 'Individual' :
+          if ($ind_id ==0 ) {$ind_id = $contact_id;}
+          $i_Ind ++;
+          array_push($contributionIds_Individual, $contributionId);
+          break;
+        default :
+          $i_Original ++;
+          array_push($contributionIds_Original, $contributionId);
+          break;
+      }
+
+    }
+
+   
+    Civi::log()->info('IssueSingleTaxReceipts.php > contributionIds_Organization isset() : '.isset($contributionIds_Organization).' contributionIds_Organization : '.print_r( $contributionIds_Organization,1));
+    Civi::log()->info('IssueSingleTaxReceipts.php > contributionIds_Individual isset() : '.isset($contributionIds_Individual).' contributionIds_Individual : '.print_r( $contributionIds_Individual,1));
+    Civi::log()->info('IssueSingleTaxReceipts.php > contributionIds_Original isset() : '.isset($contributionIds_Original).' contributionIds_Original : '.print_r( $contributionIds_Original,1));
+
+
+    // $mergePDF = new FPDF_Merge();
+    if (isset($contributionIds_Organization)){
+      $this->original($contributionIds_Organization, $org_id);
+      // $receiptsForPrintingPDF = $this->specific_type_of_contact($contributionIds_Organization, $org_id);
+      // $mergePDF.add($receiptsForPrintingPDF);
+    }
+    if (isset($contributionIds_Individual)){
+      $this->original($contributionIds_Individual, $ind_id);
+      // $receiptsForPrintingPDF = $this->specific_type_of_contact($contributionIds_Individual, $ind_id);
+      // $mergePDF.add($receiptsForPrintingPDF);
+    }
+    if (isset($contributionIds_Original)){
+      $this->original($contributionIds_Original);
+      // $receiptsForPrintingPDF = $this->original($contributionIds_Original);
+      // $mergePDF.add($receiptsForPrintingPDF);
+    }
+
+
+  }
+
+  /************************************
+   *  ***   ORIGINAL
+   ************************************/
+  function original($contributionIds, $contact_id = 0) {
+    Civi::log()->info('original contact_id : '.print_r($contact_id ,1));
     // lets get around the time limit issue if possible
     if ( ! ini_get( 'safe_mode' ) ) {
       set_time_limit( 0 );
@@ -137,14 +208,19 @@ class CRM_Cdntaxreceipts_Task_IssueSingleTaxReceipts extends CRM_Contribute_Form
     //module_load_include('.module','civicrm_cdntaxreceipts','civicrm_cdntaxreceipts');
 
     // start a PDF to collect receipts that cannot be emailed
-    $receiptsForPrinting = cdntaxreceipts_openCollectedPDF();
+    if ($contact_id > 0){
+      $receiptsForPrinting = cdntaxreceipts_openCollectedPDF($contact_id);
+    }else{
+      $receiptsForPrinting = cdntaxreceipts_openCollectedPDF();
+    }
+    
 
     $emailCount = 0;
     $printCount = 0;
     $dataCount = 0;
     $failCount = 0;
 
-    foreach ($this->_contributionIds as $item => $contributionId) {
+    foreach ($contributionIds as $item => $contributionId) {
 
       if ( $emailCount + $printCount + $failCount >= self::MAX_RECEIPT_COUNT ) {
         // limit email, print receipts as the pdf generation and email-to-archive consume
