@@ -249,7 +249,7 @@ function cdntaxreceipts_generateFormattedReceipt($receipt, &$collectedPdf = NULL
 
   $contact_id = $receipt['contact_id'];
 
-  Civi::log()->info('cdntaxreceipts_generateFormattedReceipt contact_id : '.print_r($contact_id,1)); 
+  // Civi::log()->info('cdntaxreceipts_generateFormattedReceipt contact_id : '.print_r($contact_id,1)); 
   $address = cdntaxreceipts_getAddress($receipt['contact_id']);
 
   $street_address = $address['street_address'];
@@ -340,7 +340,7 @@ function cdntaxreceipts_generateFormattedReceipt($receipt, &$collectedPdf = NULL
   }
   // $pdf = new PDF(PDF_PAGE_ORIENTATION, PDF_UNIT, 'LETTER', TRUE, 'UTF-8', FALSE);
   $contact_type = CRM_Cdntaxreceipts_Utils_MK::get_contact_type($contact_id);
-  Civi::log()->info('cdntaxreceipts_generateFormattedReceipt contact_type : '.print_r($contact_type,1)); 
+  // Civi::log()->info('cdntaxreceipts_generateFormattedReceipt contact_type : '.print_r($contact_type,1)); 
   switch ($contact_type){
     case 'organization' :
       $pdf = new PDF_ORG(PDF_PAGE_ORIENTATION, PDF_UNIT, 'A4', TRUE, 'UTF-8', FALSE);
@@ -1279,7 +1279,7 @@ function cdntaxreceipts_sendMethodForContribution( $contributionId ) {
 }
 
 function cdntaxreceipts_openCollectedPDF($contact_id = 0) {
-  Civi::log()->info('cdntaxreceipts.functions.inc > cdntaxreceipts_openCollectedPDF() contact_id : '.print_r($contact_id ,1));
+  // Civi::log()->info('cdntaxreceipts.functions.inc > cdntaxreceipts_openCollectedPDF() contact_id : '.print_r($contact_id ,1));
   CRM_Cdntaxreceipts_Utils_MK::mk_log('cdntaxreceipts.functions.inc > cdntaxreceipts_openCollectedPDF()', 'contact_id', $contact_id);
   static $pdf;
 
