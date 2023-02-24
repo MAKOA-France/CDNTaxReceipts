@@ -378,6 +378,7 @@ class CRM_Cdntaxreceipts_Task_IssueAggregateTaxReceipts extends CRM_Contribute_F
     }
 
     $params = $this->controller->exportValues($this->_name);
+    
     $year = $params['receipt_year'];
     if ( $year ) {
       $year = substr($year, strlen('issue_')); // e.g. issue_2012
