@@ -297,6 +297,10 @@ msgid "Setup in-kind receipts?"
 msgstr "Configurer les reçus en nature ?"
 
 #: CRM/Cdntaxreceipts/Form/Settings.php
+msgid "Send receipts by email?"
+msgstr "Envoyer les reçus fiscaux par mail ?"
+
+#: CRM/Cdntaxreceipts/Form/Settings.php
 msgid "Delivery Method"
 msgstr "Méthode d'envoi"
 
@@ -332,6 +336,13 @@ msgstr "Émettre le reçu fiscal"
 #: CRM/Cdntaxreceipts/Form/ViewTaxReceipt.php cdntaxreceipts.php
 msgid "Done"
 msgstr "Complété"
+
+#: CRM/Cdntaxreceipts/Form/ViewTaxReceipt.php
+#: CRM/Cdntaxreceipts/Task/IssueAggregateTaxReceipts.php
+#: CRM/Cdntaxreceipts/Task/IssueAnnualTaxReceipts.php
+#: CRM/Cdntaxreceipts/Task/IssueSingleTaxReceipts.php
+msgid "Processing"
+msgstr "Traitement en cours"
 
 #: CRM/Cdntaxreceipts/Form/ViewTaxReceipt.php
 msgid "Cancel Tax Receipt"
@@ -555,6 +566,10 @@ msgstr "Générer des reçus fiscaux (total des dons)"
 #: cdntaxreceipts.php
 msgid "CiviCRM CDN Tax Receipts"
 msgstr "Reçus fiscaux de dons"
+
+#: cdntaxreceipts.php
+msgid "Open Tracking"
+msgstr ""
 
 #: cdntaxreceipts.php
 msgid ""
