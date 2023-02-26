@@ -1,0 +1,885 @@
+# Copyright CiviCRM LLC (c) 2004-2015
+# This file is distributed under the same license as the CiviCRM package.
+# If you contribute heavily to a translation and deem your work copyrightable,
+# make sure you license it to CiviCRM LLC under Academic Free License 3.0.
+# Translators:
+# Gilles LE POITTEVIN <gilles@radiomaria.fr>, 2017
+# Mathieu Lu <mathieu@bidon.ca>, 2018-2019
+# Mathieu Lu <mathieu@bidon.ca>, 2014,2016
+# samuelsov <samuel@symbiotic.coop>, 2015,2018
+# Usha Matisson <matisson@makoa.fr>, 2020,2023
+msgid ""
+msgstr ""
+"Project-Id-Version: CiviCRM_extensions\n"
+"POT-Creation-Date: 2023-01-27 19:22+0000\n"
+"PO-Revision-Date: 2014-04-28 21:25+0000\n"
+"Last-Translator: Usha Matisson <matisson@makoa.fr>, 2020,2023\n"
+"Language-Team: French (http://www.transifex.com/civicrm/civicrm_extensions/language/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+
+#: CRM/Cdntaxreceipts/Form/ImageDelete.php
+msgid "Missing type"
+msgstr "Type manquant"
+
+#: CRM/Cdntaxreceipts/Form/ImageDelete.php
+msgid "Unknown type"
+msgstr "Type inconnu"
+
+#: CRM/Cdntaxreceipts/Form/ImageDelete.php
+msgid "Delete Image"
+msgstr "Supprimer l'image"
+
+#: CRM/Cdntaxreceipts/Form/ImageDelete.php
+#: templates/CRM/Cdntaxreceipts/Form/Settings.tpl
+msgid "Delete"
+msgstr "Supprimer"
+
+#: CRM/Cdntaxreceipts/Form/ImageDelete.php
+msgid "Cancel"
+msgstr "Annuler"
+
+#: CRM/Cdntaxreceipts/Form/ImageDelete.php
+msgid "Setting does not exist"
+msgstr "Le paramètre n'existe pas"
+
+#: CRM/Cdntaxreceipts/Form/ImageDelete.php
+msgid "The %1 file has been deleted."
+msgstr "Le fichier %1 a été supprimé."
+
+#: CRM/Cdntaxreceipts/Form/ImageDelete.php
+msgid "Logo"
+msgstr "Logo"
+
+#: CRM/Cdntaxreceipts/Form/ImageDelete.php
+msgid "Signature"
+msgstr "Signature"
+
+#: CRM/Cdntaxreceipts/Form/ImageDelete.php
+msgid "Watermark"
+msgstr "Image en filigrane"
+
+#: CRM/Cdntaxreceipts/Form/ImageDelete.php
+#: CRM/Cdntaxreceipts/Form/Settings.php
+msgid "PDF Template"
+msgstr "Modèle PDF"
+
+#: CRM/Cdntaxreceipts/Form/Report/ReceiptsIssued.php
+msgid "Contact Name (Current Value)"
+msgstr "Nom du Contact (valeur actuelle)"
+
+#: CRM/Cdntaxreceipts/Form/Report/ReceiptsIssued.php
+#: CRM/Cdntaxreceipts/Form/Report/ReceiptsNotIssued.php
+msgid "Last Name, First Name"
+msgstr "Nom, Prénom"
+
+#: CRM/Cdntaxreceipts/Form/Report/ReceiptsIssued.php
+msgid "Issue Type"
+msgstr "Type de génération"
+
+#: CRM/Cdntaxreceipts/Form/Report/ReceiptsIssued.php
+msgid "Single"
+msgstr "Unique"
+
+#: CRM/Cdntaxreceipts/Form/Report/ReceiptsIssued.php
+msgid "Annual"
+msgstr "Annuel"
+
+#: CRM/Cdntaxreceipts/Form/Report/ReceiptsIssued.php
+msgid "Aggregate"
+msgstr "Agrégation"
+
+#: CRM/Cdntaxreceipts/Form/Report/ReceiptsIssued.php
+msgid "Issue Method"
+msgstr "Méthode de génération"
+
+#: CRM/Cdntaxreceipts/Form/Report/ReceiptsIssued.php
+#: templates/CRM/Cdntaxreceipts/Form/ViewTaxReceipt.tpl
+msgid "Receipt Status"
+msgstr "Statut du reçu fiscal"
+
+#: CRM/Cdntaxreceipts/Form/Report/ReceiptsIssued.php
+msgid "Email Open Date"
+msgstr "Date d'ouverture du courriel"
+
+#: CRM/Cdntaxreceipts/Form/Report/ReceiptsIssued.php
+#: templates/CRM/Cdntaxreceipts/Form/ViewTaxReceipt.tpl
+msgid "Receipt No."
+msgstr "N° de reçu fiscal"
+
+#: CRM/Cdntaxreceipts/Form/Report/ReceiptsIssued.php
+msgid "Receipt Amount"
+msgstr "Montant du reçu fiscal"
+
+#: CRM/Cdntaxreceipts/Form/Report/ReceiptsIssued.php
+msgid "Financial Type (current value)"
+msgstr "Type d'opération financière (valeur actuelle)"
+
+#: CRM/Cdntaxreceipts/Form/Report/ReceiptsIssued.php
+msgid "Payment Method (current value)"
+msgstr "Mode de paiement (valeur actuelle)"
+
+#: CRM/Cdntaxreceipts/Form/Report/ReceiptsIssued.php
+#: CRM/Cdntaxreceipts/Form/Report/ReceiptsNotIssued.php
+#: CRM/Cdntaxreceipts/Form/ViewTaxReceipt.php
+#: CRM/Cdntaxreceipts/Task/IssueAggregateTaxReceipts.php
+#: CRM/Cdntaxreceipts/Task/IssueAnnualTaxReceipts.php
+#: CRM/Cdntaxreceipts/Task/IssueSingleTaxReceipts.php
+msgid "You do not have permission to access this page"
+msgstr "Vous n'avez pas les autorisations pour accéder à cette page"
+
+#: CRM/Cdntaxreceipts/Form/Report/ReceiptsIssued.php
+#: CRM/Cdntaxreceipts/Form/Report/ReceiptsNotIssued.php
+msgid "View Contact Summary for this Contact"
+msgstr "Voir la synthèse du contact"
+
+#: CRM/Cdntaxreceipts/Form/Report/ReceiptsIssued.php
+#: templates/CRM/Cdntaxreceipts/Form/ViewTaxReceipt.tpl
+#: templates/CRM/Cdntaxreceipts/Task/IssueAggregateTaxReceipts.tpl
+msgid "Print"
+msgstr "Imprimer"
+
+#: CRM/Cdntaxreceipts/Form/Report/ReceiptsIssued.php
+#: CRM/Cdntaxreceipts/Form/Settings.php
+#: templates/CRM/Cdntaxreceipts/Form/ViewTaxReceipt.tpl
+#: templates/CRM/Cdntaxreceipts/Task/IssueAggregateTaxReceipts.tpl
+#: templates/CRM/Cdntaxreceipts/Task/IssueAnnualTaxReceipts.tpl
+msgid "Email"
+msgstr "Courriel"
+
+#: CRM/Cdntaxreceipts/Form/Report/ReceiptsIssued.php
+#: templates/CRM/Cdntaxreceipts/Form/ViewTaxReceipt.tpl
+msgid "Issued"
+msgstr "Emis"
+
+#: CRM/Cdntaxreceipts/Form/Report/ReceiptsIssued.php
+#: templates/CRM/Cdntaxreceipts/Form/ViewTaxReceipt.tpl
+msgid "Cancelled"
+msgstr "Annulé"
+
+#: CRM/Cdntaxreceipts/Form/Report/ReceiptsIssued.php
+msgid "Unknown"
+msgstr "Inconnu"
+
+#: CRM/Cdntaxreceipts/Form/Report/ReceiptsIssued.php
+#: templates/CRM/Cdntaxreceipts/Task/IssueAggregateTaxReceipts.tpl
+msgid "Total Amount Issued"
+msgstr "Montant total émis"
+
+#: CRM/Cdntaxreceipts/Form/Report/ReceiptsIssued.php
+msgid "Number Issued"
+msgstr "Numéro émis"
+
+#: CRM/Cdntaxreceipts/Form/Report/ReceiptsIssued.php
+msgid "Average Amount Issued"
+msgstr "Montant moyen émis"
+
+#: CRM/Cdntaxreceipts/Form/Report/ReceiptsNotIssued.php
+msgid "Contact Name"
+msgstr "Nom du contact"
+
+#: CRM/Cdntaxreceipts/Form/Report/ReceiptsNotIssued.php
+msgid "Contribution Source"
+msgstr "Source du don"
+
+#: CRM/Cdntaxreceipts/Form/Report/ReceiptsNotIssued.php
+msgid "Financial Type"
+msgstr "Type d'opération (financière)"
+
+#: CRM/Cdntaxreceipts/Form/Report/ReceiptsNotIssued.php
+msgid "Yes"
+msgstr "Oui"
+
+#: CRM/Cdntaxreceipts/Form/Report/ReceiptsNotIssued.php
+msgid "No"
+msgstr "Non"
+
+#: CRM/Cdntaxreceipts/Form/Report/ReceiptsNotIssued.php
+msgid "Use Advanced Eligibility (Hooks - Memory Intensive)"
+msgstr "Utiliser l'égilibité avancée (Hooks - memory intensive)"
+
+#: CRM/Cdntaxreceipts/Form/Report/ReceiptsNotIssued.php
+msgid ""
+"For performance reasons, date range is limited to the current month. If you "
+"want to a different date range, please use the date filter."
+msgstr "Pour des raisons de performances, la plage de dates est limitée au mois en cours. Si vous souhaitez une autre plage de dates, veuillez utiliser le filtre de date."
+
+#: CRM/Cdntaxreceipts/Form/Report/ReceiptsNotIssued.php
+msgid "View Details of this Contribution"
+msgstr "Voir les détails de ce don"
+
+#: CRM/Cdntaxreceipts/Form/Settings.php
+msgid "Configure CDN Tax Receipts"
+msgstr "Configurer les reçus fiscaux de dons"
+
+#: CRM/Cdntaxreceipts/Form/Settings.php
+msgid "Submit"
+msgstr "Soumettre"
+
+#: CRM/Cdntaxreceipts/Form/Settings.php
+msgid "Organization Name"
+msgstr "Nom de l'organisation"
+
+#: CRM/Cdntaxreceipts/Form/Settings.php
+msgid "Address Line 1"
+msgstr "Adresse ligne 1"
+
+#: CRM/Cdntaxreceipts/Form/Settings.php
+msgid "Address Line 2"
+msgstr "Adresse ligne 2"
+
+#: CRM/Cdntaxreceipts/Form/Settings.php
+msgid "Telephone"
+msgstr "Téléphone"
+
+#: CRM/Cdntaxreceipts/Form/Settings.php
+msgid "Fax"
+msgstr "Télécopieur"
+
+#: CRM/Cdntaxreceipts/Form/Settings.php
+msgid "Website"
+msgstr "Site web"
+
+#: CRM/Cdntaxreceipts/Form/Settings.php
+msgid "Charitable Registration Number"
+msgstr "Numéro officiel de l'organisation"
+
+#: CRM/Cdntaxreceipts/Form/Settings.php
+#: templates/CRM/Cdntaxreceipts/Form/ViewTaxReceipt.tpl
+msgid "Location Issued"
+msgstr "Adresse d'expéditeur"
+
+#: CRM/Cdntaxreceipts/Form/Settings.php
+msgid "Receipt Prefix"
+msgstr "Préfixe du reçu fiscal"
+
+#: ./CRM/Cdntaxreceipts/Form/Settings.php
+msgid "Receipt Postfix"
+msgstr "Nb de chiffres apres le préfixe"
+
+#: ./CRM/Cdntaxreceipts/Form/Settings.php
+msgid "Authorized Signature Text"
+msgstr "Texte de « signature autorisée »"
+
+#: CRM/Cdntaxreceipts/Form/Settings.php
+msgid "Organization Logo"
+msgstr "Logo de l'organisation"
+
+#: CRM/Cdntaxreceipts/Form/Settings.php
+msgid "File size should be less than %1 MBytes (%2 bytes)"
+msgstr "La taille du fichier doit être inférieure à %1 Mo (%2 octets)"
+
+#: CRM/Cdntaxreceipts/Form/Settings.php
+msgid "Signature Image"
+msgstr "Image de la signature "
+
+#: CRM/Cdntaxreceipts/Form/Settings.php
+msgid "Watermark Image"
+msgstr "Image du filigrane"
+
+#: ./CRM/Cdntaxreceipts/Form/Settings.php
+msgid "PDF Template Organization"
+msgstr "Modèle PDF pour les organisations"
+
+#: ./CRM/Cdntaxreceipts/Form/Settings.php
+msgid "PDF Template Individual"
+msgstr "Modèle PDF pour les individus"
+
+#: ./CRM/Cdntaxreceipts/Form/Settings.php
+msgid "Could not upload the file"
+msgstr "Impossible d'envoyer le fichier"
+
+#: CRM/Cdntaxreceipts/Form/Settings.php
+msgid "Setup in-kind receipts?"
+msgstr "Configurer les reçus en nature ?"
+
+#: CRM/Cdntaxreceipts/Form/Settings.php
+msgid "Delivery Method"
+msgstr "Méthode d'envoi"
+
+#: CRM/Cdntaxreceipts/Form/Settings.php
+msgid "Attach receipts to automated workflow messages?"
+msgstr "Joindre les reçus fiscaux aux messages systèmes automatiques ?"
+
+#: CRM/Cdntaxreceipts/Form/Settings.php
+msgid "Enable Advanced Eligibility Check?"
+msgstr "Activer les vérifications avancées d'éligibilité ?"
+
+#: CRM/Cdntaxreceipts/Form/Settings.php
+msgid "Email From"
+msgstr "Expéditeur du courriel"
+
+#: CRM/Cdntaxreceipts/Form/Settings.php
+msgid "Archive Email"
+msgstr "Courriel d'archivage"
+
+#: CRM/Cdntaxreceipts/Form/Settings.php
+msgid "Your settings have been saved."
+msgstr "Vos paramètres ont été enregistrés."
+
+#: CRM/Cdntaxreceipts/Form/ViewTaxReceipt.php
+#: templates/CRM/Cdntaxreceipts/Form/ViewTaxReceipt.tpl
+msgid "Re-Issue Tax Receipt"
+msgstr "Re-émettre le reçu fiscal"
+
+#: CRM/Cdntaxreceipts/Form/ViewTaxReceipt.php
+msgid "Issue Tax Receipt"
+msgstr "Émettre le reçu fiscal"
+
+#: CRM/Cdntaxreceipts/Form/ViewTaxReceipt.php cdntaxreceipts.php
+msgid "Done"
+msgstr "Complété"
+
+#: CRM/Cdntaxreceipts/Form/ViewTaxReceipt.php
+msgid "Cancel Tax Receipt"
+msgstr "Annuler le reçu fiscal"
+
+#: CRM/Cdntaxreceipts/Form/ViewTaxReceipt.php
+msgid "Tax Receipt has been cancelled."
+msgstr "Le reçu fiscal a été annulé."
+
+#: CRM/Cdntaxreceipts/Form/ViewTaxReceipt.php
+msgid "Encountered an error. Tax receipt has not been cancelled."
+msgstr "Une erreur est survenue. Le reçu fiscal n'a pas été annulé."
+
+#: CRM/Cdntaxreceipts/Form/ViewTaxReceipt.php
+msgid ""
+"This contribution is not tax deductible and/or not completed. No receipt has"
+" been issued."
+msgstr "Ce don n'est pas déductible des impôts et / ou incomplet. Aucun reçu fiscal n'a été émis."
+
+#: CRM/Cdntaxreceipts/Form/ViewTaxReceipt.php
+msgid "Tax Receipt has been emailed to the contributor."
+msgstr "Le reçu fiscal a été envoyé par courriel au donateur"
+
+#: CRM/Cdntaxreceipts/Form/ViewTaxReceipt.php
+msgid "Tax Receipt has been generated for printing."
+msgstr "Le reçu fiscal a été généré pour l'impression."
+
+#: CRM/Cdntaxreceipts/Form/ViewTaxReceipt.php
+msgid "Tax Receipt data is available in the Tax Receipts Issued report."
+msgstr "Les données sur les reçus fiscaux sont disponibles dans le Rapport \"Reçus Fiscaux émis\"."
+
+#: CRM/Cdntaxreceipts/Form/ViewTaxReceipt.php
+msgid "Encountered an error. Tax receipt has not been issued."
+msgstr "Une erreur est survenue. Le reçu fiscal n'a pas été émis."
+
+#: CRM/Cdntaxreceipts/Form/ViewTaxReceipt.php
+msgid "File has expired. Please retrieve receipt from the email archive."
+msgstr "Le fichier a expiré. Récupérez le reçu fiscal à partir de l'archive Mail."
+
+#: CRM/Cdntaxreceipts/Task/IssueAggregateTaxReceipts.php
+msgid "Issue Aggregate Tax Receipts"
+msgstr "Générer un reçu fiscal annuel - tous les dons"
+
+#: CRM/Cdntaxreceipts/Task/IssueAggregateTaxReceipts.php
+#: CRM/Cdntaxreceipts/Task/IssueAnnualTaxReceipts.php
+#: CRM/Cdntaxreceipts/Task/IssueSingleTaxReceipts.php
+msgid "Selection required"
+msgstr "Sélection obligatoire"
+
+#: CRM/Cdntaxreceipts/Task/IssueAggregateTaxReceipts.php
+#: CRM/Cdntaxreceipts/Task/IssueAnnualTaxReceipts.php
+#: CRM/Cdntaxreceipts/Task/IssueSingleTaxReceipts.php
+msgid "Run in preview mode?"
+msgstr "Générer des brouillons (mode Aperçu) ?"
+
+#: CRM/Cdntaxreceipts/Task/IssueAggregateTaxReceipts.php
+#: CRM/Cdntaxreceipts/Task/IssueAnnualTaxReceipts.php
+#: CRM/Cdntaxreceipts/Task/IssueSingleTaxReceipts.php
+msgid "Back"
+msgstr "Retour"
+
+#: CRM/Cdntaxreceipts/Task/IssueAggregateTaxReceipts.php
+#: CRM/Cdntaxreceipts/Task/IssueAnnualTaxReceipts.php
+#: CRM/Cdntaxreceipts/Task/IssueSingleTaxReceipts.php
+msgid ""
+"Maximum of %1 tax receipt(s) were sent. Please repeat to continue "
+"processing."
+msgstr "Seulement %1 reçus fiscaux ont été envoyés. Veuillez répéter l'opération pour poursuivre le traitement."
+
+#: CRM/Cdntaxreceipts/Task/IssueAggregateTaxReceipts.php
+#: CRM/Cdntaxreceipts/Task/IssueAnnualTaxReceipts.php
+#: CRM/Cdntaxreceipts/Task/IssueSingleTaxReceipts.php
+msgid "%1 tax receipt(s) have been previewed.  No receipts have been issued."
+msgstr "%1 reçus ont été générés sous forme de brouillon (mode Aperçu). Aucun reçu fiscal officiel n'a été émis."
+
+#: CRM/Cdntaxreceipts/Task/IssueAggregateTaxReceipts.php
+#: CRM/Cdntaxreceipts/Task/IssueAnnualTaxReceipts.php
+#: CRM/Cdntaxreceipts/Task/IssueSingleTaxReceipts.php
+msgid "%1 tax receipt(s) were sent by email."
+msgstr "%1 reçus fiscaux ont été envoyés par courriel."
+
+#: CRM/Cdntaxreceipts/Task/IssueAggregateTaxReceipts.php
+#: CRM/Cdntaxreceipts/Task/IssueAnnualTaxReceipts.php
+#: CRM/Cdntaxreceipts/Task/IssueSingleTaxReceipts.php
+msgid "%1 tax receipt(s) need to be printed."
+msgstr "%1 reçus fiscaux doivent être imprimés."
+
+#: CRM/Cdntaxreceipts/Task/IssueAggregateTaxReceipts.php
+#: CRM/Cdntaxreceipts/Task/IssueAnnualTaxReceipts.php
+#: CRM/Cdntaxreceipts/Task/IssueSingleTaxReceipts.php
+msgid ""
+"Data for %1 tax receipt(s) is available in the Tax Receipts Issued report."
+msgstr "Les données pour %1 reçus fiscaux sont disponibles dans le Rapport \"Reçus fiscaux émis\"."
+
+#: CRM/Cdntaxreceipts/Task/IssueAggregateTaxReceipts.php
+#: CRM/Cdntaxreceipts/Task/IssueAnnualTaxReceipts.php
+#: CRM/Cdntaxreceipts/Task/IssueSingleTaxReceipts.php
+msgid "%1 tax receipt(s) failed to process."
+msgstr "%1 reçus fiscaux n'ont pas pu être générés."
+
+#: CRM/Cdntaxreceipts/Task/IssueAnnualTaxReceipts.php cdntaxreceipts.php
+msgid "Issue Annual Tax Receipts"
+msgstr "Générer un reçu fiscal par don"
+
+#: CRM/Cdntaxreceipts/Task/IssueSingleTaxReceipts.php cdntaxreceipts.php
+msgid "Issue Tax Receipts"
+msgstr "Générer les reçus fiscaux"
+
+#: CRM/Cdntaxreceipts/Task/IssueSingleTaxReceipts.php
+msgid "Issue tax receipts for the %1 unreceipted contributions only."
+msgstr "Générer les reçus fiscaux pour les %1 dons n'ayant pas encore été traités."
+
+#: CRM/Cdntaxreceipts/Task/IssueSingleTaxReceipts.php
+msgid ""
+"Issue tax receipts for all %1 contributions. Previously-receipted "
+"contributions will be marked 'duplicate'."
+msgstr "Générer les reçus fiscaux pour les %1 dons. Les dons pour lesquels un reçu fiscal officiel a déjà été émis précédemment seront marqués « Duplicata »."
+
+#: CRM/Cdntaxreceipts/Upgrader/Base.php
+msgid "Upgrade %1 to revision %2"
+msgstr "Mise à jour de %1 à la révision %2"
+
+#: cdntaxreceipts.functions.inc
+msgid "Failed to acquire lock. No receipts were processed."
+msgstr "Échec de l'acquisition du verrou. Aucun reçu fiscal n'a été traité."
+
+#: cdntaxreceipts.functions.inc
+msgid "Warning"
+msgstr "Avertissement"
+
+#: cdntaxreceipts.functions.inc
+msgid "This is your Official Receipt for income tax purposes."
+msgstr "Reçu fiscal officiel de don pour votre déclaration d'impôt sur le revenu."
+
+#: cdntaxreceipts.functions.inc
+msgid "Tel: %1"
+msgstr "Tél : %1"
+
+#: cdntaxreceipts.functions.inc
+msgid "Fax: %1"
+msgstr "Télécopieur : %1"
+
+#: cdntaxreceipts.functions.inc
+msgid "Email: %1; Website: %2"
+msgstr "Courriel : %1; Site web : %2"
+
+#: cdntaxreceipts.functions.inc
+msgid "Charitable Registration: %1"
+msgstr "No. officiel de l'organisation : %1"
+
+#: cdntaxreceipts.functions.inc
+msgid "Issue Date: %1"
+msgstr "Date d'émission : %1"
+
+#: cdntaxreceipts.functions.inc
+msgid "Received on: %1"
+msgstr "Don reçu le : %1"
+
+#: cdntaxreceipts.functions.inc
+msgid "Eligible Amount:  $%1"
+msgstr "Montant éligible : %1 $"
+
+#: cdntaxreceipts.functions.inc
+msgid "Location Issued: %1"
+msgstr "Adresse d'expéditeur : %1"
+
+#: cdntaxreceipts.functions.inc
+msgid "Thank you for giving in %1!"
+msgstr "Merci d'avoir donné dans %1 !"
+
+#: cdntaxreceipts.functions.inc
+msgid "Receipt No: %1"
+msgstr "N° de reçu fiscal : %1"
+
+#: cdntaxreceipts.functions.inc
+msgid "Received from: "
+msgstr "Donateur :"
+
+#: cdntaxreceipts.functions.inc
+msgid "Donation in-kind: %1"
+msgstr "Don en espèces : %1"
+
+#: cdntaxreceipts.functions.inc
+msgid "Cost: %1"
+msgstr "Coût : %1"
+
+#: cdntaxreceipts.functions.inc
+msgid "Appraiser: %1"
+msgstr "Valeur marchande : %1"
+
+#: cdntaxreceipts.functions.inc
+msgid "Canada Revenue Agency: canada.ca/charities-giving"
+msgstr "Agence Canadienne du revenu du Canada: canada.ca/charities-giving"
+
+#: cdntaxreceipts.functions.inc
+msgid "Thank you!"
+msgstr "Merci !"
+
+#: cdntaxreceipts.functions.inc
+msgid "Authorized Signature"
+msgstr "Signature autorisée"
+
+#: cdntaxreceipts.functions.inc
+msgid ""
+"Location Issued is not set. Please set it under Administer - CiviContribute "
+"- CDN Tax Receipts."
+msgstr "L'adresse d'expéditeur n'est pas configurée. Merci de la saisir dans Administrer > CiviContribute > Reçus fiscaux de dons."
+
+#: cdntaxreceipts.php
+msgid "Tax Receipt"
+msgstr "Reçu fiscal officiel de don"
+
+#: cdntaxreceipts.php
+msgid "Issue Tax Receipts (Separate Receipt for Each Contribution)"
+msgstr "Générer des reçus fiscaux (un par don)"
+
+#: cdntaxreceipts.php
+msgid "Issue Tax Receipts (Combined Receipt with Total Contributed)"
+msgstr "Générer des reçus fiscaux (total des dons)"
+
+#: cdntaxreceipts.php
+msgid "CiviCRM CDN Tax Receipts"
+msgstr "Reçus fiscaux de dons"
+
+#: cdntaxreceipts.php
+msgid ""
+"Configure the Tax Receipts extension at Administer >> CiviContribute >> CDN "
+"Tax Receipts."
+msgstr "Configurer l'extension pour les Reçus Fiscaux dans : Administrer >> CiviContribution >> Reçus fiscaux de dons."
+
+#: cdntaxreceipts.php
+msgid "CDN Tax Receipts"
+msgstr "Reçus fiscaux de dons"
+
+#: cdntaxreceipts.php
+msgid ""
+"Please upload a valid file. Allowed extensions are (.gif, .png, .jpg, .pdf)"
+msgstr "Merci de téléverser un fichier valide. Les extensions valide sont: .gif, .png, .jpg, .pdf"
+
+#: templates/CRM/Cdntaxreceipts/Form/ImageDelete.tpl
+msgid "Delete the <em>%1</em> file?"
+msgstr "Supprimer le fichier <em>%1</em> ?"
+
+#: templates/CRM/Cdntaxreceipts/Form/Settings.tpl
+msgid "Organization Details"
+msgstr "Détails de l'organisme"
+
+#: templates/CRM/Cdntaxreceipts/Form/Settings.tpl
+msgid "My Charitable Organization"
+msgstr "Mon organisme"
+
+#: templates/CRM/Cdntaxreceipts/Form/Settings.tpl
+msgid "101 Anywhere Drive"
+msgstr "123 rue Fictive"
+
+#: templates/CRM/Cdntaxreceipts/Form/Settings.tpl
+msgid "Toronto ON A1B 2C3"
+msgstr "Montréal, QC H1A 2C3"
+
+#: templates/CRM/Cdntaxreceipts/Form/Settings.tpl
+msgid "Receipt Configuration"
+msgstr "Configuration du reçu fiscal"
+
+#: templates/CRM/Cdntaxreceipts/Form/Settings.tpl
+msgid ""
+"Receipt numbers are formed by appending the CiviCRM Contribution ID to this "
+"prefix. Receipt numbers must be unique within your organization. If you also"
+" issue tax receipts using another system, you can use the prefix to ensure "
+"uniqueness (e.g. enter 'WEB-' here so all receipts issued through CiviCRM "
+"are WEB-00000001, WEB-00000002, etc.)"
+msgstr "Les numéros d'ordre des reçus fiscaux sont formés en ajoutant l'Id. de contribution CiviCRM à ce préfixe. Les numéros de reçus fiscaux doivent être uniques pour votre organisation. Si vous émettez également des reçus fiscaux en utilisant un autre système, vous pouvez changer le préfixe pour vous assurer de l'unicité des numéros dans chaque système (Par exemple, entrez \"WEB-\" ici afin que tous les reçus émis via CiviCRM soient WEB-00000001, WEB-00000002, etc.)"
+
+#: ./templates/CRM/Cdntaxreceipts/Form/Settings.tpl
+msgid "number of digits after the prefix"
+msgstr "Nombre de chiffres après le préfixe"
+
+#: templates/CRM/Cdntaxreceipts/Form/Settings.tpl
+msgid ""
+"Name and position of the authorizing official to be displayed under the "
+"signature line. Defaults to \"Authorized Signature\" if no name is "
+"specified."
+msgstr "Le nom et le poste du responsable d'autorisation doit être affiché sous la ligne de signature. Par défaut, \"Signature autorisée\" si aucun nom n'est spécifié."
+
+#: templates/CRM/Cdntaxreceipts/Form/Settings.tpl
+msgid "Logo size: 280x120 pixels; File types allowed: .jpg .png."
+msgstr "Taille du logo : 280x120 pixels; Les extensions autorisées sont .png, .jpg"
+
+#: templates/CRM/Cdntaxreceipts/Form/Settings.tpl
+msgid "Signature size: 141x58 pixels; File types allowed: .jpg .png."
+msgstr "Taille de la signature : 141x58 pixels; Les extensions autorisées sont .png, .jpg"
+
+#: templates/CRM/Cdntaxreceipts/Form/Settings.tpl
+msgid "Watermark Image size: 250x250 pixels; File types allowed: .jpg .png."
+msgstr "Taille du Filigrane : 250x250 pixels; Types de fichier autorisés: .jpg .png."
+
+#: templates/CRM/Cdntaxreceipts/Form/Settings.tpl
+msgid "Upload your own PDF template: .pdf"
+msgstr "Téléchargez votre propre modèle PDF: .pdf"
+
+#: templates/CRM/Cdntaxreceipts/Form/Settings.tpl
+msgid "System Options"
+msgstr "Options du système"
+
+#: templates/CRM/Cdntaxreceipts/Form/Settings.tpl
+msgid ""
+"Checking this box will set up the fields required to generate in-kind tax "
+"receipts. Unchecking the box will not disable in-kind receipts: you will "
+"need to do that manually, by disabling the In-kind contribution type or "
+"making it non-deductible in the CiviCRM administration pages."
+msgstr "En cochant cette case, vous pourrez configurer les champs obligatoires pour générer des reçus fiscaux en nature. La désactivation de la case ne désactivera pas les reçus en nature : vous devrez le faire manuellement, en désactivant le type de contribution en nature ou en le rendant non déductible dans les pages d'administration CiviCRM (tarifications)."
+
+#: templates/CRM/Cdntaxreceipts/Form/Settings.tpl
+msgid ""
+"Print only: all tax receipts are generated in PDF format.<br />Email or "
+"print: tax receipts are emailed if possible, otherwise generated in PDF "
+"format.<br />Data only: Tax receipts are generated internally in CiviCRM. "
+"Data can be exported for mail merge/mail house via the Tax Receipts Issued "
+"report."
+msgstr "Impression uniquement : tous les reçus fiscaux sont générés au format PDF.<br />Courriel ou impression : les reçus fiscaux sont envoyés par courriel si possible, sinon ils sont générés au format PDF.<br />Données uniquement : les reçus fiscaux sont générés en interne dans CiviCRM. Les données peuvent être exportées pour la fusion et le publipostage via le Rapport \"Reçus Fiscaux émis\"."
+
+#: templates/CRM/Cdntaxreceipts/Form/Settings.tpl
+msgid ""
+"** Not recommended if you have ACHEFT payments. **<br />If enabled, tax "
+"receipts will be attached to the automated emails that CiviCRM sends via "
+"online contribution page, and when \"send receipt\" is selected during "
+"backoffice gift entry. Be sure to alter the Contributions - Receipt (on-"
+"line/off-line) message templates to alert the donor that their tax receipt "
+"is attached."
+msgstr "** Non recommandé si vous avez des paiements ACHEFT. ** <br />Si cette option est activée, les reçus fiscaux seront joints aux courriels automatisés que CiviCRM envoie via la page de contribution en ligne, et lorsque « envoyer le reçu » est sélectionné lors de la saisie d'un cadeau dans le backoffice. Assurez-vous de modifier les modèles de message Contributions - Reçu (en ligne / hors ligne) pour avertir le donateur que son reçu fiscal est joint."
+
+#: templates/CRM/Cdntaxreceipts/Form/Settings.tpl
+msgid ""
+"If enabled, the Receipts not issued Report will have the Advanced "
+"Eligibility Check enabled by default. Required for accurate reports, but can"
+" slow reports."
+msgstr "Lorsque activé, le Rapport \"Reçus Fiscaux non-émis\" aura l'option « vérification avancée de l'éligibilité » activée par défaut. Obligatoire pour que les rapports soient justes, même si cela peut en ralentir considérablement la génération."
+
+#: templates/CRM/Cdntaxreceipts/Form/Settings.tpl
+msgid "Email Message"
+msgstr "Message du courriel"
+
+#: templates/CRM/Cdntaxreceipts/Form/Settings.tpl
+msgid "Address you would like to Email the Tax Receipt from."
+msgstr "Adresse à laquelle vous souhaitez envoyer le reçu fiscal par courriel."
+
+#: templates/CRM/Cdntaxreceipts/Form/Settings.tpl
+msgid ""
+"Address you would like to Send a copy of the Email containing the Tax "
+"Receipt to. This is useful to create an archive."
+msgstr "Adresse à laquelle vous souhaitez envoyer une copie du courriel contenant le reçu fiscal. Ceci est utile pour créer une archive."
+
+#: templates/CRM/Cdntaxreceipts/Form/Settings.tpl
+msgid "Message"
+msgstr "Message"
+
+#: templates/CRM/Cdntaxreceipts/Form/Settings.tpl
+msgid ""
+"The email message is configured under \"System Workflow Messages\" in "
+"Communication Templates."
+msgstr "Le message de ce courriel est configuré dans les « messages systèmes » des modèles de messages (Administration > Communications)."
+
+#: templates/CRM/Cdntaxreceipts/Form/Settings.tpl
+msgid ""
+"After you fill out this form and save your Configuration, create a fake "
+"Donation in CiviCRM and issue a Tax Receipt for it to check the "
+"graphics/layout of the Tax Receipt that is generated. If necessary - rework "
+"your graphics and come back to this Form to upload the new version(s)."
+msgstr "Après avoir rempli ce formulaire et sauvegardé la configuration, créez un faux don dans CiviCRM et émettez un reçu fiscal (brouillon) pour vérifier la mise en page du reçu généré."
+
+#: templates/CRM/Cdntaxreceipts/Form/ViewTaxReceipt.tpl
+msgid "Issued By"
+msgstr "Émis par"
+
+#: templates/CRM/Cdntaxreceipts/Form/ViewTaxReceipt.tpl
+msgid "Issue Date"
+msgstr "Date d'émission"
+
+#: templates/CRM/Cdntaxreceipts/Form/ViewTaxReceipt.tpl
+msgid "Method"
+msgstr "Méthode"
+
+#: templates/CRM/Cdntaxreceipts/Form/ViewTaxReceipt.tpl
+msgid "Data"
+msgstr "Données"
+
+#: templates/CRM/Cdntaxreceipts/Form/ViewTaxReceipt.tpl
+msgid "Type"
+msgstr "Type"
+
+#: templates/CRM/Cdntaxreceipts/Form/ViewTaxReceipt.tpl
+msgid "IP"
+msgstr "IP"
+
+#: templates/CRM/Cdntaxreceipts/Form/ViewTaxReceipt.tpl
+msgid "Amount"
+msgstr "Montant"
+
+#: templates/CRM/Cdntaxreceipts/Form/ViewTaxReceipt.tpl
+msgid "Contribution(s)"
+msgstr "Don(s)"
+
+#: templates/CRM/Cdntaxreceipts/Form/ViewTaxReceipt.tpl
+msgid "A tax receipt has not been issued for this contribution."
+msgstr "Aucun reçu fiscal officiel n'a été émis pour ce don."
+
+#: templates/CRM/Cdntaxreceipts/Form/ViewTaxReceipt.tpl
+msgid ""
+"The receipt will be sent <strong>by email</strong> to the contributor (%1)."
+msgstr "Le reçu fiscal sera envoyé <strong>par courriel</strong> au donateur (%1)."
+
+#: templates/CRM/Cdntaxreceipts/Form/ViewTaxReceipt.tpl
+msgid ""
+"Please <strong>download and print</strong> the receipt that\n"
+"      is generated. You will need to send a printed copy to the contributor."
+msgstr "<strong>Téléchargez et imprimez</strong> le reçu fiscal qui est\ngénéré. Vous devrez envoyer une copie imprimée au donateur."
+
+#: templates/CRM/Cdntaxreceipts/Form/ViewTaxReceipt.tpl
+msgid "You do not have sufficient authorization to issue tax receipts."
+msgstr "Vous ne disposez pas des autorisations suffisantes pour générer les reçus fiscaux officiels de don."
+
+#: templates/CRM/Cdntaxreceipts/Form/ViewTaxReceipt.tpl
+msgid ""
+"Click '%1' to re-issue a tax receipt for this contribution. The tax receipt "
+"will be marked 'Cancelled' with the same receipt number and amount as the "
+"original copy."
+msgstr "Cliquez sur '%1' pour réémettre un reçu fiscal pour ce don. Le reçu fiscal sera marqué «Annulé» et comportera le même numéro d'émission et le même montant que le reçu fiscal original."
+
+#: templates/CRM/Cdntaxreceipts/Form/ViewTaxReceipt.tpl
+msgid ""
+"Click '%1' to re-issue a tax receipt for this contribution. The tax receipt "
+"will be marked 'Duplicate' with the same receipt number and amount as the "
+"original copy."
+msgstr "Cliquez sur '%1' pour réémettre un reçu fiscal pour ce don. Le reçu fiscal sera marqué « Duplicata » et comportera le même numéro d'émission et le même montant que le reçu original."
+
+#: templates/CRM/Cdntaxreceipts/Form/ViewTaxReceipt.tpl
+msgid "You do not have sufficient authorization to re-issue tax receipts."
+msgstr "Vous ne disposez pas des autorisations suffisantes pour ré-émettre des reçus fiscaux officiels de don."
+
+#: templates/CRM/Cdntaxreceipts/Task/IssueAggregateTaxReceipts.tpl
+msgid ""
+"\n"
+"    You have selected <strong>%1</strong> contributions including <strong>%2</strong> originals and <strong>%3</strong>\n"
+"    duplicates to issue. Note that duplicates cannot be issued by this method and will be skipped.\n"
+"    The summary below includes the original receipt issue contributions only."
+msgstr "\n   Vous avez sélectionné <strong>%1</strong> dons dont <strong>%2</strong> n'ont pas encore fait l'objet d'un reçu fiscal officiel original et <strong>%3</strong>\n   sont des dons déjà générés auparavant. Notez que les dons déjà générés (duplicatas) ne peuvent pas être regénérés de cette façon et seront ignorés ici.\n    La synthèse ci-dessous comprend uniquement les dons qui n'avaient pas encore fait l'objet d'un reçu fiscal officiel original."
+
+#: templates/CRM/Cdntaxreceipts/Task/IssueAggregateTaxReceipts.tpl
+msgid "Tax Year"
+msgstr "Exercice comptable"
+
+#: templates/CRM/Cdntaxreceipts/Task/IssueAggregateTaxReceipts.tpl
+msgid "# of Contributors"
+msgstr "# des donateurs"
+
+#: templates/CRM/Cdntaxreceipts/Task/IssueAggregateTaxReceipts.tpl
+msgid "Selected Contributions"
+msgstr "Dons séléctionnés"
+
+#: templates/CRM/Cdntaxreceipts/Task/IssueAggregateTaxReceipts.tpl
+msgid "Selected Contribution Amount"
+msgstr "Montant du don sélectionnée"
+
+#: templates/CRM/Cdntaxreceipts/Task/IssueAggregateTaxReceipts.tpl
+msgid "Tax Receipts"
+msgstr "Reçu fiscal officiel de don"
+
+#: templates/CRM/Cdntaxreceipts/Task/IssueAggregateTaxReceipts.tpl
+msgid "Contributions Not Eligible"
+msgstr "Dons non éligibles"
+
+#: templates/CRM/Cdntaxreceipts/Task/IssueAggregateTaxReceipts.tpl
+msgid "Not Eligible Amount"
+msgstr "Montant non admissible"
+
+#: templates/CRM/Cdntaxreceipts/Task/IssueAggregateTaxReceipts.tpl
+msgid ""
+"Clicking 'Issue Tax Receipts' will issue aggregate tax receipts grouped into the selected year(s). These tax receipts are a sum\n"
+"    total of all selected eligible contributions, received from the donor during the selected year, that have not already been receipted individually."
+msgstr "Cliquez sur « Générer des reçus fiscaux » pour générer des reçus fiscaux regroupés pour l'année(s) sélectionnée(s). Ces reçus fiscaux comporteront, pour chaque donateur, la somme de tous ses dons éligibles de l'année et pour lesquels un reçu fiscal n'a pas déjà été émis."
+
+#: templates/CRM/Cdntaxreceipts/Task/IssueAggregateTaxReceipts.tpl
+#: templates/CRM/Cdntaxreceipts/Task/IssueAnnualTaxReceipts.tpl
+msgid ""
+"<strong>This action cannot be undone.</strong> Tax receipts will be logged for auditing purposes,\n"
+"    and a copy of each receipt will be submitted to the tax receipt archive."
+msgstr "<strong>Cette action ne peut pas être annulée.</strong> Les reçus fiscaux officiels seront envoyés aux donateurs et/ou imprimés. Ils seront aussi journalisés dans la base de donnée à des fins d'audit, et une copie de chaque reçu fiscal sera envoyée par courriel à l'adresse d'archivage (si configurée)."
+
+#: templates/CRM/Cdntaxreceipts/Task/IssueAggregateTaxReceipts.tpl
+#: templates/CRM/Cdntaxreceipts/Task/IssueAnnualTaxReceipts.tpl
+#: templates/CRM/Cdntaxreceipts/Task/IssueSingleTaxReceipts.tpl
+msgid "Email receipts will be emailed directly to the contributor."
+msgstr "Les reçus fiscaux à envoyer par courriel seront envoyés directement à chaque donateur."
+
+#: templates/CRM/Cdntaxreceipts/Task/IssueAggregateTaxReceipts.tpl
+#: templates/CRM/Cdntaxreceipts/Task/IssueAnnualTaxReceipts.tpl
+#: templates/CRM/Cdntaxreceipts/Task/IssueSingleTaxReceipts.tpl
+msgid ""
+"Print receipts will be compiled into a file for download.  Please print and "
+"mail any receipts in this file."
+msgstr "Les reçus fiscaux à imprimer seront compilés dans un fichier PDF unique à télécharger. Veuillez imprimer et envoyer les reçus à partir de ce fichier."
+
+#: templates/CRM/Cdntaxreceipts/Task/IssueAggregateTaxReceipts.tpl
+#: templates/CRM/Cdntaxreceipts/Task/IssueAnnualTaxReceipts.tpl
+#: templates/CRM/Cdntaxreceipts/Task/IssueSingleTaxReceipts.tpl
+msgid ""
+"(Generates receipts marked 'preview', but does not issue the receipts.  No "
+"logging or emails sent.)"
+msgstr "(Génère des reçus fiscaux sous forme de « Brouillon » et n'émet pas de reçus officiels. Aucune journalisation ne sera effectuée dans la base et aucun envoi de courriel ne sera effectué.)"
+
+#: templates/CRM/Cdntaxreceipts/Task/IssueAnnualTaxReceipts.tpl
+msgid ""
+"You have selected <strong>%1</strong> contacts. The summary below includes "
+"these contacts only."
+msgstr "Vous avez sélectionné <strong>%1</strong> contacts. La synthèse ci-dessous comprend uniquement ces contacts."
+
+#: templates/CRM/Cdntaxreceipts/Task/IssueAnnualTaxReceipts.tpl
+msgid "Select Tax Year"
+msgstr "Sélectionner l'exercice comptable"
+
+#: templates/CRM/Cdntaxreceipts/Task/IssueAnnualTaxReceipts.tpl
+msgid "Receipts Outstanding"
+msgstr "Reçus fiscaux en attente"
+
+#: templates/CRM/Cdntaxreceipts/Task/IssueAnnualTaxReceipts.tpl
+msgid ""
+"Clicking 'Issue Tax Receipts' will issue annual tax receipts for the selected year. Annual tax receipts are a sum\n"
+"    total of all eligible contributions, received from the donor during the selected year, that have not been receipted individually."
+msgstr "Cliquez sur 'Générer des reçus fiscaux' générera des reçus fiscaux pour l'année sélectionnée. Pour chaque donateur, les reçus fiscaux annuels comportent la somme  totale de tous ses dons de l'année éligibles, et pour lesquels aucun reçu fiscal individuel n'aurait déjà été émis."
+
+#: templates/CRM/Cdntaxreceipts/Task/IssueAnnualTaxReceipts.tpl
+msgid ""
+"Only one annual tax receipt can be issued per donor, per year. If the donor has eligible contributions that\n"
+"  were recorded after the annual receipt was issued, those contributions must be receipted one at a time. Use the Find\n"
+"  Contributions action to issue those receipts."
+msgstr "Un seul reçu fiscal annuel peut être émis par donateur et par année.\nSi le donateur a fait des dons éligibles qui auraient été reçus après l'émission du reçu fiscal annuel, il faudrait alors émettre un reçu fiscal individuel pour chaque don.\nUtilisez \"Contributions > Rechercher des contributions\" pour émettre ces reçus."
+
+#: templates/CRM/Cdntaxreceipts/Task/IssueSingleTaxReceipts.tpl
+msgid "Not yet receipted"
+msgstr "Pas encore émis"
+
+#: templates/CRM/Cdntaxreceipts/Task/IssueSingleTaxReceipts.tpl
+msgid "Already receipted"
+msgstr "Déjà émis"
+
+
+#: templates/CRM/Cdntaxreceipts/Task/IssueSingleTaxReceipts.tpl
+msgid ""
+"Clicking 'Issue Tax Receipts' will issue the selected tax receipts.\n"
+"    <strong>This action cannot be undone.</strong> Tax receipts will be logged for auditing purposes,\n"
+"    and a copy of each receipt will be submitted to the tax receipt archive."
+msgstr "En cliquant sur 'Générer les reçus fiscaux', vous émettrez les reçus fiscaux officiels sélectionnés.\n    <strong>Cette action ne peut pas être annulée.</strong> Les reçus fiscaux officiels seront envoyés aux donateurs et/ou imprimés. Ils seront aussi journalisés dans la base de donnée à des fins d'audit, et une copie de chaque reçu fiscal sera envoyée par courriel à l'adresse d'archivage (si configurée)."
