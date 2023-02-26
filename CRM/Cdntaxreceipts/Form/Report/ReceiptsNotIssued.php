@@ -259,7 +259,7 @@ CREATE TEMPORARY TABLE cdntaxreceipts_temp_civireport_eligible (
                   $this->_absoluteUrl
                );
         $rows[$rowNum]['civicrm_contact_sort_name_link'] = $url;
-        $rows[$rowNum]['civicrm_contact_sort_name_hover'] = E::ts("View Contact Summary for this Contact");
+        $rows[$rowNum]['civicrm_contact_sort_name_hover'] = E::ts('View Contact Summary for this Contact');
         $entryFound = TRUE;
       }
 
@@ -269,7 +269,7 @@ CREATE TEMPORARY TABLE cdntaxreceipts_temp_civireport_eligible (
                   $this->_absoluteUrl
                );
         $rows[$rowNum]['civicrm_contribution_id_link'] = $url;
-        $rows[$rowNum]['civicrm_contribution_id_hover'] = E::ts("View Details of this Contribution");
+        $rows[$rowNum]['civicrm_contribution_id_hover'] = E::ts('View Details of this Contribution');
         $entryFound = TRUE;
       }
 

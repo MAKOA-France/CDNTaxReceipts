@@ -22,7 +22,7 @@
 {/if}
     </tr>
     <tr>
-      <td>{ts domain='org.civicrm.cdntaxreceipts'}Already receipted<{/ts}/td>
+      <td>{ts domain='org.civicrm.cdntaxreceipts'}Already receipted{/ts}</td>
       <td>{$duplicateTotal}</td>
 {if $deliveryMethod neq '2'}
       <td>{$receiptCount.duplicate.email}</td>

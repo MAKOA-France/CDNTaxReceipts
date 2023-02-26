@@ -359,7 +359,7 @@ class CRM_Cdntaxreceipts_Form_Report_ReceiptsIssued extends CRM_Report_Form {
                   $this->_absoluteUrl
                );
         $rows[$rowNum]['civicrm_contact_sort_name_link'] = $url;
-        $rows[$rowNum]['civicrm_contact_sort_name_hover'] = E::ts("View Contact Summary for this Contact");
+        $rows[$rowNum]['civicrm_contact_sort_name_hover'] = E::ts('View Contact Summary for this Contact');
         $entryFound = TRUE;
       }
 

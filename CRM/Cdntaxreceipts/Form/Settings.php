@@ -89,14 +89,14 @@ class CRM_Cdntaxreceipts_Form_Settings extends CRM_Core_Form {
         'receipt_logo' => Civi::settings()->get('receipt_logo'),
         'receipt_signature' => Civi::settings()->get('receipt_signature'),
         'receipt_watermark' => Civi::settings()->get('receipt_watermark'),
-        'receipt_pdftemplate' => Civi::settings()->get('receipt_pdftemplate'), 
+        'receipt_pdftemplate' => Civi::settings()->get('receipt_pdftemplate'),
         // AB : addrule PDF specifique Organization AND Individual
-        'receipt_pdftemplate_organization' => Civi::settings()->get('receipt_pdftemplate_organization'), 
-        'receipt_pdftemplate_individual' => Civi::settings()->get('receipt_pdftemplate_individual'), 
+        'receipt_pdftemplate_organization' => Civi::settings()->get('receipt_pdftemplate_organization'),
+        'receipt_pdftemplate_individual' => Civi::settings()->get('receipt_pdftemplate_individual'),
 
         'org_charitable_no' => Civi::settings()->get('org_charitable_no'),
         'receipt_location_issued' => Civi::settings()->get('receipt_location_issued'),
-       
+
       );
       return $defaults;
     }
