@@ -766,8 +766,8 @@ function _writeReceipt(&$pdf, $pdf_variables, $receipt) {
  
 
   // Afficher DATE après FAit à PAris, le
-  $x_detailscolumn = 118;
-  $y_detailscolumnstart = 138.8;
+  $x_detailscolumn = 125;// 118;
+  $y_detailscolumnstart = 139.2; // 138.8;
   $pdf->SetFont($fontFNE, '', 12);
   $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 0.8);
   $pdf->Write(10, ($issued_on), '', 0, 'L', TRUE, 0, FALSE, FALSE, 0);
@@ -929,9 +929,9 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
   // *******************************
   //      N°ORDRE DU RECU
   // *******************************
-  $x_detailscolumn = 165;
+  $x_detailscolumn = 164;
   $y_detailscolumnstart = 6;
-  $pdf->SetFont($fontFNE, '', 10.5); 
+  $pdf->SetFont($fontFNE, '', 9.5); 
   $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 0);
   $pdf->Cell(24 ,6, E::ts("%1", array(1 => $receipt_number, 'domain' => 'org.civicrm.cdntaxreceipts')),0,0,'L',FALSE,''); //http://www.fpdf.org/en/doc/cell.htm
   //$pdf->Write(10, E::ts("%1", array(1 => $receipt_number, 'domain' => 'org.civicrm.cdntaxreceipts')));
@@ -1092,10 +1092,10 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
   }
 
   // ***************************************
-  //    ENCART NOM ET ADRESSE DU DONATEUR
+  //    ENCART COORDONNEES DU MECENE
   // ***************************************
   $x_detailscolumn = 1.5;
-  $y_detailscolumnstart = 142;
+  $y_detailscolumnstart = 136;
   $yplus = -1;
   $yinterligne = 4.5;
   $fontzise = 10;
@@ -1211,76 +1211,79 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
     }
   }
 
+  $font_size = 10;
   // ***************************************
   //    N° ORDRE
   // ***************************************
-  $x_detailscolumn = 125;
-  $y_detailscolumnstart = 143.4;
-  $pdf->SetFont($fontFNE, '', 12);
+  $x_detailscolumn = 129; // 125;
+  $y_detailscolumnstart = 154.4;// 143.4;
+  $pdf->SetFont($fontFNE, '', $font_size);
   $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 0.8);
   $pdf->Write(10, ($don_id), '', 0, 'L', TRUE, 0, FALSE, FALSE, 0);
 
   // ***************************************
   //    VALEUR DU DON
   // ***************************************  
-  $x_detailscolumn = 119.8;
-  $y_detailscolumnstart = 150.2;
-  $pdf->SetFont($fontFNE, '', 12);
+  $x_detailscolumn = 122.6; // 119.8;
+  $y_detailscolumnstart = 160.8; // 150.2;
+  $pdf->SetFont($fontFNE, '', $font_size);
   $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 0.8);
   $pdf->Write(10, ($valeur_don), '', 0, 'L', TRUE, 0, FALSE, FALSE, 0);
 
   // ***************************************
   //   NATURE
   // ***************************************  
-  $x_detailscolumn = 108;
-  $y_detailscolumnstart = 156.6;
-  $pdf->SetFont($fontFNE, '', 12);
+  $x_detailscolumn = 110.4;// 108;
+  $y_detailscolumnstart = 167; // 156.6;
+  $pdf->SetFont($fontFNE, '', $font_size);
   $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 0.8);
   $pdf->Write(10, ($don_nature), '', 0, 'L', TRUE, 0, FALSE, FALSE, 0);
   
   // ***************************************
   //   MODE
   // ***************************************  
-  $x_detailscolumn = 107.2;
-  $y_detailscolumnstart = 162.6;
-  $pdf->SetFont($fontFNE, '', 12);
+  $x_detailscolumn = 109; //107.2;
+  $y_detailscolumnstart = 173.2; // 162.6;
+  $pdf->SetFont($fontFNE, '', $font_size);
   $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 0.8);
   $pdf->Write(10, ($don_mode), '', 0, 'L', TRUE, 0, FALSE, FALSE, 0);
 
   // ***************************************
   //   DATE
   // ***************************************  
-  $x_detailscolumn = 104;
-  $y_detailscolumnstart = 169.6;
-  $pdf->SetFont($fontFNE, '', 12);
+  $x_detailscolumn = 105.4; // 104;
+  $y_detailscolumnstart = 180;// 169.6;
+  $pdf->SetFont($fontFNE, '', $font_size);
   $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 0.8);
   $pdf->Write(10, ($don_date), '', 0, 'L', TRUE, 0, FALSE, FALSE, 0);
 
   // ***************************************
   //   AFFECTATION
   // ***************************************  
-  $x_detailscolumn = 115.6;
-  $y_detailscolumnstart = 176.2;
-  $pdf->SetFont($fontFNE, '', 12);
+  $x_detailscolumn = 117.4;// 115.6;
+  $y_detailscolumnstart = 186.6; // 176.2;
+  $pdf->SetFont($fontFNE, '', $font_size);
   $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 0.8);
   $pdf->Write(10, ($don_affectation), '', 0, 'L', TRUE, 0, FALSE, FALSE, 0);
 
   // ***************************************
   //   FAIT à PAris, Le
   // ***************************************  
-  $x_detailscolumn = 117;
-  $y_detailscolumnstart = 226.4;
-  $pdf->SetFont($fontFNE, '', 12);
+  $font_size = 12;
+  $x_detailscolumn = 126; //117;
+  $y_detailscolumnstart = 234.4; // 226.4;
+  $pdf->SetFont($fontFNE, '', $font_size);
   $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 0.8);
   $pdf->Write(10, ($issued_on), '', 0, 'L', TRUE, 0, FALSE, FALSE, 0);
 
   // ***************************************
   //   SIREN
   // ***************************************  
+  $font_size = 10;
   $siren = '123456789';
-  $x_detailscolumn = 14.8;
-  $y_detailscolumnstart = 174.8;
-  $pdf->SetFont($fontFNE, '', 10);
+  $x_detailscolumn = 18.8; // 14.8;
+  $y_detailscolumnstart = 175.4; // 174.8;
+  $pdf->SetFont($fontFNE, '', $font_size);
   $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 0.8);
   $pdf->Write(10, ($siren), '', 0, 'L', TRUE, 0, FALSE, FALSE, 0);
 
@@ -1288,9 +1291,9 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
   //   TVA
   // ***************************************  
   $tva = 'FRXX123456789';
-  $x_detailscolumn = 41;
-  $y_detailscolumnstart = 179.6;
-  $pdf->SetFont($fontFNE, '', 10);
+  $x_detailscolumn = 54; // 41;
+  $y_detailscolumnstart = 180; // 179.6;
+  $pdf->SetFont($fontFNE, '', $font_size);
   $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 0.8);
   $pdf->Write(10, ($tva), '', 0, 'L', TRUE, 0, FALSE, FALSE, 0);
 
@@ -1298,25 +1301,32 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
   //   FORME JURIDIQUE
   // ***************************************  
   $fj = 'organisme de placement collectif en valeurs mobilières sans personnalité morale';
-  $x_detailscolumn = 24.6;
-  $y_detailscolumnstart = 184.2;
+  $x_detailscolumn = 32; // 24.6;
+  $y_detailscolumnstart = 184.8; // 184.2;
   // $pdf->SetFont($fontFNE, '', 10);
   // $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 0.8);
   // $pdf->Write(10, ($fj), '', 0, 'L', TRUE, 0, FALSE, FALSE, 0);
 
-  $fj_letter_array = CRM_Cdntaxreceipts_Utils_MK::cutStringByWord($fj,43);
+  $fj_letter_array = CRM_Cdntaxreceipts_Utils_MK::cutStringByWord($fj,35);
+  $fj_1erligne = $fj_letter_array[0];
+  $fj_letter_array = CRM_Cdntaxreceipts_Utils_MK::cutStringByWord(str_replace($fj_1erligne,'',$fj),60);
   $font_size = 10;
+  $iarr = 0;
+  // 1ere ligne
   $pdf->SetFont($fontFNE, '', $font_size);
-  $iarr = -1;
+  $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 0.8 + ($iarr*5));
+  $pdf->Write(10, $fj_1erligne, '', 0, 'L', FALSE, 0, FALSE, FALSE, 0);
+
+  
   $displayAmountLetter = '';
   foreach($fj_letter_array as $value){
     $iarr +=1;
-    if ($iarr == 0){
-      $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 0.8 + ($iarr*5));
-    } else {
+    // if ($iarr == 0){
+    //   $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 0.8 + ($iarr*5));
+    // } else {
       $x_detailscolumn = 1.3;
       $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 0.8 + ($iarr*5));
-    }
+    // }
     
     $pdf->Write(10, $value, '', 0, 'L', FALSE, 0, FALSE, FALSE, 0);
     //$displayAmountLetter .= $pdf->ln(10).$value;   
