@@ -416,6 +416,7 @@ function cdntaxreceipts_civicrm_alterMailParams(&$params, $context) {
  * /var/aegir/platforms/civicrm-d9/vendor/civicrm/org.civicrm.cdntaxreceipts/cdntaxreceipts.functions.inc
  */
 function cdntaxreceipts_cdntaxreceipts_writeReceipt(&$f, $pdf_variables, $receipt) {
+  
   // Civi::log()->info('cdntaxreceipts_cdntaxreceipts_writeReceipt');
   //$fontPathRegular = '/var/aegir/platforms/civicrm-d9/sites/fne-dev.test.makoa.net/files/civicrm/custom/Type Dynamic - Predige Rounded.otf';
   //$fontPathRegular = '/var/aegir/platforms/civicrm-d9/sites/fne-dev.test.makoa.net/files/civicrm/custom/Outlands Truetype.ttf';
@@ -468,6 +469,7 @@ function _updateLetter(&$f, $pdf_variables) {
 }
 
 function _writeReceipt(&$pdf, $pdf_variables, $receipt) {
+  $espace_incecable = ' ';
   // Civi::log()->info('cdntaxreceipts_cdntaxreceipts_writeReceipt _writeReceipt()');
   // Extract variables
   $contact_id = $receipt['contact_id'];
@@ -527,9 +529,11 @@ function _writeReceipt(&$pdf, $pdf_variables, $receipt) {
   // *******************************
   //      N°ORDRE DU RECU
   // *******************************
-  $x_detailscolumn = 165;
-  $y_detailscolumnstart = 6;
-  $pdf->SetFont($fontFNE, '', 10.5); 
+  $x_detailscolumn = 164;
+  $y_detailscolumnstart = 6.4;
+  // $x_detailscolumn = 165;
+  // $y_detailscolumnstart = 6;
+  $pdf->SetFont($fontFNE, '', 8.5); 
   $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 0);
   $pdf->Cell(24 ,6, E::ts("%1", array(1 => $receipt_number, 'domain' => 'org.civicrm.cdntaxreceipts')),0,0,'L',FALSE,''); //http://www.fpdf.org/en/doc/cell.htm
   //$pdf->Write(10, E::ts("%1", array(1 => $receipt_number, 'domain' => 'org.civicrm.cdntaxreceipts')));
@@ -739,7 +743,7 @@ function _writeReceipt(&$pdf, $pdf_variables, $receipt) {
   // Civi::log()->info('cdntaxreceipts_cdntaxreceipts_writeReceipt _writeReceipt > pdf_variables : '.print_r($pdf_variables,1));
   $convert = new CRM_Cdntaxreceipts_Utils_ConvertNum($amount, 'EUR');
   $amount = $convert->getFormated(" ", "," );
-  $amount = str_replace(' EUR',' €', $amount );
+  $amount = str_replace(' EUR', $espace_incecable.'€', $amount );
   $pdf->SetFont($fontFNE, '', 18);
   $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 23); //25
   // $pdf->Cell(94 ,9,  '***'.mb_strtoupper($amount).'***',0,0,'C',FALSE,''); //http://www.fpdf.org/en/doc/cell.htm
@@ -812,7 +816,7 @@ function _writeReceipt(&$pdf, $pdf_variables, $receipt) {
       $don_mtt = $contribution['total_amount'];
       $convert = new CRM_Cdntaxreceipts_Utils_ConvertNum(str_replace(',','.',$don_mtt), 'EUR');
       $don_mtt = $convert->getFormated(" ", "," );
-      $don_mtt = str_replace(' EUR',' €', $don_mtt );
+      $don_mtt = str_replace(' EUR', $espace_incecable.'€', $don_mtt );
 
       $don_mode = $contribution['payment_instrument_id:label']; 
       $don_nature = $contribution['payment_instrument_id:description']; // TODO  $contribution['total_amount']; // 'Numéraire', 'Don en nature', Autre
@@ -870,6 +874,7 @@ function _writeReceipt(&$pdf, $pdf_variables, $receipt) {
 
 
 function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
+  $espace_incecable = ' ';
  // Civi::log()->info('cdntaxreceipts_cdntaxreceipts_writeReceipt > _writeReceipt_Org()'); // : '.print_r($pdf_variables,1));
   // Extract variables
   $contact_id = $receipt['contact_id'];
@@ -930,13 +935,13 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
   //      N°ORDRE DU RECU
   // *******************************
   $x_detailscolumn = 164;
-  $y_detailscolumnstart = 6;
-  $pdf->SetFont($fontFNE, '', 9.5); 
+  $y_detailscolumnstart = 6.4;
+  $pdf->SetFont($fontFNE, '', 8.5); 
   $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 0);
   $pdf->Cell(24 ,6, E::ts("%1", array(1 => $receipt_number, 'domain' => 'org.civicrm.cdntaxreceipts')),0,0,'L',FALSE,''); //http://www.fpdf.org/en/doc/cell.htm
   //$pdf->Write(10, E::ts("%1", array(1 => $receipt_number, 'domain' => 'org.civicrm.cdntaxreceipts')));
   //$pdf->SetFont($fontFNE, '', 10.5);
-  $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 4.6);
+  $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 4.4);
   $pdf->Cell(24 ,6, E::ts("%1", array(1 => $contact_id)),0,0,'L',FALSE,'');
 
   // *******************************
@@ -1140,7 +1145,7 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
   // Civi::log()->info('cdntaxreceipts_cdntaxreceipts_writeReceipt _writeReceipt > pdf_variables : '.print_r($pdf_variables,1));
   $convert = new CRM_Cdntaxreceipts_Utils_ConvertNum($amount, 'EUR');
   $amount = $convert->getFormated(" ", "," );
-  $amount = str_replace(' EUR',' €', $amount );
+  $amount = str_replace(' EUR', $espace_incecable.'€', $amount );
   $pdf->SetFont($fontFNE, '', 18);
   $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 23); //25
   // $pdf->Cell(94 ,9,  '***'.mb_strtoupper($amount).'***',0,0,'C',FALSE,''); //http://www.fpdf.org/en/doc/cell.htm
@@ -1182,7 +1187,7 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
       $don_mtt = $contribution['total_amount'];
       $convert = new CRM_Cdntaxreceipts_Utils_ConvertNum(str_replace(',','.',$don_mtt), 'EUR');
       $don_mtt = $convert->getFormated(" ", "," );
-      $don_mtt = str_replace(' EUR',' €', $don_mtt );
+      $don_mtt = str_replace(' EUR', $espace_incecable.'€', $don_mtt );
       $valeur_don = $don_mtt;
 
       $don_mode = $contribution['payment_instrument_id:label']; 
@@ -1216,11 +1221,12 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
   //    N° ORDRE
   // ***************************************
   $x_detailscolumn = 129; // 125;
-  $y_detailscolumnstart = 154.4;// 143.4;
+  $y_detailscolumnstart = 154.2;// 143.4;
   $pdf->SetFont($fontFNE, '', $font_size);
   $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 0.8);
   $pdf->Write(10, ($don_id), '', 0, 'L', TRUE, 0, FALSE, FALSE, 0);
 
+  $font_size = 10;
   // ***************************************
   //    VALEUR DU DON
   // ***************************************  
@@ -1287,22 +1293,22 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
   $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 0.8);
   $pdf->Write(10, ($siren), '', 0, 'L', TRUE, 0, FALSE, FALSE, 0);
 
-  // ***************************************
-  //   TVA
-  // ***************************************  
-  $tva = 'FRXX123456789';
-  $x_detailscolumn = 54; // 41;
-  $y_detailscolumnstart = 180; // 179.6;
-  $pdf->SetFont($fontFNE, '', $font_size);
-  $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 0.8);
-  $pdf->Write(10, ($tva), '', 0, 'L', TRUE, 0, FALSE, FALSE, 0);
+  // // ***************************************
+  // //   TVA
+  // // ***************************************  
+  // $tva = 'FRXX123456789';
+  // $x_detailscolumn = 54; // 41;
+  // $y_detailscolumnstart = 180; // 179.6;
+  // $pdf->SetFont($fontFNE, '', $font_size);
+  // $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 0.8);
+  // $pdf->Write(10, ($tva), '', 0, 'L', TRUE, 0, FALSE, FALSE, 0);
 
   // ***************************************
   //   FORME JURIDIQUE
   // ***************************************  
   $fj = 'organisme de placement collectif en valeurs mobilières sans personnalité morale';
   $x_detailscolumn = 32; // 24.6;
-  $y_detailscolumnstart = 184.8; // 184.2;
+  $y_detailscolumnstart = 180; // 184.8; // 184.2;
   // $pdf->SetFont($fontFNE, '', 10);
   // $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 0.8);
   // $pdf->Write(10, ($fj), '', 0, 'L', TRUE, 0, FALSE, FALSE, 0);
