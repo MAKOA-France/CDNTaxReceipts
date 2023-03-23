@@ -156,7 +156,7 @@ class CRM_Cdntaxreceipts_Task_IssueAggregateTaxReceipts extends CRM_Contribute_F
       ),
       array(
         'type' => 'next',
-        'name' => 'Issue Tax Receipts',
+        'name' => E::ts('Issue Tax Receipts'),
         'isDefault' => TRUE,
         'submitOnce' => TRUE,
       ),
@@ -187,7 +187,7 @@ class CRM_Cdntaxreceipts_Task_IssueAggregateTaxReceipts extends CRM_Contribute_F
     if ( $year ) {
       $year = substr($year, strlen('issue_')); // e.g. issue_2012
     }
-    
+
     $iReceipts_Org = -1;
     $iReceipts_Ind = -1;
     $iReceipts_Original = -1;
@@ -293,15 +293,15 @@ class CRM_Cdntaxreceipts_Task_IssueAggregateTaxReceipts extends CRM_Contribute_F
     $printCount = 0;
     $dataCount = 0;
     $failCount = 0;
-    
-    
+
+
     //foreach ($this->_receipts['original'][$year]['contact_ids'] as $contact_id => $contribution_status) {
     foreach ($contributions_status as $contribution_status) {
      // Civi::log()->info('IssueAggregateTaxReceipts.php > postProcess  contribution_status : '.print_r( $contribution_status,1));
-      // AB : Take the right PDF depending on the type of contact  
+      // AB : Take the right PDF depending on the type of contact
       // $receiptsForPrintingPDF = cdntaxreceipts_openCollectedPDF($contact_id);
 
-      
+
       if ( $emailCount + $printCount + $failCount >= self::MAX_RECEIPT_COUNT ) {
         // limit email, print receipts as the pdf generation and email-to-archive consume
         // server resources. don't limit data-type receipts.

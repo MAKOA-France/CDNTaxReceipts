@@ -473,6 +473,7 @@ function _writeReceipt(&$pdf, $pdf_variables, $receipt) {
   // Civi::log()->info('cdntaxreceipts_cdntaxreceipts_writeReceipt _writeReceipt()');
   // Extract variables
   $contact_id = $receipt['contact_id'];
+  \Civi::log()->debug('PDF contact_id -- ' . print_r($contact_id,1));
   
   // @todo Why do we do this?
   $mode = $pdf_variables["mode"];
@@ -515,7 +516,7 @@ function _writeReceipt(&$pdf, $pdf_variables, $receipt) {
 
   // Middle center section
   if ($mode == CDNTAXRECEIPTS_MODE_PREVIEW) {
-     $pdf->Image($pdf_img_files_path . 'brouillon_mode.jpg', $mymargin_left + 100, $mymargin_top, '', 45);     
+     // $pdf->Image($pdf_img_files_path . 'brouillon_mode.jpg', $mymargin_left + 100, $mymargin_top, '', 45);     
   }
   else if ($receipt_status == 'cancelled') {
     $pdf->Image($pdf_img_files_path . 'cancelled_trans.png', $mymargin_left + 65, $mymargin_top, '', 45);
@@ -920,7 +921,7 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
 
   // Middle center section
   if ($mode == CDNTAXRECEIPTS_MODE_PREVIEW) {
-     $pdf->Image($pdf_img_files_path . 'brouillon_mode.jpg', $mymargin_left + 100, $mymargin_top, '', 45);     
+    // $pdf->Image($pdf_img_files_path . 'brouillon_mode.jpg', $mymargin_left + 100, $mymargin_top, '', 45);     
   }
   else if ($receipt_status == 'cancelled') {
     $pdf->Image($pdf_img_files_path . 'cancelled_trans.png', $mymargin_left + 65, $mymargin_top, '', 45);

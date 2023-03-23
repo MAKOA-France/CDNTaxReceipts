@@ -43,7 +43,8 @@ use CRM_Cdntaxreceipts_ExtensionUtil as E;
      */
     function Header() {
       $pdf_template_file = _cdntaxreceipts_get_image_filepath('receipt_pdftemplate_individual');
- 
+// \Civi::log()->debug('PDF_IND -- ' . print_r($pdf_template_file,1));
+
       if (!empty($pdf_template_file)) {
 
         if (is_null($this->_tplIdx)) {
@@ -342,10 +343,10 @@ function cdntaxreceipts_generateFormattedReceipt($receipt, &$collectedPdf = NULL
   $contact_type = CRM_Cdntaxreceipts_Utils_MK::get_contact_type($contact_id);
   // Civi::log()->info('cdntaxreceipts_generateFormattedReceipt contact_type : '.print_r($contact_type,1)); 
   switch ($contact_type){
-    case 'organization' :
+    case 'Organization' :
       $pdf = new PDF_ORG(PDF_PAGE_ORIENTATION, PDF_UNIT, 'A4', TRUE, 'UTF-8', FALSE);
       break;
-    case 'individual' :
+    case 'Individual' :
       $pdf = new PDF_IND(PDF_PAGE_ORIENTATION, PDF_UNIT, 'A4', TRUE, 'UTF-8', FALSE);
       break;
     default :
@@ -1286,8 +1287,10 @@ function cdntaxreceipts_openCollectedPDF($contact_id = 0) {
   // if ( ! isset($pdf) ) {
     //define ('K_PATH_IMAGES', '');
 
+    $type = !empty($contact_id) ? CRM_Cdntaxreceipts_Utils_MK::get_contact_type($contact_id) : '';
+
     // $pdf = new PDF(PDF_PAGE_ORIENTATION, PDF_UNIT, 'A4', TRUE, 'UTF-8', FALSE); //Orgi LETTER
-    switch (CRM_Cdntaxreceipts_Utils_MK::get_contact_type($contact_id)){
+    switch ($type){
       case 'Organization' :
         $pdf = new PDF_ORG(PDF_PAGE_ORIENTATION, PDF_UNIT, 'A4', TRUE, 'UTF-8', FALSE);
         break;

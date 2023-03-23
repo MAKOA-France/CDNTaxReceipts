@@ -154,9 +154,9 @@ class CRM_Cdntaxreceipts_Task_IssueSingleTaxReceipts extends CRM_Contribute_Form
     }
 
    
-    Civi::log()->info('IssueSingleTaxReceipts.php > contributionIds_Organization isset() : '.isset($contributionIds_Organization).' contributionIds_Organization : '.print_r( $contributionIds_Organization,1));
-    Civi::log()->info('IssueSingleTaxReceipts.php > contributionIds_Individual isset() : '.isset($contributionIds_Individual).' contributionIds_Individual : '.print_r( $contributionIds_Individual,1));
-    Civi::log()->info('IssueSingleTaxReceipts.php > contributionIds_Original isset() : '.isset($contributionIds_Original).' contributionIds_Original : '.print_r( $contributionIds_Original,1));
+    // Civi::log()->info('IssueSingleTaxReceipts.php > contributionIds_Organization isset() : '.isset($contributionIds_Organization).' contributionIds_Organization : '.print_r( $contributionIds_Organization,1));
+    // Civi::log()->info('IssueSingleTaxReceipts.php > contributionIds_Individual isset() : '.isset($contributionIds_Individual).' contributionIds_Individual : '.print_r( $contributionIds_Individual,1));
+    // Civi::log()->info('IssueSingleTaxReceipts.php > contributionIds_Original isset() : '.isset($contributionIds_Original).' contributionIds_Original : '.print_r( $contributionIds_Original,1));
 
 
     // $mergePDF = new FPDF_Merge();

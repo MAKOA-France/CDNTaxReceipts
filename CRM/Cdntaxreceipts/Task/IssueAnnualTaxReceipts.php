@@ -29,6 +29,17 @@ class CRM_Cdntaxreceipts_Task_IssueAnnualTaxReceipts extends CRM_Contact_Form_Ta
 
     parent::preProcess();
 
+    $prevtype = NULL;
+    foreach ($this->_contactIds as $contactId ) {
+      $type = CRM_Core_DAO::getFieldValue('CRM_Contact_DAO_Contact', $contactId, 'id', 'contact_type');
+      if (!empty($prevtype) && $prevtype != $type) {
+        // error
+        //CRM_Core_Session::setStatus('Erreur', 'Veuillez selectionner uniquement des contacts de même type', 'error');
+        CRM_Core_Error::fatal('Veuillez selectionner uniquement des contacts de même type');
+      }
+      $prevtype = $type;
+    }
+
     $thisYear = date("Y");
     $this->_years = array($thisYear, $thisYear - 1, $thisYear - 2);
 
@@ -100,7 +111,7 @@ class CRM_Cdntaxreceipts_Task_IssueAnnualTaxReceipts extends CRM_Contact_Form_Ta
       ),
       array(
         'type' => 'next',
-        'name' => 'Issue Tax Receipts',
+        'name' => E::ts('Issue Tax Receipts'),
         'isDefault' => TRUE,
         'submitOnce' => TRUE,
       ),
@@ -123,7 +134,89 @@ class CRM_Cdntaxreceipts_Task_IssueAnnualTaxReceipts extends CRM_Contact_Form_Ta
    * @return None
    */
 
-  function postProcess() {
+   function postProcess() {
+
+  //   $params = $this->controller->exportValues($this->_name);
+  //   $year = $params['receipt_year'];
+  //   if ( $year ) {
+  //     $year = substr($year, strlen('issue_')); // e.g. issue_2012
+  //   }
+
+  //   $iReceipts_Org = -1;
+  //   $iReceipts_Ind = -1;
+  //   $iReceipts_Original = -1;
+  //   $receipts_List_Organization = array();
+  //   $receipts_List_Individual = array();
+  //   $receipts_List_Original = array();
+
+  //   $org_id = 0;
+  //   $ind_id = 0;
+  //   // Retrieves the list of Organization and Individual
+  //   // Civi::log()->info('AVANT FOREACH CONTRIBUTION_STATUS '); // : '.print_r($this->_receipts['original'],1));
+  //   foreach ($this->_receipts['original'][$year]['contact_ids'] as $contact_id => $contribution_status) {
+  //     // $contact_type = MK::get_contact_type[$contact_id];
+
+  //     $contacts = \Civi\Api4\Contact::get(FALSE)
+  //       ->addWhere('id', '=', $contact_id)
+  //       ->execute();
+  //     foreach ($contacts as $contact) {
+  //       $contact_type = $contact['contact_type'];
+  //       break;
+  //     }
+
+  //     switch ($contact_type){
+  //       case 'Organization' :
+  //         if ($org_id ==0 ) {$org_id = $contact_id;}
+  //         $iReceipts_Org ++;
+  //         array_push($receipts_List_Organization, $contribution_status);
+  //         break;
+  //       case 'Individual' :
+  //         if ($ind_id ==0 ) {$ind_id = $contact_id;}
+  //         $iReceipts_Ind ++;
+  //         array_push($receipts_List_Individual, $contribution_status);
+  //         break;
+  //       default :
+  //         $iReceipts_Original ++;
+  //         array_push($receipts_List_Original, $contribution_status);
+  //         break;
+  //     }
+  //   }
+
+  //   $params = $this->controller->exportValues($this->_name);
+
+  //   // Civi::log()->info('IssueAggregateTaxReceipts.php > receipts_List_Organization isset() : '.isset($receipts_List_Organization).' empty() : '.empty($receipts_List_Organization).' receipts_List_Organization : '.print_r( $receipts_List_Organization,1));
+  //   // Civi::log()->info('IssueAggregateTaxReceipts.php > receipts_List_Individual isset() : '.isset($receipts_List_Individual).' empty() : '.empty($receipts_List_Individual).' receipts_List_Individual : '.print_r( $receipts_List_Individual,1));
+  //   // Civi::log()->info('IssueAggregateTaxReceipts.php > receipts_List_Original isset() : '.isset($receipts_List_Original).' empty() : '.empty($receipts_List_Original).' receipts_List_Original : '.print_r( $receipts_List_Original,1));
+
+  //   // $mergePDF = new FPDF_Merge();
+  //   if (isset($receipts_List_Organization)){
+  //     $this->original($receipts_List_Organization, $org_id);
+  //     // $receiptsForPrintingPDF = $this->specific_type_of_contact($receipts_List_Organization, $org_id);
+  //     // $mergePDF.add($receiptsForPrintingPDF);
+  //   }
+  //   if (isset($receipts_List_Individual)){
+  //     $this->original($receipts_List_Individual, $ind_id);
+  //     // $receiptsForPrintingPDF = $this->specific_type_of_contact($receipts_List_Individual, $ind_id);
+  //     // $mergePDF.add($receiptsForPrintingPDF);
+  //   }
+  //   if (isset($receipts_List_Original)){
+  //     $this->original($receipts_List_Original);
+  //     // $receiptsForPrintingPDF = $this->original($receipts_List_Original);
+  //     // $mergePDF.add($receiptsForPrintingPDF);
+  //   }
+
+  //   // // 4. send the collected PDF for download
+  //   // // NB: This exits if a file is sent.
+  //   // Civi::log()->info('IssueAggregateTaxReceipts.php > specific_type_of_contact BEFORE cdntaxreceipts_sendCollectedPDF');
+  //   // cdntaxreceipts_sendCollectedPDF($mergePDF, 'Receipts-To-Print-' . CRM_Cdntaxreceipts_Utils_Time::time() . '.pdf');  // EXITS.
+  //   // // cdntaxreceipts_sendCollectedPDF($receiptsForPrintingPDF, 'Receipts-To-Print-' . CRM_Cdntaxreceipts_Utils_Time::time() . '.pdf');  // EXITS.
+
+  // }
+
+  // /************************************
+  //  *  ***   ORIGINAL
+  //  ************************************/
+  // function original($contributions_status, $contact_id = 0 ) {
 
     // lets get around the time limit issue if possible
     if ( ! ini_get( 'safe_mode' ) ) {
@@ -147,13 +240,21 @@ class CRM_Cdntaxreceipts_Task_IssueAnnualTaxReceipts extends CRM_Contact_Form_Ta
     //module_load_include('.inc','civicrm_cdntaxreceipts','civicrm_cdntaxreceipts');f
     //module_load_include('.module','civicrm_cdntaxreceipts','civicrm_cdntaxreceipts');
 
-    // start a PDF to collect receipts that cannot be emailed
-    $receiptsForPrinting = cdntaxreceipts_openCollectedPDF();
+    // // start a PDF to collect receipts that cannot be emailed
+    // if ($contact_id > 0){
+    //   $receiptsForPrintingPDF = cdntaxreceipts_openCollectedPDF($contact_id);
+    // }else{
+    //  $receiptsForPrinting = cdntaxreceipts_openCollectedPDF();
+    // }
 
     $emailCount = 0;
     $printCount = 0;
     $dataCount = 0;
     $failCount = 0;
+
+
+    $contactId = array_values($this->_contactIds)[0];
+    $receiptsForPrinting = cdntaxreceipts_openCollectedPDF($contactId);
 
     foreach ($this->_contactIds as $contactId ) {
 
@@ -183,6 +284,7 @@ class CRM_Cdntaxreceipts_Task_IssueAnnualTaxReceipts extends CRM_Contact_Form_Ta
           $dataCount++;
         }
       }
+
     }
 
     // 3. Set session status

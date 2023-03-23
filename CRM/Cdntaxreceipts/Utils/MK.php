@@ -82,13 +82,13 @@ class CRM_Cdntaxreceipts_Utils_MK {
      */
     public static function get_contact_type($contact_id) {
         $contact_type = '';
-        $contacts = \Civi\Api4\Contact::get(FALSE)
+	$contact = \Civi\Api4\Contact::get(FALSE)
+          ->addSelect('contact_type')
           ->addWhere('id', '=', $contact_id)
-          ->execute();
-        foreach ($contacts as $contact) {
-          $contact_type = $contact['contact_type'];
-          break;
-        }
+	  ->execute()
+          ->first();
+	$contact_type = $contact['contact_type'];
+
         // Civi::log()->info('get_contact_type contact_id : '.print_r($contact_id,1)); 
         // Civi::log()->info('get_contact_type contact_type : '.print_r($contact_type,1)); 
 
