@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <extension key="org.civicrm.cdntaxreceipts" type="module">
   <file>cdntaxreceipts</file>
-  <name>CDN Tax Receipts</name>
+  <name>Makoa - Reçus Fiscaux - FNE - Fork de CDN Tax Receipts</name>
   <description>
       Creates Tax Receipts including single or annual/aggregate tax receipts, with distribution by email or print,
       detailed reporting, press ready PDF template possible. We worked with (and continue to work with) a BDO Tax Partner
@@ -9,10 +9,10 @@
   </description>
   <license>AGPL</license>
   <maintainer>
-    <author>KarinG and DaveD</author>
+    <author>KarinG and DaveD - breheret@makoa.fr</author>
     <email>frontdesk@semper-it.com</email>
   </maintainer>
-  <releaseDate>2022-07-26</releaseDate>
+  <releaseDate>2023-03-15</releaseDate>
   <version>1.7.0</version>
   <develStage>stable</develStage>
   <compatibility>

@@ -332,8 +332,8 @@ function cdntaxreceipts_generateFormattedReceipt($receipt, &$collectedPdf = NULL
   $line_1 = E::ts("This is your Official Receipt for income tax purposes.", array('domain' => 'org.civicrm.cdntaxreceipts'));
 
   $config = CRM_Core_Config::singleton();
-  $pdf_file = $config->uploadDir . 'Receipt-' . $receipt['receipt_no'] . '.pdf';
-  $user_friendly = 'Receipt-' . $receipt['receipt_no'] . '.pdf';
+  $pdf_file = $config->uploadDir . 'FNE-RecuFiscal-' . $receipt['receipt_no'] . '.pdf';
+  $user_friendly = 'FNE-RecuFiscal-' . $receipt['receipt_no'] . '.pdf';
 
   if (!defined('PDF_PAGE_FORMAT')) {
     // define('PDF_PAGE_FORMAT', 'USLETTER'); // orig: 'A4'
@@ -496,7 +496,7 @@ function _cdntaxreceipts_writeReceipt(&$pdf, $pdf_variables) {
 
   // Middle center section
   if ($mode == CDNTAXRECEIPTS_MODE_PREVIEW) {
-    $pdf->Image($pdf_img_files_path . 'preview_mode.png', $mymargin_left + 65, $mymargin_top, '', 45);
+    // $pdf->Image($pdf_img_files_path . 'preview_mode.png', $mymargin_left + 65, $mymargin_top, '', 45);
   }
   else if ($receipt_status == 'cancelled') {
     $pdf->Image($pdf_img_files_path . 'cancelled_trans.png', $mymargin_left + 65, $mymargin_top, '', 45);

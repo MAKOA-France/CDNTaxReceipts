@@ -128,7 +128,9 @@ function cdntaxreceipts_civicrm_searchTasks($objectType, &$tasks ) {
       $tasks[] = array (
         'title' => E::ts('Issue Annual Tax Receipts'),
         'class' => 'CRM_Cdntaxreceipts_Task_IssueAnnualTaxReceipts',
-        'result' => TRUE);
+        'result' => TRUE,
+        'url' => 'civicrm/taxreceipts-issue-annual'
+      );
     }
   }
 }
@@ -149,6 +151,7 @@ function cdntaxreceipts_civicrm_permission( &$permissions ) {
  */
 function cdntaxreceipts_civicrm_config(&$config) {
   _cdntaxreceipts_civix_civicrm_config($config);
+  //Civi::dispatcher()->addListener('hook_civicrm_searchKitTasks', ['CRM_Cdntaxreceipts_Utils_MK', 'searchKitTasks'], -1000);
 }
 
 /**
@@ -416,28 +419,28 @@ function cdntaxreceipts_civicrm_alterMailParams(&$params, $context) {
  * /var/aegir/platforms/civicrm-d9/vendor/civicrm/org.civicrm.cdntaxreceipts/cdntaxreceipts.functions.inc
  */
 function cdntaxreceipts_cdntaxreceipts_writeReceipt(&$f, $pdf_variables, $receipt) {
-  
+
   // Civi::log()->info('cdntaxreceipts_cdntaxreceipts_writeReceipt');
   //$fontPathRegular = '/var/aegir/platforms/civicrm-d9/sites/fne-dev.test.makoa.net/files/civicrm/custom/Type Dynamic - Predige Rounded.otf';
   //$fontPathRegular = '/var/aegir/platforms/civicrm-d9/sites/fne-dev.test.makoa.net/files/civicrm/custom/Outlands Truetype.ttf';
   //         $regularFont = $receipt->addTTFfont($fontPathRegular, '', '', 32);
   // $font = new TCPDF_FONTS();
   // $regularFont = $font->addTTFfont($fontPathRegular);
-  
+
   // $f->AddFont('ok','','ok.php');
   // $f->AddFont('outlandstruetype','','outlandstruetype.php');
   // $f->AddFont('PredigeRounded','','typedynamicpredigerounded.php');
   // $f->AddFont('Roboto','','Roboto.php');
   $f->AddFont('OpenSans','','opensans.php');
-  
+
   // //$f->AddFont('PredigeRounded','','predigerounded.php');
-  
+
   // // Civi::log()->info('cdntaxreceipts_cdntaxreceipts_writeReceipt > pdf_variables : '.print_r($pdf_variables,1));
   // //  Civi::log()->info('cdntaxreceipts_cdntaxreceipts_writeReceipt > receipt : '.print_r($receipt,1));
   //   // Civi::log()->info('cdntaxreceipts_cdntaxreceipts_writeReceipt > f : '.print_r($f,1));
-  // // //Letter details 
+  // // //Letter details
   // //_cdntaxreceipts_updateLetter($f, $pdf_variables);
-  
+
   //Prints onlys one copy after the letter
   $pdf_variables['margin_top'] = $pdf_variables['mymargin_top'] + 0;
   $contact_id = $receipt['contact_id'];
@@ -459,7 +462,7 @@ function cdntaxreceipts_cdntaxreceipts_writeReceipt(&$f, $pdf_variables, $receip
       break;
   }
 
-  
+
 
   //Otherwise the receipts are printed twice
   return [TRUE];
@@ -473,8 +476,8 @@ function _writeReceipt(&$pdf, $pdf_variables, $receipt) {
   // Civi::log()->info('cdntaxreceipts_cdntaxreceipts_writeReceipt _writeReceipt()');
   // Extract variables
   $contact_id = $receipt['contact_id'];
-  \Civi::log()->debug('PDF contact_id -- ' . print_r($contact_id,1));
-  
+  // Civi::log()->debug('PDF contact_id -- ' . print_r($contact_id,1));
+
   // @todo Why do we do this?
   $mode = $pdf_variables["mode"];
   $mymargin_left = $pdf_variables["mymargin_left"];
@@ -498,7 +501,7 @@ function _writeReceipt(&$pdf, $pdf_variables, $receipt) {
   $issue_type = $pdf_variables["issue_type"];
   $receipt_contributions = $pdf_variables['receipt_contributions'];
   $receipt_status = $pdf_variables['receipt_status'];
- 
+
   $address = _getaddress($contact_id);
   $street_address = $address['street_address'];
   $supplemental_address_1 = $address['supplemental_address_1'];
@@ -507,8 +510,8 @@ function _writeReceipt(&$pdf, $pdf_variables, $receipt) {
   $postal_code = $address['postal_code'];
   $city = $address['city'];
   $country = $address['country'];
-  //Civi::log()->info('cdntaxreceipts_cdntaxreceipts_writeReceipt _writeReceipt > pdf_variables : '.print_r($pdf_variables,1));
-  
+  // Civi::log()->info('cdntaxreceipts_cdntaxreceipts_writeReceipt _writeReceipt > pdf_variables : '.print_r($pdf_variables,1));
+
   //Format date 2023-12-01 en 01/12/2023
   $issued_on = CRM_Cdntaxreceipts_Utils_MK::date_format_fr($issued_on); // substr($issued_on,8,2).'/'.substr($issued_on,5,2).'/'.substr($issued_on,0,4);
 
@@ -516,7 +519,7 @@ function _writeReceipt(&$pdf, $pdf_variables, $receipt) {
 
   // Middle center section
   if ($mode == CDNTAXRECEIPTS_MODE_PREVIEW) {
-     // $pdf->Image($pdf_img_files_path . 'brouillon_mode.jpg', $mymargin_left + 100, $mymargin_top, '', 45);     
+     // $pdf->Image($pdf_img_files_path . 'brouillon_mode.jpg', $mymargin_left + 100, $mymargin_top, '', 45);
   }
   else if ($receipt_status == 'cancelled') {
     $pdf->Image($pdf_img_files_path . 'cancelled_trans.png', $mymargin_left + 65, $mymargin_top, '', 45);
@@ -524,9 +527,9 @@ function _writeReceipt(&$pdf, $pdf_variables, $receipt) {
   else if ($is_duplicate) {
     $pdf->Image($pdf_img_files_path . 'duplicate_trans.png', $mymargin_left + 65, $mymargin_top, '', 45);
   }
-  
+
   $fontFNE = 'OpenSans';
-   
+
   // *******************************
   //      N°ORDRE DU RECU
   // *******************************
@@ -534,7 +537,7 @@ function _writeReceipt(&$pdf, $pdf_variables, $receipt) {
   $y_detailscolumnstart = 6.4;
   // $x_detailscolumn = 165;
   // $y_detailscolumnstart = 6;
-  $pdf->SetFont($fontFNE, '', 8.5); 
+  $pdf->SetFont($fontFNE, '', 8.5);
   $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 0);
   $pdf->Cell(24 ,6, E::ts("%1", array(1 => $receipt_number, 'domain' => 'org.civicrm.cdntaxreceipts')),0,0,'L',FALSE,''); //http://www.fpdf.org/en/doc/cell.htm
   //$pdf->Write(10, E::ts("%1", array(1 => $receipt_number, 'domain' => 'org.civicrm.cdntaxreceipts')));
@@ -552,7 +555,7 @@ function _writeReceipt(&$pdf, $pdf_variables, $receipt) {
   // if (!empty($supplemental_address_1)) $addresse_string .=  $pdf->ln(10).$supplemental_address_1;
   // if (!empty($supplemental_address_2)) $addresse_string .=  $pdf->ln(10).$supplemental_address_2;
   // if (!empty($street_address)) $addresse_string .=  $pdf->ln(10).$street_address;
-  // $addresse_string .=  $pdf->ln(10).$postal_code.' '.$city;  
+  // $addresse_string .=  $pdf->ln(10).$postal_code.' '.$city;
   // if (!empty($country)) $addresse_string .= $pdf->ln(10).$country;
 
   // //mb_strtoupper($displayname);
@@ -604,7 +607,7 @@ function _writeReceipt(&$pdf, $pdf_variables, $receipt) {
       }
     }
   }
-  
+
 
   $yplus = -1;
   $yinterligne = 6;
@@ -643,13 +646,13 @@ function _writeReceipt(&$pdf, $pdf_variables, $receipt) {
       $fontzise -= 1.5; // $yinterligne -= 1;
       $pdf->SetFont($fontFNE, '', $fontzise, '', true);
     }
-    $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + ($yinterligne*$yplus));  
+    $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + ($yinterligne*$yplus));
     $pdf->Write(10, mb_strtoupper($address_line_2), '', 0, 'L', TRUE, 0, FALSE, FALSE, 0);
     if (strlen($address_line_2) > 73 ){
       $fontzise += 1.5; // $yinterligne += 1;
       $pdf->SetFont($fontFNE, '', $fontzise, '', true);
     }
-  
+
   }
   if (!empty($address_line_3)){
     $yplus++;
@@ -658,7 +661,7 @@ function _writeReceipt(&$pdf, $pdf_variables, $receipt) {
       $fontzise -= 1.5; // $yinterligne -= 1;
       $pdf->SetFont($fontFNE, '', $fontzise, '', true);
     }
-    $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + ($yinterligne*$yplus));  
+    $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + ($yinterligne*$yplus));
     $pdf->Write(10, mb_strtoupper($address_line_3), '', 0, 'L', TRUE, 0, FALSE, FALSE, 0);
     if (strlen($address_line_3) > 73 ){
       $fontzise += 1.5; // $yinterligne += 1;
@@ -671,7 +674,7 @@ function _writeReceipt(&$pdf, $pdf_variables, $receipt) {
       $fontzise -= 1.5; // $yinterligne -= 1;
       $pdf->SetFont($fontFNE, '', $fontzise, '', true);
     }
-    $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + ($yinterligne*$yplus));  
+    $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + ($yinterligne*$yplus));
     $pdf->Write(10, mb_strtoupper($address_line_4), '', 0, 'L', TRUE, 0, FALSE, FALSE, 0);
     if (strlen($address_line_4) > 73 ){
       $fontzise += 1.5; // $yinterligne += 1;
@@ -685,7 +688,7 @@ function _writeReceipt(&$pdf, $pdf_variables, $receipt) {
       $fontzise -= 1.5; // $yinterligne -= 1;
       $pdf->SetFont($fontFNE, '', $fontzise, '', true);
     }
-    $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + ($yinterligne*$yplus));  
+    $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + ($yinterligne*$yplus));
     $pdf->Write(10, mb_strtoupper($address_line_5), '', 0, 'L', TRUE, 0, FALSE, FALSE, 0);
     if (strlen($address_line_5) > 73 ){
       $fontzise += 1.5; // $yinterligne += 1;
@@ -715,22 +718,22 @@ function _writeReceipt(&$pdf, $pdf_variables, $receipt) {
   }
   if (!empty($address_line_2)){
     $yplus++;
-    $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + ($yinterligne*$yplus));  
+    $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + ($yinterligne*$yplus));
     $pdf->Write(10, $address_line_2, '', 0, 'L', TRUE, 0, FALSE, FALSE, 0);
   }
   if (!empty($address_line_3)){
     $yplus++;
-    $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + ($yinterligne*$yplus));  
+    $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + ($yinterligne*$yplus));
     $pdf->Write(10, $address_line_3, '', 0, 'L', TRUE, 0, FALSE, FALSE, 0);
   }
   if (!empty($address_line_4)){
     $yplus++;
-    $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + ($yinterligne*$yplus));  
+    $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + ($yinterligne*$yplus));
     $pdf->Write(10, $address_line_4, '', 0, 'L', TRUE, 0, FALSE, FALSE, 0);
   }
   if (!empty($address_line_5)){
     $yplus++;
-    $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + ($yinterligne*$yplus));  
+    $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + ($yinterligne*$yplus));
     $pdf->Write(10, $address_line_5, '', 0, 'L', TRUE, 0, FALSE, FALSE, 0);
   }
 
@@ -749,7 +752,7 @@ function _writeReceipt(&$pdf, $pdf_variables, $receipt) {
   $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 23); //25
   // $pdf->Cell(94 ,9,  '***'.mb_strtoupper($amount).'***',0,0,'C',FALSE,''); //http://www.fpdf.org/en/doc/cell.htm
   $pdf->Write(10, '***'.mb_strtoupper($amount).'***', '', 0, 'C', TRUE, 0, FALSE, FALSE, 0);
-  
+
   // *** Display amount_letter ***
   // $convert = new CRM_Cdntaxreceipts_Utils_ConvertNum(str_replace(',','.',$amount), 'EUR');
   $amount_letter = $convert->convert("fr-FR");
@@ -763,12 +766,12 @@ function _writeReceipt(&$pdf, $pdf_variables, $receipt) {
     $iarr +=1;
     $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 26 + ($iarr*4));
     $pdf->Write(5, $value, '', 0, 'C', FALSE, 0, FALSE, FALSE, 0);
-    //$displayAmountLetter .= $pdf->ln(10).$value;   
+    //$displayAmountLetter .= $pdf->ln(10).$value;
   }
   // if (!empty($displayAmountLetter)) $displayAmountLetter = substr($displayAmountLetter,2);
   // $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 32.5 + ($iarr*4));
   // $pdf->MultiCell(94, 10, $displayAmountLetter, 1, 'C',FALSE); // http://www.fpdf.org/en/doc/multicell.htm
- 
+
 
   // Afficher DATE après FAit à PAris, le
   $x_detailscolumn = 125;// 118;
@@ -789,7 +792,7 @@ function _writeReceipt(&$pdf, $pdf_variables, $receipt) {
   $x_mode = 78;
   $x_affectation = $x_mode + 53;
   $x_date = $x_affectation + 38;
-  
+
   $y_ligne = 5;
   $num_ligne = -1;
 
@@ -807,7 +810,7 @@ function _writeReceipt(&$pdf, $pdf_variables, $receipt) {
     // Civi::log()->info('contribution_id : '.print_r($contribution_id,1)); //cp1252
 
     $contributions = \Civi\Api4\Contribution::get(FALSE)
-      ->addSelect('id', 'contact_id', 'receive_date', 'total_amount', 'source', 'financial_type_id:label', 'contribution_status_id:label', 'payment_instrument_id:label', 'payment_instrument_id:description')
+      ->addSelect('id', 'contact_id', 'receive_date', 'total_amount', 'source', 'financial_type_id:label', 'contribution_status_id:label', 'payment_instrument_id:label', 'payment_instrument_id:description', 'contribution_details.Nature')
       ->addWhere('id', '=', $contribution_id)
       ->execute();
     foreach ($contributions as $contribution) {
@@ -819,10 +822,13 @@ function _writeReceipt(&$pdf, $pdf_variables, $receipt) {
       $don_mtt = $convert->getFormated(" ", "," );
       $don_mtt = str_replace(' EUR', $espace_incecable.'€', $don_mtt );
 
-      $don_mode = $contribution['payment_instrument_id:label']; 
-      $don_nature = $contribution['payment_instrument_id:description']; // TODO  $contribution['total_amount']; // 'Numéraire', 'Don en nature', Autre
+      $don_mode = $contribution['payment_instrument_id:label'];
+      $don_nature = CRM_Cdntaxreceipts_Utils_MK::getOptionValueLabel('Contribution_d_tails_Nature',  $contribution['contribution_details.Nature']); // 'Numéraire', 
       $don_mode_code = $contribution['payment_instrument_id:label']; //
-      
+
+      // Civi::log()->info('cdntaxreceipts_cdntaxreceipts_writeReceipt _writeReceipt > contribution_details.Nature : '.print_r( $contribution['contribution_details.Nature'],1)); 
+      // Civi::log()->info('cdntaxreceipts_cdntaxreceipts_writeReceipt _writeReceipt > don_nature : '.print_r($don_nature,1));
+
       $don_affectation = '';
       $don_affectation_code = $contribution['source'];
       $optionValues = \Civi\Api4\OptionValue::get(FALSE)
@@ -841,7 +847,7 @@ function _writeReceipt(&$pdf, $pdf_variables, $receipt) {
           $don_affectation = $optionValue['label'];
         }
       }
-      $don_date = CRM_Cdntaxreceipts_Utils_MK::date_format_fr( $contribution['receive_date']); 
+      $don_date = CRM_Cdntaxreceipts_Utils_MK::date_format_fr( $contribution['receive_date']);
 
 
       $h = 4.5; $b= 0;
@@ -849,10 +855,10 @@ function _writeReceipt(&$pdf, $pdf_variables, $receipt) {
       $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + ($num_ligne*$y_ligne));
       $pdf->Cell(23, $h, $don_id, $b, 0,'C',FALSE,''); //http://www.fpdf.org/en/doc/cell.htm
       // $pdf->Write(9, $don_id, '', 0, 'L', TRUE, 0, FALSE, FALSE, 0);
-    
+
       $pdf->SetXY( $mymargin_left + $x_detailscolumn + $x_valeur, $mymargin_top + $y_detailscolumnstart + ($num_ligne*$y_ligne));
       $pdf->Cell(27, $h, $don_mtt, $b, 0,'R',FALSE,''); //http://www.fpdf.org/en/doc/cell.htm
-    
+
       $pdf->SetXY($mymargin_left + $x_detailscolumn + $x_nature, $mymargin_top + $y_detailscolumnstart + ($num_ligne*$y_ligne));
       $pdf->Cell(23, $h, $don_nature, $b, 0,'C',FALSE,''); //http://www.fpdf.org/en/doc/cell.htm
       // $pdf->Write(9, $don_nature, '', 0, 'L', TRUE, 0, FALSE, FALSE, 0);
@@ -868,7 +874,7 @@ function _writeReceipt(&$pdf, $pdf_variables, $receipt) {
       $pdf->SetXY($mymargin_left + $x_detailscolumn + $x_date, $mymargin_top + $y_detailscolumnstart + ($num_ligne*$y_ligne));
       $pdf->Cell(19, $h, $don_date, $b, 0,'C',FALSE,''); //http://www.fpdf.org/en/doc/cell.htm
       // $pdf->Write(9, $don_date, '', 0, 'L', TRUE, 0, FALSE, FALSE, 0);
-    } 
+    }
   }
 
 }
@@ -879,7 +885,7 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
  // Civi::log()->info('cdntaxreceipts_cdntaxreceipts_writeReceipt > _writeReceipt_Org()'); // : '.print_r($pdf_variables,1));
   // Extract variables
   $contact_id = $receipt['contact_id'];
-  
+
   // @todo Why do we do this?
   $mode = $pdf_variables["mode"];
   $mymargin_left = $pdf_variables["mymargin_left"];
@@ -903,7 +909,7 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
   $issue_type = $pdf_variables["issue_type"];
   $receipt_contributions = $pdf_variables['receipt_contributions'];
   $receipt_status = $pdf_variables['receipt_status'];
- 
+
   $address = _getaddress($contact_id);
   $street_address = $address['street_address'];
   $supplemental_address_1 = $address['supplemental_address_1'];
@@ -913,7 +919,7 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
   $city = $address['city'];
   $country = $address['country'];
   //Civi::log()->info('cdntaxreceipts_cdntaxreceipts_writeReceipt _writeReceipt > pdf_variables : '.print_r($pdf_variables,1));
-  
+
   //Format date 2023-12-01 en 01/12/2023
   $issued_on = CRM_Cdntaxreceipts_Utils_MK::date_format_fr($issued_on); //substr($issued_on,8,2).'/'.substr($issued_on,5,2).'/'.substr($issued_on,0,4);
 
@@ -921,7 +927,7 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
 
   // Middle center section
   if ($mode == CDNTAXRECEIPTS_MODE_PREVIEW) {
-    // $pdf->Image($pdf_img_files_path . 'brouillon_mode.jpg', $mymargin_left + 100, $mymargin_top, '', 45);     
+    // $pdf->Image($pdf_img_files_path . 'brouillon_mode.jpg', $mymargin_left + 100, $mymargin_top, '', 45);
   }
   else if ($receipt_status == 'cancelled') {
     $pdf->Image($pdf_img_files_path . 'cancelled_trans.png', $mymargin_left + 65, $mymargin_top, '', 45);
@@ -929,15 +935,15 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
   else if ($is_duplicate) {
     $pdf->Image($pdf_img_files_path . 'duplicate_trans.png', $mymargin_left + 65, $mymargin_top, '', 45);
   }
-  
+
   $fontFNE = 'OpenSans';
-   
+
   // *******************************
   //      N°ORDRE DU RECU
   // *******************************
   $x_detailscolumn = 164;
   $y_detailscolumnstart = 6.4;
-  $pdf->SetFont($fontFNE, '', 8.5); 
+  $pdf->SetFont($fontFNE, '', 8.5);
   $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 0);
   $pdf->Cell(24 ,6, E::ts("%1", array(1 => $receipt_number, 'domain' => 'org.civicrm.cdntaxreceipts')),0,0,'L',FALSE,''); //http://www.fpdf.org/en/doc/cell.htm
   //$pdf->Write(10, E::ts("%1", array(1 => $receipt_number, 'domain' => 'org.civicrm.cdntaxreceipts')));
@@ -955,7 +961,7 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
   // if (!empty($supplemental_address_1)) $addresse_string .=  $pdf->ln(10).$supplemental_address_1;
   // if (!empty($supplemental_address_2)) $addresse_string .=  $pdf->ln(10).$supplemental_address_2;
   // if (!empty($street_address)) $addresse_string .=  $pdf->ln(10).$street_address;
-  // $addresse_string .=  $pdf->ln(10).$postal_code.' '.$city;  
+  // $addresse_string .=  $pdf->ln(10).$postal_code.' '.$city;
   // if (!empty($country)) $addresse_string .= $pdf->ln(10).$country;
 
   // //mb_strtoupper($displayname);
@@ -1007,7 +1013,7 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
       }
     }
   }
-  
+
 
   $yplus = -1;
   $yinterligne = 6;
@@ -1046,13 +1052,13 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
       $fontzise -= 1.5; // $yinterligne -= 1;
       $pdf->SetFont($fontFNE, '', $fontzise, '', true);
     }
-    $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + ($yinterligne*$yplus));  
+    $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + ($yinterligne*$yplus));
     $pdf->Write(10, mb_strtoupper($address_line_2), '', 0, 'L', TRUE, 0, FALSE, FALSE, 0);
     if (strlen($address_line_2) > 73 ){
       $fontzise += 1.5; // $yinterligne += 1;
       $pdf->SetFont($fontFNE, '', $fontzise, '', true);
     }
-  
+
   }
   if (!empty($address_line_3)){
     $yplus++;
@@ -1061,7 +1067,7 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
       $fontzise -= 1.5; // $yinterligne -= 1;
       $pdf->SetFont($fontFNE, '', $fontzise, '', true);
     }
-    $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + ($yinterligne*$yplus));  
+    $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + ($yinterligne*$yplus));
     $pdf->Write(10, mb_strtoupper($address_line_3), '', 0, 'L', TRUE, 0, FALSE, FALSE, 0);
     if (strlen($address_line_3) > 73 ){
       $fontzise += 1.5; // $yinterligne += 1;
@@ -1074,7 +1080,7 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
       $fontzise -= 1.5; // $yinterligne -= 1;
       $pdf->SetFont($fontFNE, '', $fontzise, '', true);
     }
-    $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + ($yinterligne*$yplus));  
+    $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + ($yinterligne*$yplus));
     $pdf->Write(10, mb_strtoupper($address_line_4), '', 0, 'L', TRUE, 0, FALSE, FALSE, 0);
     if (strlen($address_line_4) > 73 ){
       $fontzise += 1.5; // $yinterligne += 1;
@@ -1088,7 +1094,7 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
       $fontzise -= 1.5; // $yinterligne -= 1;
       $pdf->SetFont($fontFNE, '', $fontzise, '', true);
     }
-    $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + ($yinterligne*$yplus));  
+    $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + ($yinterligne*$yplus));
     $pdf->Write(10, mb_strtoupper($address_line_5), '', 0, 'L', TRUE, 0, FALSE, FALSE, 0);
     if (strlen($address_line_5) > 73 ){
       $fontzise += 1.5; // $yinterligne += 1;
@@ -1118,22 +1124,22 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
   }
   if (!empty($address_line_2)){
     $yplus++;
-    $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + ($yinterligne*$yplus));  
+    $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + ($yinterligne*$yplus));
     $pdf->Write(10, $address_line_2, '', 0, 'L', TRUE, 0, FALSE, FALSE, 0);
   }
   if (!empty($address_line_3)){
     $yplus++;
-    $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + ($yinterligne*$yplus));  
+    $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + ($yinterligne*$yplus));
     $pdf->Write(10, $address_line_3, '', 0, 'L', TRUE, 0, FALSE, FALSE, 0);
   }
   if (!empty($address_line_4)){
     $yplus++;
-    $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + ($yinterligne*$yplus));  
+    $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + ($yinterligne*$yplus));
     $pdf->Write(10, $address_line_4, '', 0, 'L', TRUE, 0, FALSE, FALSE, 0);
   }
   if (!empty($address_line_5)){
     $yplus++;
-    $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + ($yinterligne*$yplus));  
+    $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + ($yinterligne*$yplus));
     $pdf->Write(10, $address_line_5, '', 0, 'L', TRUE, 0, FALSE, FALSE, 0);
   }
 
@@ -1151,7 +1157,7 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
   $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 23); //25
   // $pdf->Cell(94 ,9,  '***'.mb_strtoupper($amount).'***',0,0,'C',FALSE,''); //http://www.fpdf.org/en/doc/cell.htm
   $pdf->Write(10, '***'.mb_strtoupper($amount).'***', '', 0, 'C', TRUE, 0, FALSE, FALSE, 0);
-  
+
   // *** Display amount_letter ***
   // $convert = new CRM_Cdntaxreceipts_Utils_ConvertNum(str_replace(',','.',$amount), 'EUR');
   $amount_letter = $convert->convert("fr-FR");
@@ -1165,10 +1171,10 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
     $iarr +=1;
     $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 26.5 + ($iarr*4));
     $pdf->Write(5, $value, '', 0, 'C', FALSE, 0, FALSE, FALSE, 0);
-    //$displayAmountLetter .= $pdf->ln(10).$value;   
+    //$displayAmountLetter .= $pdf->ln(10).$value;
   }
-  
- 
+
+
   foreach($receipt_contributions as $rc){
 
     $contribution_id = $rc['contribution_id'];
@@ -1177,7 +1183,7 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
     $valeur_don = $amount;
 
     $contributions = \Civi\Api4\Contribution::get(FALSE)
-      ->addSelect('id', 'contact_id', 'receive_date', 'total_amount', 'source', 'financial_type_id:label', 'contribution_status_id:label', 'payment_instrument_id:label', 'payment_instrument_id:description')
+      ->addSelect('id', 'contact_id', 'receive_date', 'total_amount', 'source', 'financial_type_id:label', 'contribution_status_id:label', 'payment_instrument_id:label', 'payment_instrument_id:description', 'contribution_details.Nature')
       ->addWhere('id', '=', $contribution_id)
       ->execute();
     foreach ($contributions as $contribution) {
@@ -1191,10 +1197,10 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
       $don_mtt = str_replace(' EUR', $espace_incecable.'€', $don_mtt );
       $valeur_don = $don_mtt;
 
-      $don_mode = $contribution['payment_instrument_id:label']; 
-      $don_nature = $contribution['payment_instrument_id:description']; // TODO  $contribution['total_amount']; // 'Numéraire', 'Don en nature', Autre
+      $don_mode = $contribution['payment_instrument_id:label'];
+      $don_nature =  CRM_Cdntaxreceipts_Utils_MK::getOptionValueLabel('Contribution_d_tails_Nature',  $contribution['contribution_details.Nature']); // 'Numéraire', 
       $don_mode_code = $contribution['payment_instrument_id:label']; //
-      
+
       $don_affectation = '';
       $don_affectation_code = $contribution['source'];
       $optionValues = \Civi\Api4\OptionValue::get(FALSE)
@@ -1213,7 +1219,7 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
           $don_affectation = $optionValue['label'];
         }
       }
-      $don_date = CRM_Cdntaxreceipts_Utils_MK::date_format_fr( $contribution['receive_date']); 
+      $don_date = CRM_Cdntaxreceipts_Utils_MK::date_format_fr( $contribution['receive_date']);
     }
   }
 
@@ -1230,7 +1236,7 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
   $font_size = 10;
   // ***************************************
   //    VALEUR DU DON
-  // ***************************************  
+  // ***************************************
   $x_detailscolumn = 122.6; // 119.8;
   $y_detailscolumnstart = 160.8; // 150.2;
   $pdf->SetFont($fontFNE, '', $font_size);
@@ -1239,16 +1245,16 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
 
   // ***************************************
   //   NATURE
-  // ***************************************  
+  // ***************************************
   $x_detailscolumn = 110.4;// 108;
   $y_detailscolumnstart = 167; // 156.6;
   $pdf->SetFont($fontFNE, '', $font_size);
   $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 0.8);
   $pdf->Write(10, ($don_nature), '', 0, 'L', TRUE, 0, FALSE, FALSE, 0);
-  
+
   // ***************************************
   //   MODE
-  // ***************************************  
+  // ***************************************
   $x_detailscolumn = 109; //107.2;
   $y_detailscolumnstart = 173.2; // 162.6;
   $pdf->SetFont($fontFNE, '', $font_size);
@@ -1257,7 +1263,7 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
 
   // ***************************************
   //   DATE
-  // ***************************************  
+  // ***************************************
   $x_detailscolumn = 105.4; // 104;
   $y_detailscolumnstart = 180;// 169.6;
   $pdf->SetFont($fontFNE, '', $font_size);
@@ -1266,7 +1272,7 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
 
   // ***************************************
   //   AFFECTATION
-  // ***************************************  
+  // ***************************************
   $x_detailscolumn = 117.4;// 115.6;
   $y_detailscolumnstart = 186.6; // 176.2;
   $pdf->SetFont($fontFNE, '', $font_size);
@@ -1275,7 +1281,7 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
 
   // ***************************************
   //   FAIT à PAris, Le
-  // ***************************************  
+  // ***************************************
   $font_size = 12;
   $x_detailscolumn = 126; //117;
   $y_detailscolumnstart = 234.4; // 226.4;
@@ -1285,7 +1291,7 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
 
   // ***************************************
   //   SIREN
-  // ***************************************  
+  // ***************************************
   $font_size = 10;
   $siren = '123456789';
   $x_detailscolumn = 18.8; // 14.8;
@@ -1296,7 +1302,7 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
 
   // // ***************************************
   // //   TVA
-  // // ***************************************  
+  // // ***************************************
   // $tva = 'FRXX123456789';
   // $x_detailscolumn = 54; // 41;
   // $y_detailscolumnstart = 180; // 179.6;
@@ -1306,7 +1312,7 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
 
   // ***************************************
   //   FORME JURIDIQUE
-  // ***************************************  
+  // ***************************************
   $fj = 'organisme de placement collectif en valeurs mobilières sans personnalité morale';
   $x_detailscolumn = 32; // 24.6;
   $y_detailscolumnstart = 180; // 184.8; // 184.2;
@@ -1324,7 +1330,7 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
   $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 0.8 + ($iarr*5));
   $pdf->Write(10, $fj_1erligne, '', 0, 'L', FALSE, 0, FALSE, FALSE, 0);
 
-  
+
   $displayAmountLetter = '';
   foreach($fj_letter_array as $value){
     $iarr +=1;
@@ -1334,9 +1340,9 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
       $x_detailscolumn = 1.3;
       $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 0.8 + ($iarr*5));
     // }
-    
+
     $pdf->Write(10, $value, '', 0, 'L', FALSE, 0, FALSE, FALSE, 0);
-    //$displayAmountLetter .= $pdf->ln(10).$value;   
+    //$displayAmountLetter .= $pdf->ln(10).$value;
   }
 
 
@@ -1347,8 +1353,8 @@ function _display_line_address(&$pdf, &$fontFNE, &$font_size, $s_address_line, $
     $fontzise -= 1.5; // $yinterligne -= 1;
     $pdf->SetFont($fontFNE, '', $fontzise, '', true);
   }
- // $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + ($yinterligne*$yplus));  
-  $pdf->SetXY($x, $y);  
+ // $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + ($yinterligne*$yplus));
+  $pdf->SetXY($x, $y);
   $pdf->Write(10, $s_address_line, '', 0, 'L', TRUE, 0, FALSE, FALSE, 0);
   if (strlen($s_address_line) > 73 ){
     $fontzise += 1.5; // $yinterligne += 1;
@@ -1370,9 +1376,9 @@ function _getaddress($contact_id) {
     $address_result = $address;
   }
 
-  
+
   if (!isset($address_result)) {
-  
+
     $addresses = \Civi\Api4\Address::get(FALSE)
       ->addSelect('*', 'country_id:label')
       ->addWhere('contact_id', '=', $contact_id)
@@ -1384,7 +1390,7 @@ function _getaddress($contact_id) {
   }
   $address_result = isset($address_result) ? $address : array();
 
- 
+
 
   return $address_result;
 }
