@@ -14,7 +14,7 @@ use CRM_Cdntaxreceipts_ExtensionUtil as E;
      */
     function Header() {
       $pdf_template_file = _cdntaxreceipts_get_image_filepath('receipt_pdftemplate');
- 
+
       if (!empty($pdf_template_file)) {
 
         if (is_null($this->_tplIdx)) {
@@ -67,13 +67,13 @@ use CRM_Cdntaxreceipts_ExtensionUtil as E;
      * "Remembers" the template id of the imported page
      */
     var $_tplIdx;
-      
+
     /**
      * include a background template for every page
      */
     function Header() {
       $pdf_template_file = _cdntaxreceipts_get_image_filepath('receipt_pdftemplate_organization');
- 
+
       if (!empty($pdf_template_file)) {
 
         if (is_null($this->_tplIdx)) {
@@ -87,7 +87,7 @@ use CRM_Cdntaxreceipts_ExtensionUtil as E;
         $this->parsers = array();
       }
     }
-   
+
     function Footer() {}
   }
 
@@ -98,7 +98,7 @@ use CRM_Cdntaxreceipts_ExtensionUtil as E;
   const CDNTAX_DELIVERY_DATA_ONLY = 2;
 
 
-  
+
 /**
  * processTaxReceipt()
  * Accepts an associative array containing receipt variables, and:
@@ -203,11 +203,15 @@ function cdntaxreceipts_processTaxReceipt($receipt, &$collectedPdf = NULL, $mode
       }
 
       // send a copy (without open tracking) to the tax archive
-      $sendTemplateParams['toEmail'] = $email_archive;
+      // UFM 28/03/2023 : ne pas envoyer de mail en archive (performance)
+      /*
+       $sendTemplateParams['toEmail'] = $email_archive;
       list($sent, $subject, $message, $html) = CRM_Core_BAO_MessageTemplate::sendTemplate($sendTemplateParams);
+      */
 
       // send a copy (with open tracking) to the donor
-      if ($sent && $receipt['issue_method'] == 'email' && $mode != CDNTAXRECEIPTS_MODE_WORKFLOW) {
+      // UFM 28/03/2023 : ne pas envoyer de mail en archive (performance) /* $sent && */
+      if (/* $sent && */ $receipt['issue_method'] == 'email' && $mode != CDNTAXRECEIPTS_MODE_WORKFLOW) {
         $sendTemplateParams['toEmail'] = $contact['email'];
         $sendTemplateParams['tplParams']['openTracking'] = "<img src=\"" . CRM_Utils_System::baseURL() .
           "civicrm/cdntaxreceipts/open?r={$receipt['email_tracking_id']}\" width='1' height='1' alt='' border='0'>";
@@ -250,7 +254,7 @@ function cdntaxreceipts_generateFormattedReceipt($receipt, &$collectedPdf = NULL
 
   $contact_id = $receipt['contact_id'];
 
-  // Civi::log()->info('cdntaxreceipts_generateFormattedReceipt contact_id : '.print_r($contact_id,1)); 
+  // Civi::log()->info('cdntaxreceipts_generateFormattedReceipt contact_id : '.print_r($contact_id,1));
   $address = cdntaxreceipts_getAddress($receipt['contact_id']);
 
   $street_address = $address['street_address'];
@@ -290,7 +294,7 @@ function cdntaxreceipts_generateFormattedReceipt($receipt, &$collectedPdf = NULL
   //   }
   // }
 
-  
+
   $contacts = \Civi\Api4\Contact::get(FALSE)
     ->addSelect('*', 'prefix_id:label')
     ->addWhere('id', '=', $receipt['contact_id'])
@@ -341,7 +345,7 @@ function cdntaxreceipts_generateFormattedReceipt($receipt, &$collectedPdf = NULL
   }
   // $pdf = new PDF(PDF_PAGE_ORIENTATION, PDF_UNIT, 'LETTER', TRUE, 'UTF-8', FALSE);
   $contact_type = CRM_Cdntaxreceipts_Utils_MK::get_contact_type($contact_id);
-  // Civi::log()->info('cdntaxreceipts_generateFormattedReceipt contact_type : '.print_r($contact_type,1)); 
+  // Civi::log()->info('cdntaxreceipts_generateFormattedReceipt contact_type : '.print_r($contact_type,1));
   switch ($contact_type){
     case 'Organization' :
       $pdf = new PDF_ORG(PDF_PAGE_ORIENTATION, PDF_UNIT, 'A4', TRUE, 'UTF-8', FALSE);
@@ -354,7 +358,7 @@ function cdntaxreceipts_generateFormattedReceipt($receipt, &$collectedPdf = NULL
       break;
   }
   $pdf->Open();
- 
+
   $pdf->SetAuthor(Civi::settings()->get('org_name'));
 
   $mymargin_left = 12;
@@ -1321,7 +1325,7 @@ function cdntaxreceipts_openCollectedPDF($contact_id = 0) {
 
 function cdntaxreceipts_sendCollectedPDF(&$pdf, $filename) {
   CRM_Cdntaxreceipts_Utils_MK::mk_log('cdntaxreceipts.functions.inc > cdntaxreceipts_sendCollectedPDF()');
-  
+
   if ( $pdf->getNumPages() > 0 ) {
     if (defined('CIVICRM_TEST')) {
       // Put it in uploadDir the same as the other places we put a file, then
@@ -1347,7 +1351,7 @@ function cdntaxreceipts_sendCollectedPDF(&$pdf, $filename) {
  */
 function _cdntaxreceipts_get_type_for_contribution($contribution) {
   CRM_Cdntaxreceipts_Utils_MK::mk_log('cdntaxreceipts.functions.inc > _cdntaxreceipts_get_type_for_contribution()');
-    
+
   require_once 'CRM/Financial/DAO/FinancialType.php';
   $contributionType = new CRM_Financial_DAO_FinancialType();
   $contributionType->id = $contribution->financial_type_id;
@@ -1373,7 +1377,7 @@ function _cdntaxreceipts_get_type_for_line_item($line_item) {
  * @return array|mixed|null address : Contact address fixed with named country and state_province
  */
 function cdntaxreceipts_getAddress($contact_id) {
-  CRM_Cdntaxreceipts_Utils_MK::mk_log('cdntaxreceipts.functions.inc > cdntaxreceipts_getAddress()'); 
+  CRM_Cdntaxreceipts_Utils_MK::mk_log('cdntaxreceipts.functions.inc > cdntaxreceipts_getAddress()');
 
   $address = NULL;
   // get Address information via contact
@@ -1389,7 +1393,7 @@ function cdntaxreceipts_getAddress($contact_id) {
   if ( $address_results['is_error'] == 0) {
     $address = array_shift($address_results['values']);
   }
-  
+
 
   if (!isset($address)) {
     $params = array(
@@ -1435,7 +1439,7 @@ function cdntaxreceipts_getAddress($contact_id) {
  * @return string the value of the $key setting.
  */
 function cdntaxreceipts_getCiviSetting($key) {
-  CRM_Cdntaxreceipts_Utils_MK::mk_log('cdntaxreceipts.functions.inc > cdntaxreceipts_getCiviSetting()'); 
+  CRM_Cdntaxreceipts_Utils_MK::mk_log('cdntaxreceipts.functions.inc > cdntaxreceipts_getCiviSetting()');
 
   $result = civicrm_api3('Setting', 'get', array(
     'sequential' => 1,
@@ -1452,7 +1456,7 @@ function cdntaxreceipts_getCiviSetting($key) {
  * @paramm string $value the value for the setting.
  */
 function cdntaxreceipts_setCiviSetting($key, $value) {
-  CRM_Cdntaxreceipts_Utils_MK::mk_log('cdntaxreceipts.functions.inc > cdntaxreceipts_setCiviSetting()'); 
+  CRM_Cdntaxreceipts_Utils_MK::mk_log('cdntaxreceipts.functions.inc > cdntaxreceipts_setCiviSetting()');
 
   civicrm_api3('Setting', 'create', array(
     'sequential' => 1,
@@ -1465,7 +1469,7 @@ function cdntaxreceipts_setCiviSetting($key, $value) {
  * @return string display formatted Issue type
  */
 function _cdntaxreceipts_get_display_type($issue_type) {
-  CRM_Cdntaxreceipts_Utils_MK::mk_log('cdntaxreceipts.functions.inc > _cdntaxreceipts_get_display_type()'); 
+  CRM_Cdntaxreceipts_Utils_MK::mk_log('cdntaxreceipts.functions.inc > _cdntaxreceipts_get_display_type()');
 
   switch ($issue_type) {
     case 'aggregate' :
@@ -1486,7 +1490,7 @@ function _cdntaxreceipts_get_display_type($issue_type) {
  * @language string $language preferred_language (i.e. en_US or fr_CA)
  */
 function _cdntaxreceipts_setReceiptanguage($language) {
-  CRM_Cdntaxreceipts_Utils_MK::mk_log('cdntaxreceipts.functions.inc > _cdntaxreceipts_setReceiptanguage()'); 
+  CRM_Cdntaxreceipts_Utils_MK::mk_log('cdntaxreceipts.functions.inc > _cdntaxreceipts_setReceiptanguage()');
 
   $cdnLanguages = array('en', 'fr');
   $short = CRM_Core_I18n_PseudoConstant::shortForLong($language);
@@ -1523,7 +1527,7 @@ function _cdntaxreceipts_setReceiptanguage($language) {
  * @return string file path or NULL
  */
 function _cdntaxreceipts_get_image_filepath($imageSettingName) {
-  CRM_Cdntaxreceipts_Utils_MK::mk_log('cdntaxreceipts.functions.inc > _cdntaxreceipts_get_image_filepath()'); 
+  CRM_Cdntaxreceipts_Utils_MK::mk_log('cdntaxreceipts.functions.inc > _cdntaxreceipts_get_image_filepath()');
 
   $fileName = Civi::settings()->get($imageSettingName);
   if ($fileName) {
@@ -1549,7 +1553,7 @@ function _cdntaxreceipts_get_image_filepath($imageSettingName) {
  * @return bool
  */
 function _cdntaxreceipts_custom_field_exists($custom_group_id, $field_label) {
-  CRM_Cdntaxreceipts_Utils_MK::mk_log('cdntaxreceipts.functions.inc > _cdntaxreceipts_custom_field_exists()'); 
+  CRM_Cdntaxreceipts_Utils_MK::mk_log('cdntaxreceipts.functions.inc > _cdntaxreceipts_custom_field_exists()');
 
   $params = array(
     'custom_group_id' => $custom_group_id,
@@ -1567,7 +1571,7 @@ function _cdntaxreceipts_custom_field_exists($custom_group_id, $field_label) {
  * @return string
  */
 function _cdntaxreceipts_get_location(): string {
-  CRM_Cdntaxreceipts_Utils_MK::mk_log('cdntaxreceipts.functions.inc > _cdntaxreceipts_get_location()'); 
+  CRM_Cdntaxreceipts_Utils_MK::mk_log('cdntaxreceipts.functions.inc > _cdntaxreceipts_get_location()');
 
   $city = \Civi::settings()->get('receipt_location_issued');
   if (empty($city)) {
@@ -1585,7 +1589,7 @@ function _cdntaxreceipts_get_location(): string {
  * run some checks and statusBounce if not good to go.
  */
 function _cdntaxreceipts_check_requirements(): void {
-  CRM_Cdntaxreceipts_Utils_MK::mk_log('cdntaxreceipts.functions.inc > _cdntaxreceipts_check_requirements()'); 
+  CRM_Cdntaxreceipts_Utils_MK::mk_log('cdntaxreceipts.functions.inc > _cdntaxreceipts_check_requirements()');
 
   // At the moment this is all we do...
   _cdntaxreceipts_get_location();
