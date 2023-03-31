@@ -1333,7 +1333,7 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
 
   $fj_letter_array = CRM_Cdntaxreceipts_Utils_MK::cutStringByWord($fj,35);
   $fj_1erligne = $fj_letter_array[0];
-  $fj_letter_array = CRM_Cdntaxreceipts_Utils_MK::cutStringByWord(str_replace($fj_1erligne,'',$fj),60);
+ 
   $font_size = 10;
   $iarr = 0;
   // 1ere ligne
@@ -1341,21 +1341,22 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
   $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 0.8 + ($iarr*5));
   $pdf->Write(10, $fj_1erligne, '', 0, 'L', FALSE, 0, FALSE, FALSE, 0);
 
+  if (strlen($fj) > 35) {
+    $fj_letter_array = CRM_Cdntaxreceipts_Utils_MK::cutStringByWord(str_replace($fj_1erligne,'',$fj),60);
+    $displayAmountLetter = '';
+    foreach($fj_letter_array as $value){
+      $iarr +=1;
+      // if ($iarr == 0){
+      //   $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 0.8 + ($iarr*5));
+      // } else {
+        $x_detailscolumn = 1.3;
+        $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 0.8 + ($iarr*5));
+      // }
 
-  $displayAmountLetter = '';
-  foreach($fj_letter_array as $value){
-    $iarr +=1;
-    // if ($iarr == 0){
-    //   $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 0.8 + ($iarr*5));
-    // } else {
-      $x_detailscolumn = 1.3;
-      $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + 0.8 + ($iarr*5));
-    // }
-
-    $pdf->Write(10, $value, '', 0, 'L', FALSE, 0, FALSE, FALSE, 0);
-    //$displayAmountLetter .= $pdf->ln(10).$value;
+      $pdf->Write(10, $value, '', 0, 'L', FALSE, 0, FALSE, FALSE, 0);
+      //$displayAmountLetter .= $pdf->ln(10).$value;
+    }
   }
-
 
 }
 
