@@ -1018,12 +1018,13 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
   $yplus = -1;
   $yinterligne = 6;
   $fontzise = 12;
-  if (strlen($displayname) > 35) {   $fontzise = 6; $yinterligne -= 1;}
+  if (strlen($displayname) > 31) {   $fontzise = 6; $yinterligne -= 1;}
   $pdf->SetFont($fontFNE, '', $fontzise, '', true);
   $yplus++;
   if (strlen($displayname) > 73 ){
     $fontzise -= 1.5; // $yinterligne -= 1;
     $pdf->SetFont($fontFNE, '', $fontzise, '', true);
+    $fontzise += 1.5;
   }
   $pdf->SetXY($mymargin_left + $x_detailscolumn, $mymargin_top + $y_detailscolumnstart + ($yinterligne*$yplus));
   $pdf->Write(10, mb_strtoupper($displayname), '', 0, 'L', TRUE, 0, FALSE, FALSE, 0);
@@ -1181,9 +1182,12 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
     $date_don = $rc['receive_date'];
     $date_don = CRM_Cdntaxreceipts_Utils_MK::date_format_fr($date_don); //substr($date_don,8,2).'/'.substr($date_don,5,2).'/'.substr($date_don,0,4);
     $valeur_don = $amount;
+    $don_affectation = '';
 
     $contributions = \Civi\Api4\Contribution::get(FALSE)
-      ->addSelect('id', 'contact_id', 'receive_date', 'total_amount', 'source', 'financial_type_id:label', 'contribution_status_id:label', 'payment_instrument_id:label', 'payment_instrument_id:description', 'contribution_details.Nature')
+      ->addSelect('id', 'contact_id', 'receive_date', 'total_amount', 'source', 'financial_type_id:label'
+        , 'contribution_status_id:label', 'payment_instrument_id:label', 'payment_instrument_id:description', 'contribution_details.Nature'
+        , 'campaign_id.title')
       ->addWhere('id', '=', $contribution_id)
       ->execute();
     foreach ($contributions as $contribution) {
@@ -1202,24 +1206,24 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
       $don_nature =  CRM_Cdntaxreceipts_Utils_MK::getOptionValueLabel('Contribution_d_tails_Nature',  $contribution['contribution_details.Nature']); // 'Numéraire',
       $don_mode_code = $contribution['payment_instrument_id:label']; //
 
-      $don_affectation = '';
-      $don_affectation_code = $contribution['source'];
-      $optionValues = \Civi\Api4\OptionValue::get(FALSE)
-        ->addWhere('option_group_id:name', '=', 'fne_type_affectation')
-        ->addWhere('value', '=', $don_affectation_code)
-        ->execute();
-      foreach ($optionValues as $optionValue) {
-        $don_affectation = $optionValue['label'];
-      }
-      if (empty($don_affectation)){
-        $optionValues = \Civi\Api4\OptionValue::get(FALSE)
-          ->addWhere('option_group_id:name', '=', 'fne_type_affectation')
-          ->addWhere('value', '=', 'default')
-          ->execute();
-        foreach ($optionValues as $optionValue) {
-          $don_affectation = $optionValue['label'];
-        }
-      }
+      $don_affectation = $contribution['campaign_id.title'];
+      // $don_affectation_code = $contribution['source'];
+      // $optionValues = \Civi\Api4\OptionValue::get(FALSE)
+      //   ->addWhere('option_group_id:name', '=', 'fne_type_affectation')
+      //   ->addWhere('value', '=', $don_affectation_code)
+      //   ->execute();
+      // foreach ($optionValues as $optionValue) {
+      //   $don_affectation = $optionValue['label'];
+      // }
+      // if (empty($don_affectation)){
+      //   $optionValues = \Civi\Api4\OptionValue::get(FALSE)
+      //     ->addWhere('option_group_id:name', '=', 'fne_type_affectation')
+      //     ->addWhere('value', '=', 'default')
+      //     ->execute();
+      //   foreach ($optionValues as $optionValue) {
+      //     $don_affectation = $optionValue['label'];
+      //   }
+      // }
       $don_date = CRM_Cdntaxreceipts_Utils_MK::date_format_fr( $contribution['receive_date']);
     }
   }
