@@ -455,8 +455,8 @@ class CRM_Cdntaxreceipts_Form_Report_ReceiptsIssued extends CRM_Report_Form {
     $dao = CRM_Core_DAO::executeQuery($sql);
 
     while ($dao->fetch()) {
-      $totalAmount[] = CRM_Utils_Money::format($dao->amount, 'CAD');
-      $average[] =   CRM_Utils_Money::format($dao->avg, 'CAD');
+      $totalAmount[] = CRM_Utils_Money::format($dao->amount, 'EUR');
+      $average[] =   CRM_Utils_Money::format($dao->avg, 'EUR');
       $count += $dao->count;
     }
     $statistics['counts']['amount'] = array(
