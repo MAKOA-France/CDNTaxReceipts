@@ -823,10 +823,10 @@ function _writeReceipt(&$pdf, $pdf_variables, $receipt) {
       $don_mtt = str_replace(' EUR', $espace_incecable.'€', $don_mtt );
 
       $don_mode = $contribution['payment_instrument_id:label'];
-      $don_nature = CRM_Cdntaxreceipts_Utils_MK::getOptionValueLabel('Contribution_d_tails_Nature',  $contribution['contribution_details.Nature']); // 'Numéraire', 
+      $don_nature = CRM_Cdntaxreceipts_Utils_MK::getOptionValueLabel('Contribution_d_tails_Nature',  $contribution['contribution_details.Nature']); // 'Numéraire',
       $don_mode_code = $contribution['payment_instrument_id:label']; //
 
-      // Civi::log()->info('cdntaxreceipts_cdntaxreceipts_writeReceipt _writeReceipt > contribution_details.Nature : '.print_r( $contribution['contribution_details.Nature'],1)); 
+      // Civi::log()->info('cdntaxreceipts_cdntaxreceipts_writeReceipt _writeReceipt > contribution_details.Nature : '.print_r( $contribution['contribution_details.Nature'],1));
       // Civi::log()->info('cdntaxreceipts_cdntaxreceipts_writeReceipt _writeReceipt > don_nature : '.print_r($don_nature,1));
 
       $don_affectation = '';
@@ -1190,6 +1190,7 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
     // Civi::log()->info('cdntaxreceipts_cdntaxreceipts_writeReceipt _writeReceipt > contribution : '.print_r($contribution,1));
       $num_ligne ++;
       $don_id = $contribution['id'];
+      
 
       $don_mtt = $contribution['total_amount'];
       $convert = new CRM_Cdntaxreceipts_Utils_ConvertNum(str_replace(',','.',$don_mtt), 'EUR');
@@ -1198,7 +1199,7 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
       $valeur_don = $don_mtt;
 
       $don_mode = $contribution['payment_instrument_id:label'];
-      $don_nature =  CRM_Cdntaxreceipts_Utils_MK::getOptionValueLabel('Contribution_d_tails_Nature',  $contribution['contribution_details.Nature']); // 'Numéraire', 
+      $don_nature =  CRM_Cdntaxreceipts_Utils_MK::getOptionValueLabel('Contribution_d_tails_Nature',  $contribution['contribution_details.Nature']); // 'Numéraire',
       $don_mode_code = $contribution['payment_instrument_id:label']; //
 
       $don_affectation = '';
@@ -1293,7 +1294,17 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
   //   SIREN
   // ***************************************
   $font_size = 10;
-  $siren = '123456789';
+  //UFM correction 31/03 apres generation des RF organisations en prod
+  $siren = '';
+  $fj = '';
+  $contacts = \Civi\Api4\Contact::get(FALSE)
+    ->addSelect('infos_legales.siren', 'infos_legales.forme_juridique:label')
+    ->addWhere('id', '=', $contribution['contact_id'])
+    ->execute();
+  foreach ($contacts as $contact) {
+    $siren= $contact['infos_legales.siren'];
+    $fj= $contact['infos_legales.forme_juridique:label'];
+  }
   $x_detailscolumn = 18.8; // 14.8;
   $y_detailscolumnstart = 175.4; // 174.8;
   $pdf->SetFont($fontFNE, '', $font_size);
@@ -1313,7 +1324,7 @@ function _writeReceipt_Org(&$pdf, $pdf_variables, $receipt) {
   // ***************************************
   //   FORME JURIDIQUE
   // ***************************************
-  $fj = 'organisme de placement collectif en valeurs mobilières sans personnalité morale';
+  //$fj = 'organisme de placement collectif en valeurs mobilières sans personnalité morale';
   $x_detailscolumn = 32; // 24.6;
   $y_detailscolumnstart = 180; // 184.8; // 184.2;
   // $pdf->SetFont($fontFNE, '', 10);
