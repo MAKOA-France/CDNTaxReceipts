@@ -612,7 +612,7 @@ function _writeReceipt(&$pdf, $pdf_variables, $receipt) {
   $yplus = -1;
   $yinterligne = 6;
   $fontzise = 12;
-  if (strlen($displayname) > 35) {   $fontzise = 6; $yinterligne -= 1;}
+  if (strlen($displayname) > 31) {   $fontzise = 6; $yinterligne -= 1;}
   $pdf->SetFont($fontFNE, '', $fontzise, '', true);
   $yplus++;
   if (strlen($displayname) > 73 ){
