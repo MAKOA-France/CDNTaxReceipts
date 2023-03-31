@@ -810,7 +810,9 @@ function _writeReceipt(&$pdf, $pdf_variables, $receipt) {
     // Civi::log()->info('contribution_id : '.print_r($contribution_id,1)); //cp1252
 
     $contributions = \Civi\Api4\Contribution::get(FALSE)
-      ->addSelect('id', 'contact_id', 'receive_date', 'total_amount', 'source', 'financial_type_id:label', 'contribution_status_id:label', 'payment_instrument_id:label', 'payment_instrument_id:description', 'contribution_details.Nature')
+      ->addSelect('id', 'contact_id', 'receive_date', 'total_amount', 'source', 'financial_type_id:label', 'contribution_status_id:label'
+      , 'payment_instrument_id:label', 'payment_instrument_id:description', 'contribution_details.Nature'
+      , 'campaign_id.title')
       ->addWhere('id', '=', $contribution_id)
       ->execute();
     foreach ($contributions as $contribution) {
@@ -829,24 +831,25 @@ function _writeReceipt(&$pdf, $pdf_variables, $receipt) {
       // Civi::log()->info('cdntaxreceipts_cdntaxreceipts_writeReceipt _writeReceipt > contribution_details.Nature : '.print_r( $contribution['contribution_details.Nature'],1));
       // Civi::log()->info('cdntaxreceipts_cdntaxreceipts_writeReceipt _writeReceipt > don_nature : '.print_r($don_nature,1));
 
-      $don_affectation = '';
-      $don_affectation_code = $contribution['source'];
-      $optionValues = \Civi\Api4\OptionValue::get(FALSE)
-        ->addWhere('option_group_id:name', '=', 'fne_type_affectation')
-        ->addWhere('value', '=', $don_affectation_code)
-        ->execute();
-      foreach ($optionValues as $optionValue) {
-        $don_affectation = $optionValue['label'];
-      }
-      if (empty($don_affectation)){
-        $optionValues = \Civi\Api4\OptionValue::get(FALSE)
-          ->addWhere('option_group_id:name', '=', 'fne_type_affectation')
-          ->addWhere('value', '=', 'default')
-          ->execute();
-        foreach ($optionValues as $optionValue) {
-          $don_affectation = $optionValue['label'];
-        }
-      }
+      $don_affectation = $contribution['campaign_id.title'];
+      
+      // $don_affectation_code = $contribution['source'];
+      // $optionValues = \Civi\Api4\OptionValue::get(FALSE)
+      //   ->addWhere('option_group_id:name', '=', 'fne_type_affectation')
+      //   ->addWhere('value', '=', $don_affectation_code)
+      //   ->execute();
+      // foreach ($optionValues as $optionValue) {
+      //   $don_affectation = $optionValue['label'];
+      // }
+      // if (empty($don_affectation)){
+      //   $optionValues = \Civi\Api4\OptionValue::get(FALSE)
+      //     ->addWhere('option_group_id:name', '=', 'fne_type_affectation')
+      //     ->addWhere('value', '=', 'default')
+      //     ->execute();
+      //   foreach ($optionValues as $optionValue) {
+      //     $don_affectation = $optionValue['label'];
+      //   }
+      // }
       $don_date = CRM_Cdntaxreceipts_Utils_MK::date_format_fr( $contribution['receive_date']);
 
 
