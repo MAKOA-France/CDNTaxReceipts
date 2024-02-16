@@ -4,6 +4,7 @@
   <div class="icon inform-icon"></div>
   {ts 1=$totalSelectedContacts domain='org.civicrm.cdntaxreceipts'}You have selected <strong>%1</strong> contacts. The summary below includes these contacts only.{/ts}
 </div>
+
   <table class="cdntax_summary">
     <thead>
       <th width=30%>{ts domain='org.civicrm.cdntaxreceipts'}Select Tax Year{/ts}</th>
