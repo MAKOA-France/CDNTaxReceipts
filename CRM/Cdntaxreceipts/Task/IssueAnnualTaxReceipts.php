@@ -150,11 +150,11 @@ class CRM_Cdntaxreceipts_Task_IssueAnnualTaxReceipts extends CRM_Contact_Form_Ta
       'runner' => 'task',
       'error' => 'abort',
     ]);
-
+    
     foreach ($this->_contactIds as $contactId ) {
       $queue->createItem(new CRM_Queue_Task(
         ['CRM_Cdntaxreceipts_Utils', 'processOneReceipt'], // callback
-        [$contactId, $year, $previewMode, $queue->getName()], // arguments
+        [$contactId, $year, $previewMode], // arguments
         "Contact $contactId" // title
       ));
     }
@@ -164,95 +164,37 @@ class CRM_Cdntaxreceipts_Task_IssueAnnualTaxReceipts extends CRM_Contact_Form_Ta
       'status_id:name' => 'in_progress',
       'queue_id.name' => $queue->getName(),
       'metadata' => [
+        'preview' => $previewMode,
+        'year' => $year,
         'print' => [],
         'count' => [
           'email' => 0,
           'print' => 0,
           'data' => 0,
           'fail' => 0,
+          'total' => count($this->_contactIds),
         ],
       ],
     ])->execute();
+    
+    // get queue for transfer id in url of page end
+    $queueReceipt = \Civi\Api4\Queue::get(TRUE)
+      ->addSelect('*', 'custom.*')
+      ->addWhere('name', '=', $queue->getName())
+      ->execute()
+      ->first();
+
+    $parameterPageEndQueueReceipt = $queueReceipt['id'];
 
     $runner = new CRM_Queue_Runner([
       'title' => ts('Generating Receipts'),
       'queue' => $queue,
       // Deprecated; only works on AJAX runner // 'onEnd' => ['CRM_Demoqueue_Page_DemoQueue', 'onEnd'],
-      //'onEndUrl' => CRM_Utils_System::url('civicrm/demo-queue/done'),
+      'onEndUrl' => CRM_Utils_System::url('civicrm/cdntaxreceipts/queue-result?queue=' . $parameterPageEndQueueReceipt),
     ]);
-    $runner->runAllInteractive(); // does not return
+    // redirect to a specific queue page
+    $runner->runAllInteractive();
 
-
-return;
-    /**
-     * Drupal module include
-     */
-    //module_load_include('.inc','civicrm_cdntaxreceipts','civicrm_cdntaxreceipts');
-    //module_load_include('.module','civicrm_cdntaxreceipts','civicrm_cdntaxreceipts');
-
-    $emailCount = 0;
-    $printCount = 0;
-    $dataCount = 0;
-    $failCount = 0;
-
-    foreach ($this->_contactIds as $contactId ) {
-
-      list( $issuedOn, $receiptId ) = cdntaxreceipts_annual_issued_on($contactId, $year);
-      $contributions = cdntaxreceipts_contributions_not_receipted($contactId, $year);
-
-      if ( $emailCount + $printCount + $failCount >= self::MAX_RECEIPT_COUNT ) {
-        $status = ts('Maximum of %1 tax receipt(s) were sent. Please repeat to continue processing.', array(1=>self::MAX_RECEIPT_COUNT, 'domain' => 'org.civicrm.cdntaxreceipts'));
-        CRM_Core_Session::setStatus($status, '', 'info');
-        break;
-      }
-
-      if ( empty($issuedOn) && count($contributions) > 0 ) {
-
-        list( $ret, $method ) = cdntaxreceipts_issueAnnualTaxReceipt($contactId, $year, $receiptsForPrinting, $previewMode);
-
-        if ( $ret == 0 ) {
-          $failCount++;
-        }
-        elseif ( $method == 'email' ) {
-          $emailCount++;
-        }
-        elseif ( $method == 'print') {
-          $printCount++;
-        }
-        elseif ( $method == 'data') {
-          $dataCount++;
-        }
-      }
-    }
-
-    // 3. Set session status
-    if ( $previewMode ) {
-      $status = ts('%1 tax receipt(s) have been previewed.  No receipts have been issued.', array(1=>$printCount, 'domain' => 'org.civicrm.cdntaxreceipts'));
-      CRM_Core_Session::setStatus($status, '', 'success');
-    }
-    else {
-      if ($emailCount > 0) {
-        $status = ts('%1 tax receipt(s) were sent by email.', array(1=>$emailCount, 'domain' => 'org.civicrm.cdntaxreceipts'));
-        CRM_Core_Session::setStatus($status, '', 'success');
-      }
-      if ($printCount > 0) {
-        $status = ts('%1 tax receipt(s) need to be printed.', array(1=>$printCount, 'domain' => 'org.civicrm.cdntaxreceipts'));
-        CRM_Core_Session::setStatus($status, '', 'success');
-      }
-      if ($dataCount > 0) {
-        $status = ts('Data for %1 tax receipt(s) is available in the Tax Receipts Issued report.', array(1=>$dataCount, 'domain' => 'org.civicrm.cdntaxreceipts'));
-        CRM_Core_Session::setStatus($status, '', 'success');
-      }
-    }
-
-    if ( $failCount > 0 ) {
-      $status = ts('%1 tax receipt(s) failed to process.', array(1=>$failCount, 'domain' => 'org.civicrm.cdntaxreceipts'));
-      CRM_Core_Session::setStatus($status, '', 'error');
-    }
-
-    // 4. send the collected PDF for download
-    // NB: This exits if a file is sent.
-    cdntaxreceipts_sendCollectedPDF($receiptsForPrinting, CRM_Utils_File::makeFilenameWithUnicode(ts('Receipts-To-Print-%1', [1 => (int) $_SERVER['REQUEST_TIME'], 'domain' => 'org.civicrm.cdntaxreceipts'])) . '.pdf');
   }
 }
 

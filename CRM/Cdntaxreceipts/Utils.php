@@ -2,51 +2,63 @@
 
 class CRM_Cdntaxreceipts_Utils {
   
-  static function processOneReceipt($contactId, $year, $previewMode, $queueName) {
+  // TODO: ensure we don't do the same contactId twice (e.g. how does the queue deal with refresh?)
+  static function processOneReceipt(CRM_Queue_TaskContext $ctx, $contactId, $year, $previewMode) {
 
-    list( $issuedOn, $receiptId ) = cdntaxreceipts_annual_issued_on($contactId, $year);
-      $contributions = cdntaxreceipts_contributions_not_receipted($contactId, $year);
+    $queueName = $ctx->queue->getName();
 
-    if ( empty($issuedOn) && count($contributions) > 0 ) {
+	  list( $issuedOn, $receiptId ) = cdntaxreceipts_annual_issued_on($contactId, $year);
+    $contributions = cdntaxreceipts_contributions_not_receipted($contactId, $year);
+
+    if (empty($issuedOn)) {
 
       $userJob = \Civi\Api4\UserJob::get(TRUE)
-        ->addSelect('metadata')
-        ->addWhere('name', '=', $queueName)
+        ->addSelect('id', 'metadata')
+        ->addWhere('queue_id.name', '=', $queueName)
         ->setLimit(1)
         ->execute()
         ->first();
+      $userJobId = $userJob['id'];
       $metadata = $userJob['metadata'];
 
-      // start a PDF to collect receipts that cannot be emailed
+      // start a dummy PDF to collect receipts that cannot be emailed
+      // it will be re-generated later on
+      // FIXME: this will likely create a Duplicate mode issue ?
       $receiptsForPrinting = cdntaxreceipts_openCollectedPDF();
-      list( $ret, $method ) = cdntaxreceipts_issueAnnualTaxReceipt($contactId, $year, $receiptsForPrinting, $previewMode);
+      list($ret, $method) = cdntaxreceipts_issueAnnualTaxReceipt($contactId, $year, $receiptsForPrinting, $previewMode);
 
-      if ( $ret == 0 ) {
+      // in preview mode print everything
+      $requirePrinting = $previewMode ? TRUE : FALSE;
+
+      // update statistics
+      if ($ret == 0) {
         $metadata['count']['fail']++;
       }
-      elseif ( $method == 'email' ) {
+      elseif ($method == 'email') {
         $metadata['count']['email']++;
       }
-      elseif ( $method == 'print') {
+      elseif ($method == 'print') {
         $metadata['count']['print']++;
+        $requirePrinting = TRUE;
+      }
+      elseif ( $method == 'data') {
+        $metadata['count']['data']++;
+      }
 
-        // TODO: add contactId to metadata to compute the pdf to print at the end
+      if ($requirePrinting) {
+        // add contactId to metadata to compute the pdf to print at the end
         if (!isset($metadata['print'])) $metadata['print'] = [];
         $metadata['print'][] = $contactId;
       }
-      elseif ( $method == 'data') {
-        $dataCount++;
-        $metadata['count']['data']
-      }
 
+      // save metadata
       $results = \Civi\Api4\UserJob::update(TRUE)
         ->addValue('metadata', $metadata)
-        ->addWhere('name', '=', $queueName)
+        ->addWhere('id', '=', $userJobId)
         ->execute();
 
     }
 
-    sleep(2);
     return TRUE;
   }
 

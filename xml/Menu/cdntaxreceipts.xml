@@ -26,4 +26,16 @@
     <access_callback>1</access_callback>
     <is_public>true</is_public>
   </item>
+  <item>
+    <path>civicrm/cdntaxreceipts/queue-result</path>
+    <page_callback>CRM_Cdntaxreceipts_Page_PageOnEndQueueReceipt</page_callback>
+    <title>PageOnEndQueueReceipt</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/cdntaxreceipts/queue-print</path>
+    <page_callback>CRM_Cdntaxreceipts_Page_QueuePrint</page_callback>
+    <title>GenerateReceiptsToPrint</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
 </menu>

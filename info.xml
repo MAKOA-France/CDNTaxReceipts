@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <extension key="org.civicrm.cdntaxreceipts" type="module">
   <file>cdntaxreceipts</file>
-  <name>Makoa - Reçus Fiscaux - FNE - Fork de CDN Tax Receipts</name>
+  <name>Makoa - Re&#xE7;us Fiscaux - FNE - Fork de CDN Tax Receipts</name>
   <description>
       Creates Tax Receipts including single or annual/aggregate tax receipts, with distribution by email or print,
       detailed reporting, press ready PDF template possible. We worked with (and continue to work with) a BDO Tax Partner
@@ -28,5 +28,16 @@
   </comments>
   <civix>
     <namespace>CRM/Cdntaxreceipts</namespace>
+    <format>23.02.1</format>
   </civix>
+  <mixins>
+    <mixin>menu-xml@1.0.0</mixin>
+    <mixin>mgd-php@1.0.0</mixin>
+    <mixin>smarty-v2@1.0.1</mixin>
+  </mixins>
+  <classloader>
+    <psr0 prefix="CRM_" path="."/>
+    <psr4 prefix="Civi\" path="Civi"/>
+  </classloader>
+  <upgrader>CRM_Cdntaxreceipts_Upgrader</upgrader>
 </extension>
