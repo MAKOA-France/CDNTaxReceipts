@@ -21,14 +21,16 @@ class CRM_Cdntaxreceipts_Utils {
       $userJobId = $userJob['id'];
       $metadata = $userJob['metadata'];
 
-      // start a dummy PDF to collect receipts that cannot be emailed
-      // it will be re-generated later on
-      // FIXME: this will likely create a Duplicate mode issue ?
-      $receiptsForPrinting = cdntaxreceipts_openCollectedPDF();
-      list($ret, $method) = cdntaxreceipts_issueAnnualTaxReceipt($contactId, $year, $receiptsForPrinting, $previewMode);
-
-      // in preview mode print everything
-      $requirePrinting = $previewMode ? TRUE : FALSE;
+      // we delay the ones that needs to be printed to the end of the process to avoid being marked as duplicates
+      list($method, $email) = cdntaxreceipts_sendMethodForContact($contactId);
+      $ret = TRUE;
+      if ($method != 'print') {
+        // dummy PDF to collect receipts that cannot be emailed
+        // it will be re-generated later on
+        // FIXME: this will likely create a Duplicate mode issue ?
+        $receiptsForPrinting = cdntaxreceipts_openCollectedPDF();
+        list($ret, $method) = cdntaxreceipts_issueAnnualTaxReceipt($contactId, $year, $receiptsForPrinting, $previewMode);
+      }
 
       // update statistics
       if ($ret == 0) {
@@ -39,13 +41,13 @@ class CRM_Cdntaxreceipts_Utils {
       }
       elseif ($method == 'print') {
         $metadata['count']['print']++;
-        $requirePrinting = TRUE;
       }
       elseif ( $method == 'data') {
         $metadata['count']['data']++;
       }
 
-      if ($requirePrinting) {
+      // in preview mode print everything
+      if ($previewMode || $method == 'print') {
         // add contactId to metadata to compute the pdf to print at the end
         if (!isset($metadata['print'])) $metadata['print'] = [];
         $metadata['print'][] = $contactId;
