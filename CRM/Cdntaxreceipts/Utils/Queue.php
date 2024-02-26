@@ -143,7 +143,7 @@ class CRM_Cdntaxreceipts_Utils_Queue {
       $userJobId = $userJob['id'];
       $metadata = $userJob['metadata'];
 
-      $receiptsForPrinting = cdntaxreceipts_openCollectedPDF();
+      $receiptsForPrinting = cdntaxreceipts_openCollectedPDF($contactId);
       $ret = cdntaxreceipts_issueAggregateTaxReceipt($contactId, $year, $contributions, $method, $receiptsForPrinting, $previewMode);
       self::updateMetadata($ret, $method, $metadata);
 
@@ -193,7 +193,7 @@ class CRM_Cdntaxreceipts_Utils_Queue {
 
       // keeping the legacy way for printing : collect in a file
       // but here, we save it to a temporary file for later use when the full queue is processed
-      $receiptsForPrinting = cdntaxreceipts_openCollectedPDF();
+      $receiptsForPrinting = cdntaxreceipts_openCollectedPDF($contactId);
       list($ret, $method) = cdntaxreceipts_issueAnnualTaxReceipt($contactId, $year, $receiptsForPrinting, $previewMode);
 
       // update statistics

@@ -43,7 +43,7 @@ use CRM_Cdntaxreceipts_ExtensionUtil as E;
      */
     function Header() {
       $pdf_template_file = _cdntaxreceipts_get_image_filepath('receipt_pdftemplate_individual');
-// \Civi::log()->debug('PDF_IND -- ' . print_r($pdf_template_file,1));
+        //Civi::log()->debug('PDF_IND -- ' . print_r($pdf_template_file,1));
 
       if (!empty($pdf_template_file)) {
 
@@ -52,7 +52,7 @@ use CRM_Cdntaxreceipts_ExtensionUtil as E;
           $this->_tplIdx = $this->importPage(1);
         }
         $this->useTemplate($this->_tplIdx);
-        // Civi::log()->info('$this->_tplIdx : '.print_r($this->_tplIdx,1)); //cp1
+        //Civi::log()->info('$this->_tplIdx : '.print_r($this->_tplIdx,1)); //cp1
       }
       else {
         $this->parsers = array();
@@ -73,7 +73,7 @@ use CRM_Cdntaxreceipts_ExtensionUtil as E;
      */
     function Header() {
       $pdf_template_file = _cdntaxreceipts_get_image_filepath('receipt_pdftemplate_organization');
-
+        //Civi::log()->debug('PDF_ORG -- ' . print_r($pdf_template_file,1));
       if (!empty($pdf_template_file)) {
 
         if (is_null($this->_tplIdx)) {
@@ -1289,7 +1289,7 @@ function cdntaxreceipts_sendMethodForContribution( $contributionId ) {
 }
 
 function cdntaxreceipts_openCollectedPDF($contact_id = 0) {
-  // Civi::log()->info('cdntaxreceipts.functions.inc > cdntaxreceipts_openCollectedPDF() contact_id : '.print_r($contact_id ,1));
+  //Civi::log()->info('cdntaxreceipts.functions.inc > cdntaxreceipts_openCollectedPDF() contact_id : '.print_r($contact_id ,1));
   CRM_Cdntaxreceipts_Utils_MK::mk_log('cdntaxreceipts.functions.inc > cdntaxreceipts_openCollectedPDF()', 'contact_id', $contact_id);
   static $pdf;
 
@@ -1297,7 +1297,8 @@ function cdntaxreceipts_openCollectedPDF($contact_id = 0) {
     //define ('K_PATH_IMAGES', '');
 
     $type = !empty($contact_id) ? CRM_Cdntaxreceipts_Utils_MK::get_contact_type($contact_id) : '';
-
+    //Civi::log()->info('cdntaxreceipts.functions.inc > cdntaxreceipts_openCollectedPDF() contact_id get_contact_type : '.print_r($contact_id ,1));
+    
     // $pdf = new PDF(PDF_PAGE_ORIENTATION, PDF_UNIT, 'A4', TRUE, 'UTF-8', FALSE); //Orgi LETTER
     switch ($type){
       case 'Organization' :
