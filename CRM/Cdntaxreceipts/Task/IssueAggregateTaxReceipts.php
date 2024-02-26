@@ -1,13 +1,12 @@
 <?php
-use CRM_Cdntaxreceipts_ExtensionUtil as E;
-use CRM_Cdntaxreceipts_Utils_MK as MK;
+
 /**
  * This class provides the common functionality for issuing Aggregate Tax Receipts for
  * a group of Contribution ids.
  */
 class CRM_Cdntaxreceipts_Task_IssueAggregateTaxReceipts extends CRM_Contribute_Form_Task {
 
-  const MAX_RECEIPT_COUNT = 2000; // FIXME : PUT IN setting
+  const MAX_RECEIPT_COUNT = 1000;
 
   private $_contributions_status;
   private $_issue_type;
@@ -24,7 +23,7 @@ class CRM_Cdntaxreceipts_Task_IssueAggregateTaxReceipts extends CRM_Contribute_F
 
     //check for permission to edit contributions
     if ( ! CRM_Core_Permission::check('issue cdn tax receipts') ) {
-      CRM_Core_Error::fatal(E::ts('You do not have permission to access this page', array('domain' => 'org.civicrm.cdntaxreceipts')));
+      CRM_Core_Error::fatal(ts('You do not have permission to access this page', array('domain' => 'org.civicrm.cdntaxreceipts')));
     }
 
     _cdntaxreceipts_check_requirements();
@@ -47,6 +46,10 @@ class CRM_Cdntaxreceipts_Task_IssueAggregateTaxReceipts extends CRM_Contribute_F
     );
 
     $this->_contributions_status = cdntaxreceipts_contributions_get_status($this->_contributionIds);
+    if (empty($this->_contributions_status)) {
+      // e.g. if all the contributions selected were in-kind
+      CRM_Core_Error::statusBounce(ts('No eligible contributions selected. E.g. In-kind must be receipted individually.', array('domain' => 'org.civicrm.cdntaxreceipts')));
+    }
 
     // Get the number of years selected
     foreach ($this->_contributions_status as $contrib_status) {
@@ -81,6 +84,7 @@ class CRM_Cdntaxreceipts_Task_IssueAggregateTaxReceipts extends CRM_Contribute_F
         $receipts[$issue_type][$year]['total_amount'] += ($status['total_amount']);
         $receipts[$issue_type][$year]['not_eligible_amount'] += $status['non_deductible_amount'];
         if ($status['eligible']) {
+          //_cdntaxreceipts_check_lineitems($id);
           list( $method, $email ) = cdntaxreceipts_sendMethodForContact($status['contact_id']);
           $receipts[$issue_type][$year][$method]['contribution_count']++;
           if (!isset($receipts[$issue_type][$year]['contact_ids'][$status['contact_id']])) {
@@ -128,7 +132,7 @@ class CRM_Cdntaxreceipts_Task_IssueAggregateTaxReceipts extends CRM_Contribute_F
    */
   function buildQuickForm() {
 
-    CRM_Utils_System::setTitle(E::ts('Issue Aggregate Tax Receipts', array('domain' => 'org.civicrm.cdntaxreceipts')));
+    CRM_Utils_System::setTitle(ts('Issue Aggregate Tax Receipts', array('domain' => 'org.civicrm.cdntaxreceipts')));
 
     CRM_Core_Resources::singleton()->addStyleFile('org.civicrm.cdntaxreceipts', 'css/civicrm_cdntaxreceipts.css');
 
@@ -143,20 +147,20 @@ class CRM_Cdntaxreceipts_Task_IssueAggregateTaxReceipts extends CRM_Contribute_F
     foreach ( $this->_years as $year ) {
       $this->addElement('radio', 'receipt_year', NULL, $year, 'issue_' . $year);
     }
-    $this->addRule('receipt_year', E::ts('Selection required', array('domain' => 'org.civicrm.cdntaxreceipts')), 'required');
+    $this->addRule('receipt_year', ts('Selection required', array('domain' => 'org.civicrm.cdntaxreceipts')), 'required');
 
     if ($delivery_method != CDNTAX_DELIVERY_DATA_ONLY) {
-      $this->add('checkbox', 'is_preview', E::ts('Run in preview mode?', array('domain' => 'org.civicrm.cdntaxreceipts')) );
+      $this->add('checkbox', 'is_preview', ts('Run in preview mode?', array('domain' => 'org.civicrm.cdntaxreceipts')));
     }
 
     $buttons = array(
       array(
         'type' => 'cancel',
-        'name' => E::ts('Back', array('domain' => 'org.civicrm.cdntaxreceipts')),
+        'name' => ts('Back', array('domain' => 'org.civicrm.cdntaxreceipts')),
       ),
       array(
         'type' => 'next',
-        'name' => E::ts('Issue Tax Receipts'),
+        'name' => 'Issue Tax Receipts',
         'isDefault' => TRUE,
         'submitOnce' => TRUE,
       ),
@@ -167,9 +171,7 @@ class CRM_Cdntaxreceipts_Task_IssueAggregateTaxReceipts extends CRM_Contribute_F
 
   function setDefaultValues() {
     // TODO: Handle case where year -1 was not an option
-    return array('receipt_year' => 'issue_' . (date("Y") - 1),
-                  'is_preview' => true,
-                );
+    return array('receipt_year' => 'issue_' . (date("Y") - 1),);
   }
 
   /**
@@ -188,182 +190,40 @@ class CRM_Cdntaxreceipts_Task_IssueAggregateTaxReceipts extends CRM_Contribute_F
       $year = substr($year, strlen('issue_')); // e.g. issue_2012
     }
 
-    $iReceipts_Org = -1;
-    $iReceipts_Ind = -1;
-    $iReceipts_Original = -1;
-    $receipts_List_Organization = array();
-    $receipts_List_Individual = array();
-    $receipts_List_Original = array();
-
-    $org_id = 0;
-    $ind_id = 0;
-    // Retrieves the list of Organization and Individual
-    // Civi::log()->info('AVANT FOREACH CONTRIBUTION_STATUS '); // : '.print_r($this->_receipts['original'],1));
-    foreach ($this->_receipts['original'][$year]['contact_ids'] as $contact_id => $contribution_status) {
-      // $contact_type = MK::get_contact_type[$contact_id];
-
-      $contacts = \Civi\Api4\Contact::get(FALSE)
-        ->addWhere('id', '=', $contact_id)
-        ->execute();
-      foreach ($contacts as $contact) {
-        $contact_type = $contact['contact_type'];
-        break;
-      }
-
-      switch ($contact_type){
-        case 'Organization' :
-          if ($org_id ==0 ) {$org_id = $contact_id;}
-          $iReceipts_Org ++;
-          array_push($receipts_List_Organization, $contribution_status);
-          break;
-        case 'Individual' :
-          if ($ind_id ==0 ) {$ind_id = $contact_id;}
-          $iReceipts_Ind ++;
-          array_push($receipts_List_Individual, $contribution_status);
-          break;
-        default :
-          $iReceipts_Original ++;
-          array_push($receipts_List_Original, $contribution_status);
-          break;
-      }
-    }
-
-    $params = $this->controller->exportValues($this->_name);
-
-    // Civi::log()->info('IssueAggregateTaxReceipts.php > receipts_List_Organization isset() : '.isset($receipts_List_Organization).' empty() : '.empty($receipts_List_Organization).' receipts_List_Organization : '.print_r( $receipts_List_Organization,1));
-    // Civi::log()->info('IssueAggregateTaxReceipts.php > receipts_List_Individual isset() : '.isset($receipts_List_Individual).' empty() : '.empty($receipts_List_Individual).' receipts_List_Individual : '.print_r( $receipts_List_Individual,1));
-    // Civi::log()->info('IssueAggregateTaxReceipts.php > receipts_List_Original isset() : '.isset($receipts_List_Original).' empty() : '.empty($receipts_List_Original).' receipts_List_Original : '.print_r( $receipts_List_Original,1));
-
-    // $mergePDF = new FPDF_Merge();
-    if (isset($receipts_List_Organization)){
-      $this->original($receipts_List_Organization, $org_id);
-      // $receiptsForPrintingPDF = $this->specific_type_of_contact($receipts_List_Organization, $org_id);
-      // $mergePDF.add($receiptsForPrintingPDF);
-    }
-    if (isset($receipts_List_Individual)){
-      $this->original($receipts_List_Individual, $ind_id);
-      // $receiptsForPrintingPDF = $this->specific_type_of_contact($receipts_List_Individual, $ind_id);
-      // $mergePDF.add($receiptsForPrintingPDF);
-    }
-    if (isset($receipts_List_Original)){
-      $this->original($receipts_List_Original);
-      // $receiptsForPrintingPDF = $this->original($receipts_List_Original);
-      // $mergePDF.add($receiptsForPrintingPDF);
-    }
-
-    // // 4. send the collected PDF for download
-    // // NB: This exits if a file is sent.
-    // Civi::log()->info('IssueAggregateTaxReceipts.php > specific_type_of_contact BEFORE cdntaxreceipts_sendCollectedPDF');
-    // cdntaxreceipts_sendCollectedPDF($mergePDF, 'Receipts-To-Print-' . CRM_Cdntaxreceipts_Utils_Time::time() . '.pdf');  // EXITS.
-    // // cdntaxreceipts_sendCollectedPDF($receiptsForPrintingPDF, 'Receipts-To-Print-' . CRM_Cdntaxreceipts_Utils_Time::time() . '.pdf');  // EXITS.
-
-  }
-
-  /************************************
-   *  ***   ORIGINAL
-   ************************************/
-  function original($contributions_status, $contact_id = 0 ) {
-    // Civi::log()->info('IssueAggregateTaxReceipts.php > original  contributionS_status : '.print_r( $contributions_status,1));
-
-    // lets get around the time limit issue if possible
-    if ( ! ini_get( 'safe_mode' ) ) {
-      set_time_limit( 0 );
-    }
-
-    $params = $this->controller->exportValues($this->_name);
-
-    $year = $params['receipt_year'];
-    if ( $year ) {
-      $year = substr($year, strlen('issue_')); // e.g. issue_2012
-    }
-
     $previewMode = FALSE;
     if (isset($params['is_preview']) && $params['is_preview'] == 1 ) {
       $previewMode = TRUE;
     }
 
-    // start a PDF to collect receipts that cannot be emailed
-    if ($contact_id > 0){
-      $receiptsForPrintingPDF = cdntaxreceipts_openCollectedPDF($contact_id);
-    }else{
-      $receiptsForPrintingPDF = cdntaxreceipts_openCollectedPDF();
-    }
-
-    $emailCount = 0;
-    $printCount = 0;
-    $dataCount = 0;
-    $failCount = 0;
-
-
-    //foreach ($this->_receipts['original'][$year]['contact_ids'] as $contact_id => $contribution_status) {
-    foreach ($contributions_status as $contribution_status) {
-     // Civi::log()->info('IssueAggregateTaxReceipts.php > postProcess  contribution_status : '.print_r( $contribution_status,1));
-      // AB : Take the right PDF depending on the type of contact
-      // $receiptsForPrintingPDF = cdntaxreceipts_openCollectedPDF($contact_id);
-
-
-      if ( $emailCount + $printCount + $failCount >= self::MAX_RECEIPT_COUNT ) {
-        // limit email, print receipts as the pdf generation and email-to-archive consume
-        // server resources. don't limit data-type receipts.
-        $status = E::ts('Maximum of %1 tax receipt(s) were sent. Please repeat to continue processing.',
-          array(1=>self::MAX_RECEIPT_COUNT, 'domain' => 'org.civicrm.cdntaxreceipts'));
-        CRM_Core_Session::setStatus($status, '', 'info');
-        break;
-      }
-
+    $tasks = [];
+    foreach ($this->_receipts['original'][$year]['contact_ids'] as $contactId => $contribution_status) {
+      
       $contributions = $contribution_status['contributions'];
       $method = $contribution_status['issue_method'];
 
-      if ( empty($issuedOn) && count($contributions) > 0 ) {
-        $ret = cdntaxreceipts_issueAggregateTaxReceipt($contact_id, $year, $contributions, $method,
-          $receiptsForPrintingPDF, $previewMode);
-
-        if ( $ret == 0 ) {
-          $failCount++;
-        }
-        elseif ( $method == 'email' ) {
-          $emailCount++;
-        }
-        elseif ( $method == 'print' ) {
-          $printCount++;
-        }
-        elseif ( $method == 'data' ) {
-          $dataCount++;
-        }
+      if (empty($issuedOn) && count($contributions) > 0) {
+        $tasks[] = new CRM_Queue_Task(
+          ['CRM_Cdntaxreceipts_Utils_Queue', 'processOneAggregateReceipt'], // callback
+          [$contactId, $year, $previewMode, $contribution_status], // arguments
+          "Contact $contactId" // title
+        );
       }
     }
 
-    // 3. Set session status
-    if ( $previewMode ) {
-      $status = E::ts('%1 tax receipt(s) have been previewed.  No receipts have been issued.', array(1=>$printCount, 'domain' => 'org.civicrm.cdntaxreceipts'));
-      CRM_Core_Session::setStatus($status, '', 'success');
-    }
-    else {
-      if ($emailCount > 0) {
-        $status = E::ts('%1 tax receipt(s) were sent by email.', array(1=>$emailCount, 'domain' => 'org.civicrm.cdntaxreceipts'));
-        CRM_Core_Session::setStatus($status, '', 'success');
-      }
-      if ($printCount > 0) {
-        $status = E::ts('%1 tax receipt(s) need to be printed.', array(1=>$printCount, 'domain' => 'org.civicrm.cdntaxreceipts'));
-        CRM_Core_Session::setStatus($status, '', 'success');
-      }
-      if ($dataCount > 0) {
-        $status = E::ts('Data for %1 tax receipt(s) is available in the Tax Receipts Issued report.', array(1=>$dataCount, 'domain' => 'org.civicrm.cdntaxreceipts'));
-        CRM_Core_Session::setStatus($status, '', 'success');
-      }
-    }
+    $queue = CRM_Cdntaxreceipts_Utils_Queue::createQueue($year, $previewMode, $tasks, 'contact');
+    
+    // get queue for transfer id in url of page end
+    $queueId = CRM_Cdntaxreceipts_Utils_Queue::getQueueId($queue);
+    
+    $runner = new CRM_Queue_Runner([
+      'title' => ts('Generating Receipts'),
+      'queue' => $queue,
+      // Deprecated; only works on AJAX runner // 'onEnd' => ['CRM_Demoqueue_Page_DemoQueue', 'onEnd'],
+      'onEndUrl' => CRM_Utils_System::url('civicrm/cdntaxreceipts/queue-done?queue=' . $queueId),
+    ]);
+    // redirect to a specific queue page
+    $runner->runAllInteractive();
 
-    if ( $failCount > 0 ) {
-      $status = E::ts('%1 tax receipt(s) failed to process.', array(1=>$failCount, 'domain' => 'org.civicrm.cdntaxreceipts'));
-      CRM_Core_Session::setStatus($status, '', 'error');
-    }
-
-    // return $receiptsForPrintingPDF;
-    // 4. send the collected PDF for download
-    // NB: This exits if a file is sent.
-    cdntaxreceipts_sendCollectedPDF($receiptsForPrintingPDF, 'Receipts-To-Print-' . CRM_Cdntaxreceipts_Utils_Time::time() . '.pdf');  // EXITS.
   }
-
-
 }
 

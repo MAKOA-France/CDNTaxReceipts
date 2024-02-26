@@ -113,10 +113,6 @@ class CRM_Cdntaxreceipts_Task_IssueAnnualTaxReceipts extends CRM_Contact_Form_Ta
   }
 
 
-  function processOneReceipt($contactId, $year, $previewMode) {
-    sleep(2);
-  }
-
   /**
    * process the form after the input has been submitted and validated
    *
@@ -126,11 +122,6 @@ class CRM_Cdntaxreceipts_Task_IssueAnnualTaxReceipts extends CRM_Contact_Form_Ta
    */
 
   function postProcess() {
-
-    // lets get around the time limit issue if possible
-    /*if ( ! ini_get( 'safe_mode' ) ) {
-      set_time_limit( 0 );
-    }*/
 
     $params = $this->controller->exportValues($this->_name);
     $year = $params['receipt_year'];
@@ -143,54 +134,29 @@ class CRM_Cdntaxreceipts_Task_IssueAnnualTaxReceipts extends CRM_Contact_Form_Ta
       $previewMode = TRUE;
     }
 
-    $queueName = 'cdntaxreceipt_' . time();
-
-    $queue = Civi::queue($queueName, [
-      'type' => 'Sql',
-      'runner' => 'task',
-      'error' => 'abort',
-    ]);
-    
+    $tasks = [];
     foreach ($this->_contactIds as $contactId ) {
-      $queue->createItem(new CRM_Queue_Task(
-        ['CRM_Cdntaxreceipts_Utils', 'processOneReceipt'], // callback
-        [$contactId, $year, $previewMode], // arguments
-        "Contact $contactId" // title
-      ));
+      // limit to those who have a valid contribution in the current selected year
+      $contributions = cdntaxreceipts_contributions_not_receipted($contactId, $year);
+      if (count($contributions) > 0) {
+        $tasks[] = new CRM_Queue_Task(
+          ['CRM_Cdntaxreceipts_Utils_Queue', 'processOneContactReceipt'], // callback
+          [$contactId, $year, $previewMode], // arguments
+          "Contact $contactId" // title
+        );
+      }
     }
 
-    \Civi\Api4\UserJob::create()->setValues([
-      'job_type' => 'contact_import',
-      'status_id:name' => 'in_progress',
-      'queue_id.name' => $queue->getName(),
-      'metadata' => [
-        'preview' => $previewMode,
-        'year' => $year,
-        'print' => [],
-        'count' => [
-          'email' => 0,
-          'print' => 0,
-          'data' => 0,
-          'fail' => 0,
-          'total' => count($this->_contactIds),
-        ],
-      ],
-    ])->execute();
+    $queue = CRM_Cdntaxreceipts_Utils_Queue::createQueue($year, $previewMode, $tasks, 'contact');
     
     // get queue for transfer id in url of page end
-    $queueReceipt = \Civi\Api4\Queue::get(TRUE)
-      ->addSelect('*', 'custom.*')
-      ->addWhere('name', '=', $queue->getName())
-      ->execute()
-      ->first();
-
-    $parameterPageEndQueueReceipt = $queueReceipt['id'];
-
+    $queueId = CRM_Cdntaxreceipts_Utils_Queue::getQueueId($queue);
+    
     $runner = new CRM_Queue_Runner([
       'title' => ts('Generating Receipts'),
       'queue' => $queue,
       // Deprecated; only works on AJAX runner // 'onEnd' => ['CRM_Demoqueue_Page_DemoQueue', 'onEnd'],
-      'onEndUrl' => CRM_Utils_System::url('civicrm/cdntaxreceipts/queue-result?queue=' . $parameterPageEndQueueReceipt),
+      'onEndUrl' => CRM_Utils_System::url('civicrm/cdntaxreceipts/queue-done?queue=' . $queueId),
     ]);
     // redirect to a specific queue page
     $runner->runAllInteractive();
