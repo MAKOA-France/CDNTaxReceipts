@@ -445,7 +445,7 @@ msgstr "%1 reçus fiscaux n'ont pas pu être générés."
 
 #: CRM/Cdntaxreceipts/Task/IssueAnnualTaxReceipts.php cdntaxreceipts.php
 msgid "Issue Annual Tax Receipts"
-msgstr "Générer un reçu fiscal par don"
+msgstr "Générer un reçu fiscal"
 
 #: CRM/Cdntaxreceipts/Task/IssueSingleTaxReceipts.php cdntaxreceipts.php
 msgid "Issue Tax Receipts"

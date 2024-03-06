@@ -204,10 +204,10 @@ function cdntaxreceipts_processTaxReceipt($receipt, &$collectedPdf = NULL, $mode
 
       // send a copy (without open tracking) to the tax archive
       // UFM 28/03/2023 : ne pas envoyer de mail en archive (performance)
-      /*
+      
        $sendTemplateParams['toEmail'] = $email_archive;
       list($sent, $subject, $message, $html) = CRM_Core_BAO_MessageTemplate::sendTemplate($sendTemplateParams);
-       */
+      
       // [SV 2023-03-31] because of the commented code above
       // if we don't do that, the database is never updated for print
       if ($receipt['issue_method'] != 'email') {

@@ -80,8 +80,11 @@ class CRM_Cdntaxreceipts_Utils_Queue {
     if (cdntaxreceipts_eligibleForReceipt($contribution->id)) {
 
       $userJob = \Civi\Api4\UserJob::get(TRUE)
+        //->addSelect('id', 'metadata', 'queue_id')
+        //->addWhere('queue_id.name', '=', $queueName)
         ->addSelect('id', 'metadata', 'queue_id')
-        ->addWhere('queue_id.name', '=', $queueName)
+        ->addJoin('Queue AS queue', 'LEFT', ['queue.id', '=', 'queue_id'])
+        ->addWhere('queue.name', '=', $queueName)
         ->setLimit(1)
         ->execute()
         ->first();
