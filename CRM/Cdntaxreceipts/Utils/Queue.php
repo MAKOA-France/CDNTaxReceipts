@@ -79,7 +79,7 @@ class CRM_Cdntaxreceipts_Utils_Queue {
     // if contribution is eligible for receipting, issue the tax receipt.  Otherwise ignore.
     if (cdntaxreceipts_eligibleForReceipt($contribution->id)) {
 
-      $userJob = \Civi\Api4\UserJob::get(TRUE)
+      $userJob = \Civi\Api4\UserJob::get(false)
         //->addSelect('id', 'metadata', 'queue_id')
         //->addWhere('queue_id.name', '=', $queueName)
         ->addSelect('id', 'metadata', 'queue_id')
@@ -136,7 +136,7 @@ class CRM_Cdntaxreceipts_Utils_Queue {
 
     if (empty($issuedOn) && count($contributions) > 0) {
 
-      $userJob = \Civi\Api4\UserJob::get(TRUE)
+      $userJob = \Civi\Api4\UserJob::get(false)
         ->addSelect('id', 'metadata', 'queue_id')
         ->addWhere('queue_id.name', '=', $queueName)
         ->setLimit(1)
@@ -184,7 +184,7 @@ class CRM_Cdntaxreceipts_Utils_Queue {
 
     if (empty($issuedOn)) {
 
-      $userJob = \Civi\Api4\UserJob::get(TRUE)
+      $userJob = \Civi\Api4\UserJob::get(false)
         ->addSelect('id', 'metadata', 'queue_id')
         ->addWhere('queue_id.name', '=', $queueName)
         ->setLimit(1)
