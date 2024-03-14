@@ -181,8 +181,9 @@ class CRM_Cdntaxreceipts_Utils_Queue {
 
 	  list($issuedOn, $receiptId) = cdntaxreceipts_annual_issued_on($contactId, $year);
     $contributions = cdntaxreceipts_contributions_not_receipted($contactId, $year);
-
-    if (empty($issuedOn)) {
+  
+    // [SV] temporaire pour https://lab.symbiotic.coop/makoa/general/-/issues/568
+    if (TRUE/*empty($issuedOn)*/) {
 
       $userJob = \Civi\Api4\UserJob::get(false)
         ->addSelect('id', 'metadata', 'queue_id')

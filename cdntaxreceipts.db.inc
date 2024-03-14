@@ -87,7 +87,11 @@ function cdntaxreceipts_all_issued_on($contribution_id) {
 
 
 function cdntaxreceipts_contributions_not_receipted($contactId, $year) {
-
+  
+  // [SV] temporaire pour https://lab.symbiotic.coop/makoa/general/-/issues/568
+  // on veut pouvoir regenerer
+  
+  
   $sql = "SELECT contrib.id as contribution_id, contrib.total_amount,
         ifnull(contrib.non_deductible_amount, 0) as non_deductible_amount, contrib.receive_date
     FROM civicrm_contribution contrib
@@ -95,7 +99,8 @@ function cdntaxreceipts_contributions_not_receipted($contactId, $year) {
             ON contrib.financial_type_id = contrib_type.id
     LEFT  JOIN cdntaxreceipts_log_contributions cdntax_c
             ON contrib.id = cdntax_c.contribution_id
-    WHERE cdntax_c.receipt_id IS NULL AND contrib_type.name <> 'In-kind'
+    -- WHERE cdntax_c.receipt_id IS NULL AND contrib_type.name <> 'In-kind'
+    WHERE contrib_type.name <> 'In-kind'
       AND contrib.contact_id = $contactId AND YEAR(contrib.receive_date) = $year
     ORDER BY contrib.id";
 
