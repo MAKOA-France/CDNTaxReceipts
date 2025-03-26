@@ -341,8 +341,16 @@ function cdntaxreceipts_generateFormattedReceipt($receipt, &$collectedPdf = NULL
   $line_1 = E::ts("This is your Official Receipt for income tax purposes.", array('domain' => 'org.civicrm.cdntaxreceipts'));
 
   $config = CRM_Core_Config::singleton();
-  $pdf_file = $config->uploadDir . 'FNE-RecuFiscal-' . $receipt['receipt_no'] . '.pdf';
-  $user_friendly = 'FNE-RecuFiscal-' . $receipt['receipt_no'] . '.pdf';
+  $prefixe = '';
+  $description = CRM_Cdntaxreceipts_Utils_MK::getDomainData();
+  if(!empty($description)) {
+    $prefixe = CRM_Cdntaxreceipts_Utils_MK::getPrefixeRF(trim($description));
+  } else {
+    $prefixe = '';
+  }
+  
+  $pdf_file = $config->uploadDir . $prefixe . $receipt['receipt_no'] . '.pdf';
+  $user_friendly = $prefixe . $receipt['receipt_no'] . '.pdf';
 
   if (!defined('PDF_PAGE_FORMAT')) {
     // define('PDF_PAGE_FORMAT', 'USLETTER'); // orig: 'A4'

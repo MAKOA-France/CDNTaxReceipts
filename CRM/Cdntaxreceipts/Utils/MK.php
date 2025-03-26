@@ -92,4 +92,37 @@ class CRM_Cdntaxreceipts_Utils_MK {
         // Civi::log()->info('getOptionValueLabel label : '.print_r($label,1));
         return $label;
     }
+    
+    public static function getDomainData(){
+      $description = '';
+      $domains = \Civi\Api4\Domain::get(FALSE)
+        ->addSelect('*', 'custom.*')
+        ->addWhere('id', '=', 1)
+        ->execute()
+        ->first();
+      
+      if(!empty($domains)){
+        $description = $domains['description'];
+      } else {
+        Civi::log()->debug('function getDomainData return is empty');
+      }
+      
+      return $description;
+    }
+    
+    public static function getPrefixeRF($description){
+      $prefixe = '';
+      switch ($description) {
+        case 'FNE NAT':
+          $prefixe = 'FNE-';
+          break;
+        case 'NE17':
+          $prefixe = 'NE17-';
+          break;
+        default:
+          $prefixe;
+      }
+      
+      return $prefixe;
+    }
 }
