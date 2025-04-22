@@ -23,7 +23,7 @@
   <ul>
     <li>{ts 1=$statistics.email}%1 tax receipt(s) were sent by email.{/ts}</li> 
     <li>{ts 1=$statistics.print}%1 tax receipt(s) need to be printed.{/ts}. {if !$preview}<a href="/civicrm/cdntaxreceipts/queue-print?queue={$qid}">Download the PDF</a>{/if}</li>
-    <li>{ts 1=$statistics.data}Data for %1 tax receipt(s) is available in the Tax Receipts Issued report.{/ts}</li>
+    <!--<li>{ts 1=$statistics.data}Data for %1 tax receipt(s) is available in the Tax Receipts Issued report.{/ts}</li>-->
   </ul>
 </div>
 
