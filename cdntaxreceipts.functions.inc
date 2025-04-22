@@ -113,7 +113,7 @@ function cdntaxreceipts_processTaxReceipt($receipt, &$collectedPdf = NULL, $mode
   CRM_Cdntaxreceipts_Utils_MK::mk_log('cdntaxreceipts.functions.inc > cdntaxreceipts_processTaxReceipt()');
 
   // Get contact details
-  list($displayname, $email) = CRM_Contact_BAO_Contact::getContactDetails($receipt['contact_id']);
+  [$displayname, $email] = CRM_Contact_BAO_Contact::getContactDetails($receipt['contact_id']);
 
   // add support for preferred language
   $old_locale = CRM_Core_I18n::singleton()->getLocale();
@@ -148,7 +148,7 @@ function cdntaxreceipts_processTaxReceipt($receipt, &$collectedPdf = NULL, $mode
   }
   else {
     // generate the PDF file
-    list($pdf_file, $user_friendly) = cdntaxreceipts_generateFormattedReceipt($receipt, $collectedPdf, $mode);
+    [$pdf_file, $user_friendly] = cdntaxreceipts_generateFormattedReceipt($receipt, $collectedPdf, $mode);
 
     if ($mode == CDNTAXRECEIPTS_MODE_PREVIEW) {
       // no email, just PDF
@@ -206,7 +206,7 @@ function cdntaxreceipts_processTaxReceipt($receipt, &$collectedPdf = NULL, $mode
       // UFM 28/03/2023 : ne pas envoyer de mail en archive (performance)
       
        $sendTemplateParams['toEmail'] = $email_archive;
-      list($sent, $subject, $message, $html) = CRM_Core_BAO_MessageTemplate::sendTemplate($sendTemplateParams);
+      [$sent, $subject, $message, $html] = CRM_Core_BAO_MessageTemplate::sendTemplate($sendTemplateParams);
       
       // [SV 2023-03-31] because of the commented code above
       // if we don't do that, the database is never updated for print
@@ -220,7 +220,7 @@ function cdntaxreceipts_processTaxReceipt($receipt, &$collectedPdf = NULL, $mode
         $sendTemplateParams['toEmail'] = $contact['email'];
         $sendTemplateParams['tplParams']['openTracking'] = "<img src=\"" . CRM_Utils_System::baseURL() .
           "civicrm/cdntaxreceipts/open?r={$receipt['email_tracking_id']}\" width='1' height='1' alt='' border='0'>";
-        list($sent, $subject, $message, $html) = CRM_Core_BAO_MessageTemplate::sendTemplate($sendTemplateParams);
+        [$sent, $subject, $message, $html] = CRM_Core_BAO_MessageTemplate::sendTemplate($sendTemplateParams);
       }
     }
   }
@@ -235,6 +235,12 @@ function cdntaxreceipts_processTaxReceipt($receipt, &$collectedPdf = NULL, $mode
   if (!$receipt['is_duplicate'] && $sent && $mode != CDNTAXRECEIPTS_MODE_PREVIEW) {
     cdntaxreceipts_log($receipt);
     // TODO: log an activity
+    
+    /**
+     * 22/04/2025 : Dewy Mercerais
+     * MAJ du champ thankyoudate de la contribution lors de la génération du RF
+     */
+    CRM_Cdntaxreceipts_Utils_MK::setThankYouDateContributionReceiptIssued($receipt['contact_id']);
   }
 
   if (isset($collectedPdf) && $pdf_file) {
@@ -282,7 +288,7 @@ function cdntaxreceipts_generateFormattedReceipt($receipt, &$collectedPdf = NULL
   $address_line_2 = implode(' ', $parts);
   $address_line_3 = isset($address['country']) ? $address['country'] : '';
 
-  list($displayname, $email) = CRM_Contact_BAO_Contact::getContactDetails($receipt['contact_id']);
+  [$displayname, $email] = CRM_Contact_BAO_Contact::getContactDetails($receipt['contact_id']);
 
   // $result_get_name = civicrm_api3('Contact', 'get', array(
   //   'sequential' => 1,
@@ -803,7 +809,7 @@ function cdntaxreceipts_issueTaxReceipt($contribution, &$collectedPdf = NULL, $m
 
   // check if a Tax Receipt has already been issued previously for this Contribution
   // user input could be tainted! we want this method to check everything for validity...
-  list($issued_on, $receipt_id) = cdntaxreceipts_issued_on($contribution->id);
+  [$issued_on, $receipt_id] = cdntaxreceipts_issued_on($contribution->id);
 
   // When returning issued_on field:
   //   returns false for non existing $contribution ID
@@ -823,7 +829,7 @@ function cdntaxreceipts_issueTaxReceipt($contribution, &$collectedPdf = NULL, $m
     else if ( $receipt['issue_type'] == 'aggregate' ) {
       $contactId = $receipt['contact_id'];
       $year = substr($receipt['contributions'][0]['receive_date'], 0, 4);
-      list($method, $email) = cdntaxreceipts_sendMethodForContact($contactId);
+      [$method, $email] = cdntaxreceipts_sendMethodForContact($contactId);
       return cdntaxreceipts_issueAggregateTaxReceipt($contactId, $year, $receipt['contributions'],
         $method, $collectedPdf, $mode);
     }
@@ -836,7 +842,7 @@ function cdntaxreceipts_issueTaxReceipt($contribution, &$collectedPdf = NULL, $m
   }
 
   // determine the send method
-  list($method, $email) = cdntaxreceipts_sendMethodForContact($contribution->contact_id);
+  [$method, $email] = cdntaxreceipts_sendMethodForContact($contribution->contact_id);
 
   // Cancelled receipts are not sent via email
   if ($is_duplicate && $receipt['receipt_status'] == 'cancelled' && $method != 'data') {
@@ -1062,10 +1068,10 @@ function cdntaxreceipts_issueAnnualTaxReceipt( $contactId, $year, &$collectedPdf
   CRM_Cdntaxreceipts_Utils_MK::mk_log('cdntaxreceipts.functions.inc > cdntaxreceipts_issueAnnualTaxReceipt()');
 
   // determine the send method
-  list( $method, $email ) = cdntaxreceipts_sendMethodForContact($contactId);
+  [ $method, $email ] = cdntaxreceipts_sendMethodForContact($contactId);
 
   // query for duplicate receipt
-  list( $issued_on, $receipt_id ) = cdntaxreceipts_annual_issued_on($contactId, $year);
+  [ $issued_on, $receipt_id ] = cdntaxreceipts_annual_issued_on($contactId, $year);
 
   // When returning issued_on field:
   //   returns false for non existing $contribution ID
@@ -1177,7 +1183,7 @@ function cdntaxreceipts_issueAggregateTaxReceipt($contactId, $year, $contributio
 
   $contrib_copy = $contributions;
   $check_contribution = array_shift($contrib_copy);
-  list($issued_on, $receipt_id) = cdntaxreceipts_issued_on($check_contribution['contribution_id']);
+  [$issued_on, $receipt_id] = cdntaxreceipts_issued_on($check_contribution['contribution_id']);
 
   if (isset($check_contribution['receipt_id']) && $check_contribution['receipt_id'] != 0) {
     $is_duplicate = TRUE;
@@ -1256,7 +1262,7 @@ function cdntaxreceipts_sendMethodForContact( $contactId ) {
   $method = array('print', NULL);
 
   require_once 'CRM/Contact/BAO/Contact.php';
-  list($displayname, $email, $doNotEmail, $onHold) = CRM_Contact_BAO_Contact::getContactDetails($contactId);
+  [$displayname, $email, $doNotEmail, $onHold] = CRM_Contact_BAO_Contact::getContactDetails($contactId);
 
   if ( isset($email) ) {
     if ( ! $onHold ) {

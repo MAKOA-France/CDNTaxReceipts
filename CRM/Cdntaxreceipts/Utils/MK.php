@@ -125,4 +125,23 @@ class CRM_Cdntaxreceipts_Utils_MK {
       
       return $prefixe;
     }
+  
+  /**
+   * 22/04/2025 : Dewy Mercerais
+   * MAJ du champ thankyoudate de la contribution lors de la génération du RF
+   * @param $contactId (identifiant du contact)
+   * @return void
+   */
+    public static function setThankYouDateContributionReceiptIssued($contactId) {
+      $sql = "";
+      $sql .= " UPDATE civicrm_contribution as con";
+      $sql .= " INNER JOIN cdntaxreceipts_log_contributions AS logcon ON logcon.contribution_id = con.id";
+      $sql .= " INNER JOIN cdntaxreceipts_log AS log ON log.id = logcon.receipt_id";
+      $sql .= " SET con.thankyou_date = FROM_UNIXTIME(log.issued_on)";
+      $sql .= " WHERE con.thankyou_date is null";
+      $sql .= " AND con.contact_id = " . $contactId;
+      $sql .= " ;";
+      
+      CRM_Core_DAO::executeQuery($sql);
+    }
 }
