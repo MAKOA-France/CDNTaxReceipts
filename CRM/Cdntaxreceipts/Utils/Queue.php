@@ -71,6 +71,21 @@ class CRM_Cdntaxreceipts_Utils_Queue {
 
     $contribution = new CRM_Contribute_DAO_Contribution();
     $contribution->id = $contributionId;
+
+    Civi::log()->debug("--- contribution OBJECT : ".print_r($contribution ,1));
+    // on recherche le contact_id avec l'identifiant de la contribution. Ce contact_id est nécessaire
+    // pour la fonction cdntaxreceipts_openCollectedPDF. C'est cette fonction qui determine le bon template PDF
+    // à utiliser
+    if(!empty($contributionId)) {
+      $contributionApi4 = \Civi\Api4\Contribution::get(FALSE)
+        ->addSelect('contact_id')
+        ->addWhere('id', '=', $contributionId)
+        ->execute()
+        ->first();
+
+      $contactId = $contributionApi4['contact_id'];
+    }
+
     if (!$contribution->find( TRUE )) {
       // FIXME: in a queue, what is the proper way of doing this ?
       CRM_Core_Error::fatal( "CDNTaxReceipts: Could not find corresponding contribution id." );
@@ -96,7 +111,7 @@ class CRM_Cdntaxreceipts_Utils_Queue {
       list($issued_on, $receipt_id) = cdntaxreceipts_issued_on($contribution->id);
       if (empty($issued_on) || !$originalOnly) {
 
-        $receiptsForPrinting = cdntaxreceipts_openCollectedPDF();
+        $receiptsForPrinting = cdntaxreceipts_openCollectedPDF($contactId);
         list($ret, $method) = cdntaxreceipts_issueTaxReceipt($contribution, $receiptsForPrinting, $previewMode);
         self::updateMetadata($ret, $method, $metadata);
       
