@@ -71,8 +71,7 @@ class CRM_Cdntaxreceipts_Utils_Queue {
 
     $contribution = new CRM_Contribute_DAO_Contribution();
     $contribution->id = $contributionId;
-
-    Civi::log()->debug("--- contribution OBJECT : ".print_r($contribution ,1));
+    
     // on recherche le contact_id avec l'identifiant de la contribution. Ce contact_id est nécessaire
     // pour la fonction cdntaxreceipts_openCollectedPDF. C'est cette fonction qui determine le bon template PDF
     // à utiliser
